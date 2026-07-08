@@ -1,0 +1,19 @@
+# Dependencies & build output
+node_modules/
+public/
+.quartz-cache/
+prof/
+tsconfig.tsbuildinfo
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+
+# Obsidian: commit the shared config, but not per-machine volatile state
+content/.obsidian/workspace.json
+content/.obsidian/workspace-mobile.json
+content/.obsidian/cache
+content/.trash/
+
+# Claude Code: personal/local settings never go to the public repo
+.claude/settings.local.json
