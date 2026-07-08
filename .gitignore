@@ -9,15 +9,15 @@ tsconfig.tsbuildinfo
 .DS_Store
 Thumbs.db
 
-# Obsidian: the real vault is content/. A .obsidian at the repo root is a stray
+# Obsidian: the vault is Vault/. A .obsidian at the repo root is a stray
 # vault created by accidentally opening the root folder — never track it.
 /.obsidian/
 
 # Obsidian: commit the shared config, but not per-machine volatile state
-content/.obsidian/workspace.json
-content/.obsidian/workspace-mobile.json
-content/.obsidian/cache
-content/.trash/
+Vault/.obsidian/workspace.json
+Vault/.obsidian/workspace-mobile.json
+Vault/.obsidian/cache
+Vault/.trash/
 
 # Claude Code: personal/local settings never go to the public repo
 .claude/settings.local.json

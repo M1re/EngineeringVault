@@ -23,10 +23,6 @@ export const defaultContentPageLayout: PageLayout = {
     }),
     Component.ArticleTitle(),
     Component.ContentMeta(),
-    Component.ConditionalRender({
-      component: Component.SectionProgress(),
-      condition: (page) => page.fileData.slug === "index",
-    }),
     Component.TagList(),
   ],
   left: [
