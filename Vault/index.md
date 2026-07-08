@@ -35,12 +35,8 @@ return function TopicDashboard() {
   const DEFAULT_ICON = `<path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/>`;
   const wrapSvg = (inner) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${inner}</svg>`;
 
-  const STATUS_PROGRESS = { "not-started": 0, "creation": 33, "ready to repeat": 66, "done": 100 };
-  const STATUS_RAMP = [
-    { key: "done", label: "Done", weight: 100, alpha: 1 },
-    { key: "ready to repeat", label: "Ready to Repeat", weight: 66, alpha: 0.6 },
-    { key: "creation", label: "Creation", weight: 33, alpha: 0.28 },
-  ];
+  // Accent for the overall bar (teal, matching the theme's tip-callout colour).
+  const OVERALL_RGB = "63, 182, 168";
 
   const firstString = (v) =>
     Array.isArray(v) ? (v.length ? String(v[0]).trim() : "") : (v == null ? "" : String(v).trim());
@@ -62,20 +58,17 @@ return function TopicDashboard() {
     folderNoteFor.set(dir, p);
   }
 
+  // Simple model: a note counts as done when its `status` is "done"; progress = done / total.
   const statsFor = (folder) => {
     const prefix = `${folder}/`;
-    const byStatus = {};
-    let total = 0, points = 0, done = 0;
+    let total = 0, done = 0;
     for (const p of pages) {
       if (!p.$path.startsWith(prefix)) continue;
       if (hasTag(p, "FolderNote") || hasTag(p, "MetricsIgnore")) continue;
-      const key = firstString(p.value("status")).toLowerCase();
       total += 1;
-      points += STATUS_PROGRESS[key] ?? 0;
-      if (key === "done") done += 1;
-      byStatus[key] = (byStatus[key] ?? 0) + 1;
+      if (firstString(p.value("status")).toLowerCase() === "done") done += 1;
     }
-    return { pct: total > 0 ? Math.round(points / total) : 0, done, total, points, byStatus };
+    return { total, done, pct: total > 0 ? Math.round((done / total) * 100) : 0 };
   };
 
   const cards = TOPICS
@@ -92,21 +85,9 @@ return function TopicDashboard() {
       spanNarrow: index === 0 ? 12 : 6,
     }));
 
-  let oDone = 0, oTotal = 0, oPoints = 0;
-  const oByStatus = {};
-  for (const c of cards) {
-    oDone += c.done; oTotal += c.total; oPoints += c.points;
-    for (const k of Object.keys(c.byStatus)) oByStatus[k] = (oByStatus[k] ?? 0) + c.byStatus[k];
-  }
-  const oPct = oTotal > 0 ? Math.round(oPoints / oTotal) : 0;
-
-  const segments = (byStatus, total) =>
-    STATUS_RAMP.map((seg) => {
-      const cnt = byStatus[seg.key] ?? 0;
-      const width = total > 0 ? (cnt * seg.weight) / total : 0;
-      if (width <= 0) return null;
-      return <span style={{ width: `${width}%`, background: "rgb(var(--topic-rgb))", opacity: seg.alpha }} />;
-    });
+  let oDone = 0, oTotal = 0;
+  for (const c of cards) { oDone += c.done; oTotal += c.total; }
+  const oPct = oTotal > 0 ? Math.round((oDone / oTotal) * 100) : 0;
 
   const spanRules = (cls) =>
     Array.from({ length: 12 }, (_, i) => `.dc-topic-card.${cls}-${i + 1} { grid-column: span ${i + 1}; }`).join(" ");
@@ -124,13 +105,11 @@ return function TopicDashboard() {
 .dc-topic-spacer { flex: 1 0 auto; min-height: 0.55em; }
 .dc-topic-foot { display: flex; flex-direction: column; gap: 4px; }
 .dc-topic-cap { font-size: 0.72rem; display: flex; justify-content: space-between; align-items: baseline; color: var(--text-muted, var(--gray, #9ca3af)); }
-.dc-topic-bar { display: flex; width: 100%; height: 6px; border-radius: 4px; margin-top: 0.15rem; overflow: hidden; background: var(--background-modifier-border, var(--lightgray, #e5e5e5)); }
+.dc-topic-bar { width: 100%; height: 6px; border-radius: 4px; margin-top: 0.15rem; overflow: hidden; background: var(--background-modifier-border, var(--lightgray, #e5e5e5)); }
+.dc-topic-fill { height: 100%; border-radius: 4px; background: rgb(var(--topic-rgb)); transition: width 200ms ease; }
 .dc-topic-link { position: absolute; inset: 0; z-index: 1; }
 .dc-topic-link a { position: absolute; inset: 0; font-size: 0; background: none !important; }
-.dc-topic-total { margin-top: 0.75rem; padding: 0.75em; border-radius: var(--radius-m, 8px); border: 1px solid rgba(var(--topic-rgb), 0.4); background: rgba(var(--topic-rgb), 0.1); }
-.dc-topic-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.4em 1.1em; margin-top: 0.7em; font-size: 0.8em; opacity: 0.85; }
-.dc-topic-legend-item { display: inline-flex; align-items: center; gap: 0.4em; }
-.dc-topic-legend-sw { width: 0.8em; height: 0.8em; border-radius: 3px; flex: 0 0 auto; display: inline-block; background: rgb(var(--topic-rgb)); }
+.dc-topic-total { margin-top: 0.75rem; padding: 0.75em; border-radius: var(--radius-m, 8px); border: 1px solid rgba(var(--topic-rgb), 0.4); background: rgba(var(--topic-rgb), 0.08); }
 ${spanRules("dsk")}
 @media (max-width: 1600px) { ${spanRules("med")} }
 @media (max-width: 760px) { ${spanRules("nar")} }
@@ -152,25 +131,17 @@ ${spanRules("dsk")}
               <div class="dc-topic-spacer" />
               <div class="dc-topic-foot">
                 <div class="dc-topic-cap"><span>{c.done}/{c.total} done</span><span>{c.pct}%</span></div>
-                <div class="dc-topic-bar">{segments(c.byStatus, c.total)}</div>
+                <div class="dc-topic-bar"><div class="dc-topic-fill" style={{ width: `${c.pct}%` }} /></div>
               </div>
             </div>
             {c.fn ? <span class="dc-topic-link"><dc.Link link={c.fn.$link} /></span> : null}
           </div>
         ))}
       </div>
-      <div class="dc-topic-total" style={{ "--topic-rgb": "125, 125, 125" }}>
+      <div class="dc-topic-total" style={{ "--topic-rgb": OVERALL_RGB }}>
         <div class="dc-topic-foot">
-          <div class="dc-topic-bar" style={{ height: "0.7em" }}>{segments(oByStatus, oTotal)}</div>
-          <div class="dc-topic-cap"><span style={{ opacity: 0.7 }}>{oDone}/{oTotal} done</span><span>{oPct}%</span></div>
-        </div>
-        <div class="dc-topic-legend">
-          {STATUS_RAMP.map((seg) => (
-            <span class="dc-topic-legend-item">
-              <span class="dc-topic-legend-sw" style={{ opacity: seg.alpha }} />
-              <span>{seg.label} · {seg.weight}%</span>
-            </span>
-          ))}
+          <div class="dc-topic-cap"><span style={{ opacity: 0.75 }}>{oDone}/{oTotal} done</span><span>{oPct}%</span></div>
+          <div class="dc-topic-bar" style={{ height: "0.7em" }}><div class="dc-topic-fill" style={{ width: `${oPct}%` }} /></div>
         </div>
       </div>
     </div>

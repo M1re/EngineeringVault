@@ -24,6 +24,9 @@ How this stays healthy (so it never bloats and drags down quality):
 - No AI slop: no filler, no hype, no restating the obvious, no padding to look thorough.
 - Never fabricate facts, APIs, numbers, or features. If unsure → `> [!warning] Unverified`, or omit.
 - Don't add AI-attribution / "made or maintained with Claude Code"-style credit lines to content.
+- Keep UI honest and minimal: don't show static elements that look like live data (e.g. a legend
+  implying statuses that don't exist), and match the existing theme's accent colours rather than
+  inventing new ones.
 - Keep this ledger lean: record proactively, merge duplicates, promote mature rules into structure.
 
 ## Archive (log)
@@ -32,6 +35,9 @@ How this stays healthy (so it never bloats and drags down quality):
 
 ### 2026-07-08
 
+- Progress model is simple **done/total** (not the 4-status spaced-repetition ramp). The dashboard
+  must not show a legend/segments implying statuses that don't exist; the overall bar uses the
+  theme's teal accent (matches the tip callout), not grey.
 - Remove AI-attribution / credit lines from content (e.g. "maintained with the help of Claude Code").
 - Guard against bloat: keep "Active rules" small and `CLAUDE.md` principle-level; promote mature
   rules into structure; use a size-tripwire hook + `/consolidate-feedback` to stay compact.

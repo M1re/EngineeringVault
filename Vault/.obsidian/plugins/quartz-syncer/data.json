@@ -1,11 +1,11 @@
 {
   "git": {
-    "remoteUrl": "",
-    "branch": "v4",
+    "remoteUrl": "https://github.com/M1re/EngineeringVault",
+    "branch": "main",
     "corsProxyUrl": "",
     "auth": {
       "type": "basic",
-      "username": ""
+      "username": "M1re"
     },
     "providerHint": "github"
   },
@@ -30,13 +30,13 @@
   "cache": "{}",
   "useAutoCardLink": false,
   "useDataview": true,
-  "useDatacore": false,
-  "useExcalidraw": false,
+  "useDatacore": true,
+  "useExcalidraw": true,
   "useFantasyStatblocks": false,
   "useBases": false,
   "useCanvas": false,
   "manageSyncerStyles": true,
-  "lastUsedSettingsTab": "git",
+  "lastUsedSettingsTab": "integration",
   "noteSettingsIsInitialized": true,
   "pluginVersion": "1.15.3",
   "lastUpstreamCommitSha": "",
