@@ -55,6 +55,14 @@ const PATTERNS = [
     }
 
     const ti = payload.tool_input || {};
+
+    // Only guard files INSIDE this repo (what may get published). Writes to paths outside
+    // the repo root — e.g. Claude's own memory under ~/.claude — are never published, so skip them.
+    const cwd = process.cwd().replace(/\\/g, '/').toLowerCase();
+    const fp = String(ti.file_path || '').replace(/\\/g, '/').toLowerCase();
+    const isAbsolute = /^(?:[a-z]:\/|\/)/.test(fp);
+    if (isAbsolute && cwd && !fp.startsWith(cwd)) process.exit(0);
+
     // Gather text depending on the tool.
     let text = '';
     if (typeof ti.content === 'string') text += ti.content + '\n';
