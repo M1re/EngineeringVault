@@ -15,15 +15,17 @@ should understand deeply. Notes live in `content/` and are published as a websit
 
 ## Feedback ledger (binding)
 
-`.claude/feedback.md` is the author's accumulated feedback. Two duties, both mandatory:
+`.claude/feedback.md` holds the author's feedback. Duties:
 
-1. **Obey it.** Before writing or editing anything in this repo, read `.claude/feedback.md` and
-   follow every rule. Treat each entry as binding; never repeat a listed mistake.
-2. **Keep it current — automatically.** Whenever the author expresses a correction, dislike, or
-   preference about how you write or work — anywhere in normal conversation, without being asked —
-   distill it into a general rule and append it to `.claude/feedback.md` in that same turn. Do not
-   wait to be told, and do not require the `/feedback` command; that command is only a manual
-   shortcut for the same action.
+1. **Obey the "Active rules"** section before writing or editing anything here. Only that section
+   is binding; the "Archive" is history, not required reading.
+2. **Record feedback proactively.** Whenever the author expresses a correction, dislike, or
+   preference — anywhere in normal conversation, unprompted — capture it that same turn: refine an
+   existing active rule (preferred) or add one, and log it in the Archive. No `/feedback` command
+   needed; that is only a manual shortcut.
+3. **Keep it lean.** Keep the Active set small and this file principle-level. When a rule matures,
+   move it into structure (skill, template, hook, Linter) and delete it from the ledger. When the
+   size tripwire (`.claude/hooks/check-ledger-size.js`) nudges you, run `/consolidate-feedback`.
 
 ## Repository layout
 

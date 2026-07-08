@@ -1,37 +1,38 @@
 # Feedback & Corrections Ledger
 
-Binding writing/behaviour rules from the author. **`CLAUDE.md` points here: read this file and
-obey every rule before writing or editing anything in this repo. Never repeat a listed mistake.**
+The author's feedback that shapes how I write and work in this repo.
 
-New feedback is added via the `/feedback` command. Keep entries short, general, and imperative —
-a rule that applies next time, not a comment about one sentence. No personal data (public repo).
+**Binding = only the "Active rules" below.** Read and obey them before writing or editing anything.
+The "Archive" is dated history for provenance and is NOT required reading.
+
+How this stays healthy (so it never bloats and drags down quality):
+
+- Record feedback proactively — append/refine the same turn the author gives it, no command needed.
+- Prefer to **refine an existing active rule** over adding a near-duplicate.
+- When a rule matures, move it into structure (the `note-writer` skill, the note template, a hook,
+  or the Linter plugin) and **delete it from here** — structure costs no attention and is more reliable.
+- A size tripwire hook (`.claude/hooks/check-ledger-size.js`) nudges you to run
+  `/consolidate-feedback` when this file or `CLAUDE.md` grows past its soft limit.
 
 ---
 
-## Writing — do
+## Active rules
 
-- Be concrete: real mechanics, real numbers, real failure modes, small code snippets.
-- Keep it clear and tight. A short correct explanation beats a long vague one.
-- Explanations for the author: simple language, but still detailed and technically honest.
+- Be concrete: real mechanics, numbers, failure modes, small code snippets — not textbook definitions.
+- Clear and tight beats long and vague; if a point needs a re-read to parse, rewrite it.
+- For the author's own explanations: simple language, still detailed and technically honest.
+- No AI slop: no filler, no hype, no restating the obvious, no padding to look thorough.
+- Never fabricate facts, APIs, numbers, or features. If unsure → `> [!warning] Unverified`, or omit.
+- Keep this ledger lean: record proactively, merge duplicates, promote mature rules into structure.
 
-## Writing — don't
+## Archive (log)
 
-- **No AI slop.** No filler, no empty hype, no generic "in today's fast-paced world" phrasing,
-  no restating the obvious, no padding to look thorough.
-- **Never fabricate.** No invented facts, APIs, numbers, or features. If unsure, use a
-  `> [!warning] Unverified` callout or leave it out — never guess and present it as fact.
-- **Don't be convoluted.** No confusing structure or tangled sentences. If a point needs a
-  re-read to parse, rewrite it.
-
-## Log
-
-<!-- Newest first. Format: ### YYYY-MM-DD  — then bullet rules distilled from the feedback. -->
+<!-- Dated history. Newest first. Not required reading; kept for provenance. -->
 
 ### 2026-07-08
 
-- Maintain this ledger **proactively and automatically** during conversation: when the author
-  gives any feedback, record a distilled rule here in that same turn — do not wait for the
-  `/feedback` command.
-- (seed) The author dislikes three things above all: text that reads like AI slop, invented
-  facts / things that aren't real, and writing that is silly or confusing. Optimise every output
-  for: correct, concrete, clear.
+- Guard against bloat: keep "Active rules" small and `CLAUDE.md` principle-level; promote mature
+  rules into structure; use a size-tripwire hook + `/consolidate-feedback` to stay compact.
+- Maintain this ledger proactively/automatically during conversation (no `/feedback` needed).
+- Seed: the author dislikes AI-slop phrasing, invented/unreal facts, and confusing writing —
+  optimise for correct, concrete, clear.
