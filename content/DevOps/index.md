@@ -1,5 +1,8 @@
 ---
 title: DevOps
+icon: ⚙️
+blurb: CI/CD, containers, and observability.
+order: 9
 tags:
   - moc
 draft: false

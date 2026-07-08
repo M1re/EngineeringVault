@@ -1,5 +1,8 @@
 ---
 title: Security
+icon: 🔒
+blurb: Cryptography, auth, and defensive engineering.
+order: 7
 tags:
   - moc
 draft: false

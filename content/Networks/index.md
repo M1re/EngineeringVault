@@ -1,5 +1,8 @@
 ---
 title: Networks
+icon: 🌐
+blurb: Protocols, TCP/IP, and how packets move.
+order: 4
 tags:
   - moc
 draft: false

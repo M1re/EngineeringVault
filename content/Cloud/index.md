@@ -1,5 +1,8 @@
 ---
 title: Cloud
+icon: ☁️
+blurb: Cloud-native design, serverless, and providers.
+order: 8
 tags:
   - moc
 draft: false

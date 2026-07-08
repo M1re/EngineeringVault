@@ -1,5 +1,8 @@
 ---
 title: Programming
+icon: 💻
+blurb: Languages, paradigms, and runtime internals.
+order: 1
 tags:
   - moc
 draft: false

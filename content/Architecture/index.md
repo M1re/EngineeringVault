@@ -1,5 +1,8 @@
 ---
 title: Architecture
+icon: 🏛️
+blurb: Distributed systems, patterns, and scalability.
+order: 5
 tags:
   - moc
 draft: false

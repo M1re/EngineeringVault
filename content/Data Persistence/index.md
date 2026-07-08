@@ -1,5 +1,8 @@
 ---
 title: Data Persistence
+icon: 🗄️
+blurb: Databases, indexing, transactions, storage engines.
+order: 3
 tags:
   - moc
 draft: false

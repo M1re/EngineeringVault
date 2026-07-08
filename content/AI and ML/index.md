@@ -1,5 +1,8 @@
 ---
 title: AI & ML
+icon: 🤖
+blurb: Models, training, and practical machine learning.
+order: 6
 tags:
   - moc
 draft: false

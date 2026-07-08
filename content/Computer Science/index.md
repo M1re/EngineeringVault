@@ -1,5 +1,8 @@
 ---
 title: Computer Science
+icon: 🧮
+blurb: Algorithms, data structures, and foundations.
+order: 2
 tags:
   - moc
 draft: false
