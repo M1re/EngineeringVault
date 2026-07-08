@@ -23,6 +23,7 @@ How this stays healthy (so it never bloats and drags down quality):
 - For the author's own explanations: simple language, still detailed and technically honest.
 - No AI slop: no filler, no hype, no restating the obvious, no padding to look thorough.
 - Never fabricate facts, APIs, numbers, or features. If unsure → `> [!warning] Unverified`, or omit.
+- Don't add AI-attribution / "made or maintained with Claude Code"-style credit lines to content.
 - Keep this ledger lean: record proactively, merge duplicates, promote mature rules into structure.
 
 ## Archive (log)
@@ -31,6 +32,7 @@ How this stays healthy (so it never bloats and drags down quality):
 
 ### 2026-07-08
 
+- Remove AI-attribution / credit lines from content (e.g. "maintained with the help of Claude Code").
 - Guard against bloat: keep "Active rules" small and `CLAUDE.md` principle-level; promote mature
   rules into structure; use a size-tripwire hook + `/consolidate-feedback` to stay compact.
 - Maintain this ledger proactively/automatically during conversation (no `/feedback` needed).
