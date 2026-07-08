@@ -1,0 +1,489 @@
+<!--
+  Engineering Vault — repository guide (source of the published artifact).
+  Canonical artifact URL: https://claude.ai/code/artifact/ce03401b-1126-4f79-a7f9-f97bc6b2f7ce
+  To update: edit this file, then run /update-guide (redeploys to the URL above). Do not fabricate.
+-->
+<title>Engineering Vault — Repo Guide</title>
+<style>
+  :root {
+    /* neutrals — faint green bias, chosen not inherited */
+    --bg: #f6f8f7;
+    --surface: #ffffff;
+    --surface-2: #eef2f0;
+    --ink: #1c2a2a;
+    --ink-soft: #46585600;
+    --muted: #5f716e;
+    --border: #d9e2df;
+    /* two worlds: SITE (teal) vs AUTOMATION (amber) */
+    --site: #2f7d74;
+    --site-soft: #e2efec;
+    --auto: #b4652a;
+    --auto-soft: #f5e9dd;
+    --danger: #b23b3b;
+    --radius: 12px;
+    --maxw: 74ch;
+    --mono: ui-monospace, "SF Mono", "JetBrains Mono", "Cascadia Code", Consolas, monospace;
+    --sans: "Segoe UI", system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #101514;
+      --surface: #161d1c;
+      --surface-2: #1d2625;
+      --ink: #e4ece9;
+      --muted: #93a49f;
+      --border: #2a3634;
+      --site: #58b3a6;
+      --site-soft: #16302c;
+      --auto: #d98a4e;
+      --auto-soft: #2e2117;
+      --danger: #e07373;
+    }
+  }
+  :root[data-theme="light"] {
+    --bg: #f6f8f7; --surface: #ffffff; --surface-2: #eef2f0; --ink: #1c2a2a;
+    --muted: #5f716e; --border: #d9e2df; --site: #2f7d74; --site-soft: #e2efec;
+    --auto: #b4652a; --auto-soft: #f5e9dd; --danger: #b23b3b;
+  }
+  :root[data-theme="dark"] {
+    --bg: #101514; --surface: #161d1c; --surface-2: #1d2625; --ink: #e4ece9;
+    --muted: #93a49f; --border: #2a3634; --site: #58b3a6; --site-soft: #16302c;
+    --auto: #d98a4e; --auto-soft: #2e2117; --danger: #e07373;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: var(--sans); line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 1080px; margin: 0 auto; padding: 0 clamp(1rem, 4vw, 2.5rem);
+    display: grid; grid-template-columns: 220px 1fr; gap: clamp(1.5rem, 4vw, 3.5rem);
+    align-items: start;
+  }
+  @media (max-width: 860px) { .wrap { grid-template-columns: 1fr; } }
+
+  /* ---- header ---- */
+  header.hero {
+    grid-column: 1 / -1; padding: clamp(2.2rem, 6vw, 4rem) 0 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .eyebrow {
+    font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--site); margin: 0 0 0.9rem;
+  }
+  .hero h1 {
+    font-size: clamp(2rem, 5.5vw, 3rem); line-height: 1.08; margin: 0 0 0.8rem;
+    letter-spacing: -0.02em; text-wrap: balance; font-weight: 800;
+  }
+  .hero p.lede { font-size: 1.12rem; color: var(--muted); max-width: 60ch; margin: 0; }
+  .hero .meta {
+    display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.4rem;
+    font-family: var(--mono); font-size: 0.78rem;
+  }
+  .hero .meta a, .hero .meta span {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    padding: 0.32rem 0.7rem; border: 1px solid var(--border); border-radius: 999px;
+    color: var(--ink); text-decoration: none; background: var(--surface);
+  }
+  .hero .meta a:hover { border-color: var(--site); color: var(--site); }
+
+  /* ---- nav ---- */
+  nav.toc { position: sticky; top: 1.2rem; font-size: 0.9rem; }
+  @media (max-width: 860px) {
+    nav.toc { position: static; margin: 1rem 0; padding: 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
+  }
+  nav.toc ol { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.15rem; }
+  nav.toc a {
+    display: block; padding: 0.32rem 0.6rem; color: var(--muted); text-decoration: none;
+    border-left: 2px solid transparent; border-radius: 0 6px 6px 0; transition: color .15s, border-color .15s, background .15s;
+  }
+  nav.toc a:hover { color: var(--ink); background: var(--surface-2); }
+  nav.toc a.active { color: var(--site); border-left-color: var(--site); font-weight: 600; }
+  nav.toc .num { font-family: var(--mono); font-size: 0.72rem; color: var(--site); margin-right: 0.45rem; }
+
+  main { min-width: 0; padding-bottom: 4rem; }
+  section { padding: 2.4rem 0 0.6rem; scroll-margin-top: 1rem; }
+  section > h2 {
+    font-size: clamp(1.4rem, 3.5vw, 1.75rem); margin: 0 0 0.3rem; letter-spacing: -0.01em;
+    display: flex; align-items: baseline; gap: 0.6rem; text-wrap: balance;
+  }
+  section > h2 .num { font-family: var(--mono); font-size: 0.9rem; color: var(--site); font-weight: 700; }
+  section > p, main p { max-width: var(--maxw); }
+  h3 { font-size: 1.08rem; margin: 1.8rem 0 0.4rem; letter-spacing: -0.01em; }
+  p { margin: 0.7rem 0; }
+  a.inline { color: var(--site); text-decoration: underline; text-underline-offset: 2px; text-decoration-thickness: 1px; }
+  strong { font-weight: 700; }
+  code {
+    font-family: var(--mono); font-size: 0.86em; background: var(--surface-2);
+    padding: 0.1em 0.4em; border-radius: 5px; border: 1px solid var(--border);
+  }
+
+  /* ---- cards ---- */
+  .card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 1.1rem 1.25rem; margin: 1rem 0;
+  }
+  .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin: 1.2rem 0; }
+  .grid2 > p, .card > p { max-width: none; }
+
+  /* legend chips */
+  .tag { font-family: var(--mono); font-size: 0.72rem; padding: 0.15em 0.55em; border-radius: 999px; font-weight: 600; white-space: nowrap; }
+  .tag.site { background: var(--site-soft); color: var(--site); }
+  .tag.auto { background: var(--auto-soft); color: var(--auto); }
+
+  /* annotated tree */
+  .tree {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 1.1rem 1.25rem; overflow-x: auto; margin: 1.2rem 0;
+  }
+  .tree pre { margin: 0; font-family: var(--mono); font-size: 0.82rem; line-height: 1.85; white-space: pre; }
+  .tree .dir { color: var(--site); font-weight: 600; }
+  .tree .auto { color: var(--auto); font-weight: 600; }
+  .tree .cmt { color: var(--muted); }
+
+  /* layer blocks */
+  .layer { display: grid; grid-template-columns: auto 1fr; gap: 0 1rem; align-items: start; padding: 1rem 0; border-top: 1px solid var(--border); }
+  .layer:first-of-type { border-top: none; }
+  .layer .badge {
+    font-family: var(--mono); font-weight: 700; font-size: 1rem; width: 2.2rem; height: 2.2rem;
+    display: grid; place-items: center; border-radius: 8px; background: var(--auto-soft); color: var(--auto);
+  }
+  .layer h4 { margin: 0.1rem 0 0.2rem; font-size: 1.02rem; }
+  .layer .who { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+  .layer p { margin: 0.35rem 0 0; max-width: 62ch; }
+
+  /* pipeline */
+  .pipe { display: flex; flex-wrap: wrap; align-items: stretch; gap: 0.5rem; margin: 1.3rem 0; }
+  .pipe .step {
+    flex: 1 1 130px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+    padding: 0.7rem 0.8rem; position: relative; min-width: 0;
+  }
+  .pipe .step .k { font-family: var(--mono); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+  .pipe .step .v { font-size: 0.9rem; font-weight: 600; margin-top: 0.15rem; }
+  .pipe .step.s-site { border-left: 3px solid var(--site); }
+  .pipe .step.s-auto { border-left: 3px solid var(--auto); }
+  .pipe .arrow { align-self: center; color: var(--muted); font-family: var(--mono); }
+  @media (max-width: 620px) { .pipe { flex-direction: column; } .pipe .arrow { transform: rotate(90deg); } }
+
+  /* callout */
+  .note {
+    border-left: 3px solid var(--site); background: var(--site-soft);
+    padding: 0.8rem 1rem; border-radius: 0 8px 8px 0; margin: 1.1rem 0;
+  }
+  .note.warn { border-color: var(--danger); background: color-mix(in srgb, var(--danger) 12%, var(--surface)); }
+  .note .lbl { font-family: var(--mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; }
+  .note.warn .lbl { color: var(--danger); }
+  .note:not(.warn) .lbl { color: var(--site); }
+  .note p { margin: 0.3rem 0 0; max-width: none; }
+
+  /* table */
+  .tablewrap { overflow-x: auto; margin: 1.2rem 0; border: 1px solid var(--border); border-radius: var(--radius); }
+  table { border-collapse: collapse; width: 100%; font-size: 0.9rem; }
+  th, td { text-align: left; padding: 0.6rem 0.85rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { font-family: var(--mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); background: var(--surface-2); }
+  tr:last-child td { border-bottom: none; }
+  td code { white-space: nowrap; }
+
+  .kbd { font-family: var(--mono); font-size: 0.8rem; background: var(--surface-2); border: 1px solid var(--border); border-bottom-width: 2px; border-radius: 5px; padding: 0.1em 0.45em; }
+
+  footer { grid-column: 1 / -1; border-top: 1px solid var(--border); margin-top: 2rem; padding: 1.5rem 0 3rem; color: var(--muted); font-size: 0.85rem; }
+
+  @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+  html { scroll-behavior: smooth; }
+</style>
+
+<div class="wrap">
+  <header class="hero">
+    <p class="eyebrow">Полный гайд по репозиторию · для новичка</p>
+    <h1>Engineering Vault, разобранный по косточкам</h1>
+    <p class="lede">Как устроена твоя база знаний: где живут заметки, что превращает их в сайт, как Claude помогает писать, и почему всё разложено именно так.</p>
+    <div class="meta">
+      <a href="https://github.com/M1re/EngineeringVault">↗ github.com/M1re/EngineeringVault</a>
+      <a href="https://m1re.github.io/EngineeringVault/">↗ m1re.github.io/EngineeringVault</a>
+      <span>Obsidian · Quartz v4 · Claude Code · GitHub Pages</span>
+    </div>
+  </header>
+
+  <nav class="toc" aria-label="Оглавление">
+    <ol>
+      <li><a href="#big"><span class="num">01</span>Общая картина</a></li>
+      <li><a href="#model"><span class="num">02</span>Главная идея</a></li>
+      <li><a href="#tree"><span class="num">03</span>Дерево файлов</a></li>
+      <li><a href="#content"><span class="num">04</span>Папка content</a></li>
+      <li><a href="#claude"><span class="num">05</span>4 слоя Claude</a></li>
+      <li><a href="#quartz"><span class="num">06</span>Движок Quartz</a></li>
+      <li><a href="#pipeline"><span class="num">07</span>Цепочка публикации</a></li>
+      <li><a href="#drafts"><span class="num">08</span>Черновики</a></li>
+      <li><a href="#cheat"><span class="num">09</span>Шпаргалка</a></li>
+      <li><a href="#glossary"><span class="num">10</span>Словарь</a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <section id="big">
+      <h2><span class="num">01</span> Общая картина</h2>
+      <p>Твой репозиторий носит <strong>три «шляпы» одновременно</strong>. Это главное, что нужно уложить в голове — дальше всё встанет на места.</p>
+      <div class="grid2">
+        <div class="card">
+          <span class="tag site">1 · ХРАНИЛИЩЕ</span>
+          <h3 style="margin-top:.6rem">Obsidian-заметки</h3>
+          <p>Папка <code>content/</code> — это твои заметки в формате Markdown. Ты открываешь её в Obsidian и пишешь. Только это и есть «контент».</p>
+        </div>
+        <div class="card">
+          <span class="tag site">2 · САЙТ</span>
+          <h3 style="margin-top:.6rem">Генератор Quartz</h3>
+          <p>Quartz берёт заметки из <code>content/</code> и собирает из них красивый сайт с поиском, графом и навигацией. Публикуется на GitHub Pages.</p>
+        </div>
+        <div class="card">
+          <span class="tag auto">3 · ПОМОЩНИК</span>
+          <h3 style="margin-top:.6rem">Автоматизация Claude</h3>
+          <p>Папка <code>.claude/</code> и <code>CLAUDE.md</code> — правила, команды, навыки и защита, чтобы Claude помогал писать заметки в едином стиле и не давал утечь личным данным.</p>
+        </div>
+      </div>
+      <div class="note">
+        <span class="lbl">Ключ ко всему</span>
+        <p>Весь репозиторий делится на два цвета: <span class="tag site">бирюзовое</span> — контент и сайт (то, что видят люди), <span class="tag auto">оранжевое</span> — автоматизация (то, что помогает тебе писать). Я использую эти цвета по всему гайду.</p>
+      </div>
+    </section>
+
+    <section id="model">
+      <h2><span class="num">02</span> Главная идея: content — это всё, остальное — механика</h2>
+      <p>Самое частое, на чём спотыкаются новички: «зачем столько файлов вокруг?». Ответ простой:</p>
+      <div class="card">
+        <p style="margin:0"><strong>Публикуется только <code>content/</code>.</strong> Всё остальное в корне — это «завод», который собирает сайт и помогает тебе писать. На сам сайт эти файлы не попадают.</p>
+      </div>
+      <p>Поэтому в Obsidian ты открываешь как vault <strong>именно <code>content/</code></strong>, а не корень репозитория. Тогда тебе видны только заметки, а «завод» (Quartz, конфиги, <code>.claude</code>) не мешается под ногами.</p>
+      <div class="note warn">
+        <span class="lbl">Помни</span>
+        <p>Если открыть в Obsidian корень репозитория вместо <code>content/</code> — Obsidian создаст лишнюю папку <code>.obsidian</code> в корне (такое уже случилось один раз, мы её удалили). Всегда открывай <code>content/</code>.</p>
+      </div>
+    </section>
+
+    <section id="tree">
+      <h2><span class="num">03</span> Дерево файлов целиком</h2>
+      <p>Вот вся репа с пояснениями. Бирюзовое — контент/сайт, оранжевое — автоматизация Claude.</p>
+      <div class="tree"><pre><span class="dir">EngineeringVault/</span>            <span class="cmt"># корень репо (то, что на GitHub)</span>
+│
+├── <span class="dir">content/</span>                 <span class="cmt"># ← ЭТО открываешь в Obsidian. Только это публикуется</span>
+│   ├── index.md             <span class="cmt"># главная страница сайта (карта разделов)</span>
+│   ├── <span class="dir">Programming/</span>         <span class="cmt"># раздел; внутри index.md = обложка раздела</span>
+│   ├── <span class="dir">Computer Science/</span>    <span class="cmt"># … и ещё 7 разделов (всего 9)</span>
+│   ├── <span class="dir">Architecture/</span>
+│   │   ├── index.md
+│   │   └── Idempotency.md    <span class="cmt"># образцовая заметка — эталон формата</span>
+│   ├── <span class="dir">Templates/</span>           <span class="cmt"># шаблон заметки (на сайт НЕ идёт)</span>
+│   ├── <span class="dir">attachments/</span>         <span class="cmt"># картинки, диаграммы</span>
+│   └── <span class="dir">.obsidian/</span>           <span class="cmt"># настройки Obsidian + плагины</span>
+│
+├── <span class="auto">.claude/</span>                 <span class="cmt"># автоматизация Claude Code</span>
+│   ├── <span class="auto">commands/</span>            <span class="cmt"># твои слэш-команды: /new-note /expand …</span>
+│   ├── <span class="auto">skills/</span>              <span class="cmt"># навык note-writer (Claude включает сам)</span>
+│   ├── <span class="auto">hooks/</span>              <span class="cmt"># check-secrets.js — блокирует секреты</span>
+│   ├── <span class="auto">settings.json</span>        <span class="cmt"># сюда подключён хук (едет в репо)</span>
+│   ├── <span class="auto">settings.local.json</span>  <span class="cmt"># личные настройки (в .gitignore)</span>
+│   └── <span class="auto">launch.json</span>          <span class="cmt"># конфиг локального превью сайта</span>
+│
+├── <span class="auto">CLAUDE.md</span>                <span class="cmt"># «конституция»: правила, Claude читает всегда</span>
+│
+├── <span class="dir">quartz/</span>                  <span class="cmt"># движок сайта — НЕ трогаем</span>
+├── <span class="dir">quartz.config.ts</span>         <span class="cmt"># настройки сайта: заголовок, baseUrl, тема</span>
+├── <span class="dir">quartz.layout.ts</span>         <span class="cmt"># раскладка страниц: сайдбар, граф, backlinks</span>
+├── package.json            <span class="cmt"># список зависимостей Quartz</span>
+├── package-lock.json       <span class="cmt"># точные версии (для стабильной сборки)</span>
+│
+├── <span class="dir">.github/workflows/</span>
+│   └── deploy.yml           <span class="cmt"># авто-публикация при каждом push</span>
+│
+├── <span class="auto">docs/setup.md</span>            <span class="cmt"># инструкция: плагины и рабочий процесс</span>
+├── README.md               <span class="cmt"># описание проекта (видно на GitHub)</span>
+└── .gitignore              <span class="cmt"># что НЕ загружать в репо</span>
+</pre></div>
+    </section>
+
+    <section id="content">
+      <h2><span class="num">04</span> Папка <code>content/</code> подробно</h2>
+      <p>Здесь живёт всё, что станет сайтом. Три вещи, которые стоит понять:</p>
+
+      <h3>Разделы и «обложки»</h3>
+      <p>Каждый раздел — это папка (<code>Programming/</code>, <code>Networks/</code> …). Внутри лежит файл <code>index.md</code> — он становится <strong>обложкой раздела</strong> на сайте. У него тег <code>moc</code> (Map of Content — карта содержимого).</p>
+
+      <h3>Из чего состоит заметка</h3>
+      <p>Открой <code>Architecture/Idempotency.md</code> — это эталон. Сверху идёт <strong>frontmatter</strong> (служебный блок между <code>---</code>), потом тело по фиксированной структуре:</p>
+      <div class="tree"><pre><span class="cmt">---</span>
+<span class="dir">title</span>: Idempotency        <span class="cmt"># заголовок</span>
+<span class="dir">tags</span>: [architecture]     <span class="cmt"># теги для графа и поиска</span>
+<span class="dir">draft</span>: false            <span class="cmt"># true = скрыто с сайта</span>
+<span class="cmt">---</span>
+<span class="cmt"># дальше тело: In one sentence → Why it matters →</span>
+<span class="cmt"># How it works → Trade-offs → Questions → Related → References</span></pre></div>
+      <p>Эта структура заставляет раскрывать тему на уровне staff-инженера: не «определение из учебника», а механика + компромиссы + сложные вопросы.</p>
+
+      <h3>Связи вместо папок</h3>
+      <p>Заметки связываются <strong>вики-ссылками</strong> <code>[[Название]]</code>. Именно из них строится граф на сайте. Ссылка на ещё не написанную заметку — это нормально: она становится «маркером на будущее».</p>
+    </section>
+
+    <section id="claude">
+      <h2><span class="num">05</span> Четыре слоя автоматизации Claude</h2>
+      <p>Это самая важная часть для понимания. У Claude четыре разных инструмента, и они отличаются <strong>тем, кто их запускает</strong>. Разложим:</p>
+
+      <div class="card">
+        <div class="layer">
+          <div class="badge">Md</div>
+          <div>
+            <div class="who">Запускается сам · читается каждую сессию</div>
+            <h4><code>CLAUDE.md</code> — «Конституция»</h4>
+            <p>Файл с правилами базы: структура, стиль заметок, запрет личных данных, формат frontmatter. Claude автоматически подгружает его каждый раз, когда ты работаешь в этой папке. Это фон, который действует всегда.</p>
+          </div>
+        </div>
+        <div class="layer">
+          <div class="badge">/</div>
+          <div>
+            <div class="who">Запускаешь ты · вручную командой</div>
+            <h4>Слэш-команды <code>.claude/commands/</code> — «Кнопки»</h4>
+            <p>Готовые сценарии, которые ты вызываешь явно: <code>/new-note</code>, <code>/expand</code>, <code>/review-note</code>, <code>/link</code>. Каждый — это заранее написанный подробный промпт. Печатаешь команду — Claude выполняет сценарий.</p>
+          </div>
+        </div>
+        <div class="layer">
+          <div class="badge">✦</div>
+          <div>
+            <div class="who">Включает сам Claude · когда уместно</div>
+            <h4>Навык (skill) <code>note-writer</code> — «Мастерство»</h4>
+            <p>Методология письма на staff-уровне. В отличие от команды, ты его <em>не вызываешь</em> — Claude сам подхватывает навык, когда видит, что ты пишешь или правишь заметку. Это «насмотренность», которая включается автоматически.</p>
+          </div>
+        </div>
+        <div class="layer">
+          <div class="badge" style="background:var(--auto-soft);color:var(--danger)">!</div>
+          <div>
+            <div class="who">Запускает система · автоматически на событие</div>
+            <h4>Хук <code>check-secrets.js</code> — «Охранник»</h4>
+            <p>Скрипт, который срабатывает <strong>перед каждой записью файла</strong>. Сканирует текст на секреты и личные данные (ключи, токены, email) и <strong>блокирует запись</strong>, если что-то найдёт. Ты уже видел его в деле. Работает только внутри репозитория — публичную часть.</p>
+          </div>
+        </div>
+      </div>
+      <div class="note">
+        <span class="lbl">Как запомнить</span>
+        <p><strong>CLAUDE.md</strong> = правила (всегда). <strong>/команды</strong> = ты нажал. <strong>Навык</strong> = Claude сам сообразил. <strong>Хук</strong> = система проверила. Разные триггеры — разные роли.</p>
+      </div>
+    </section>
+
+    <section id="quartz">
+      <h2><span class="num">06</span> Движок Quartz</h2>
+      <p>Quartz — это <strong>генератор статических сайтов</strong>: программа, которая превращает папку с Markdown в готовый HTML-сайт. «Статический» значит, что на выходе просто файлы — их дёшево и быстро отдавать, никакого сервера с базой не нужно.</p>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Файл</th><th>За что отвечает</th></tr></thead>
+          <tbody>
+            <tr><td><code>quartz.config.ts</code></td><td>Главные настройки: заголовок сайта, <code>baseUrl</code> (адрес публикации), тема, шрифты, что игнорировать. Тут мы прописали <code>M1re.github.io/EngineeringVault</code>.</td></tr>
+            <tr><td><code>quartz.layout.ts</code></td><td>Раскладка страниц: где сайдбар, граф, оглавление, backlinks.</td></tr>
+            <tr><td><code>quartz/</code></td><td>Сам код движка. Его <strong>не трогаем</strong> — он обновляется отдельно.</td></tr>
+            <tr><td><code>package.json</code></td><td>Список библиотек, от которых зависит Quartz. Ставятся командой <code>npm install</code>.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Локально посмотреть сайт до публикации: <code>npx quartz build --serve</code> → открыть <code>http://localhost:8080</code>.</p>
+    </section>
+
+    <section id="pipeline">
+      <h2><span class="num">07</span> Цепочка публикации: от заметки до сайта</h2>
+      <p>Что происходит, когда ты хочешь опубликовать изменения. Каждый шаг — автоматический, кроме первых двух (их делаешь ты):</p>
+      <div class="pipe">
+        <div class="step s-site"><div class="k">Ты · Obsidian</div><div class="v">Пишешь заметку, ставишь draft: false</div></div>
+        <div class="arrow">→</div>
+        <div class="step s-auto"><div class="k">Ты · Obsidian Git</div><div class="v">Commit-and-sync (кнопка / по таймеру)</div></div>
+        <div class="arrow">→</div>
+        <div class="step s-auto"><div class="k">GitHub</div><div class="v">push в ветку main</div></div>
+        <div class="arrow">→</div>
+        <div class="step s-auto"><div class="k">GitHub Actions</div><div class="v">deploy.yml запускается сам</div></div>
+        <div class="arrow">→</div>
+        <div class="step s-site"><div class="k">Сборка</div><div class="v">npm ci + quartz build → public/</div></div>
+        <div class="arrow">→</div>
+        <div class="step s-site"><div class="k">GitHub Pages</div><div class="v">Сайт обновлён 🎉</div></div>
+      </div>
+      <p><strong>GitHub Actions</strong> — это робот-сборщик на серверах GitHub. Файл <code>.github/workflows/deploy.yml</code> — его инструкция: «на каждый push в main поставь Node, собери Quartz, выложи результат на Pages». Тебе не нужно ничего собирать вручную — достаточно запушить.</p>
+      <div class="note">
+        <span class="lbl">Обрати внимание</span>
+        <p>Между push и обновлением сайта проходит 1–2 минуты (робот собирает). Статус сборки виден во вкладке <strong>Actions</strong> на GitHub.</p>
+      </div>
+    </section>
+
+    <section id="drafts">
+      <h2><span class="num">08</span> Черновики: что видно, а что нет</h2>
+      <p>У каждой заметки в frontmatter есть поле <code>draft</code>. Это твой рубильник видимости:</p>
+      <div class="grid2">
+        <div class="card"><span class="tag auto">draft: true</span><p style="margin-top:.5rem">Заметка <strong>скрыта</strong> с сайта. Черновик, над которым ты ещё работаешь. Новые заметки Claude создаёт именно такими.</p></div>
+        <div class="card"><span class="tag site">draft: false</span><p style="margin-top:.5rem">Заметка <strong>публикуется</strong>. Ставишь, когда всё готово и проверено.</p></div>
+      </div>
+      <p>За это отвечает плагин Quartz <code>RemoveDrafts</code> — при сборке он просто выкидывает все черновики. Поэтому можно смело держать в репозитории недописанные заметки: на публичный сайт они не попадут, пока ты сам не переключишь флаг.</p>
+    </section>
+
+    <section id="cheat">
+      <h2><span class="num">09</span> Шпаргалка на каждый день</h2>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Хочу…</th><th>Делаю</th></tr></thead>
+          <tbody>
+            <tr><td>Создать заметку</td><td><code>/new-note Networks — TLS Handshake</code></td></tr>
+            <tr><td>Углубить заметку</td><td><code>/expand Idempotency</code></td></tr>
+            <tr><td>Проверить перед публикацией</td><td><code>/review-note Idempotency</code></td></tr>
+            <tr><td>Проставить связи в графе</td><td><code>/link Idempotency</code></td></tr>
+            <tr><td>Посмотреть сайт локально</td><td><code>npx quartz build --serve</code> → <code>localhost:8080</code></td></tr>
+            <tr><td>Опубликовать</td><td>draft: false → Obsidian Git: <em>Commit-and-sync</em></td></tr>
+            <tr><td>Проверить статус публикации</td><td>GitHub → вкладка <strong>Actions</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note warn">
+        <span class="lbl">Золотое правило</span>
+        <p>Репозиторий <strong>публичный</strong>. Никаких личных данных, паролей, токенов, имён коллег, внутренних ссылок. Хук ловит очевидное, но финальная ответственность на тебе — используй <code>/review-note</code> перед публикацией.</p>
+      </div>
+    </section>
+
+    <section id="glossary">
+      <h2><span class="num">10</span> Словарь терминов</h2>
+      <div class="tablewrap">
+        <table>
+          <tbody>
+            <tr><td><strong>Vault</strong></td><td>«Хранилище» — папка, которую открывает Obsidian. У тебя это <code>content/</code>.</td></tr>
+            <tr><td><strong>Frontmatter</strong></td><td>Блок метаданных вверху заметки между <code>---</code> (title, tags, draft).</td></tr>
+            <tr><td><strong>Wikilink</strong></td><td>Ссылка вида <code>[[Название]]</code> между заметками. Основа графа.</td></tr>
+            <tr><td><strong>MOC</strong></td><td>Map of Content — заметка-карта, собирающая ссылки на тему. Наши <code>index.md</code>.</td></tr>
+            <tr><td><strong>Quartz</strong></td><td>Генератор статических сайтов, превращающий заметки в веб-сайт.</td></tr>
+            <tr><td><strong>Static site</strong></td><td>Сайт из готовых HTML-файлов, без сервера с базой. Быстро и дёшево.</td></tr>
+            <tr><td><strong>GitHub Pages</strong></td><td>Бесплатный хостинг статических сайтов прямо из репозитория.</td></tr>
+            <tr><td><strong>GitHub Actions</strong></td><td>Робот-автоматизация на серверах GitHub. Собирает и публикует сайт.</td></tr>
+            <tr><td><strong>Hook</strong></td><td>Скрипт, который Claude запускает сам на событие (у нас — перед записью файла).</td></tr>
+            <tr><td><strong>Skill</strong></td><td>Навык, который Claude включает сам, когда задача подходит.</td></tr>
+            <tr><td><strong>Slash-команда</strong></td><td>Твой готовый промпт, вызываемый через <code>/имя</code>.</td></tr>
+            <tr><td><strong>baseUrl</strong></td><td>Адрес, по которому опубликован сайт. Нужен, чтобы ссылки и стили работали.</td></tr>
+            <tr><td><strong>npm / Node.js</strong></td><td>Среда и менеджер пакетов JavaScript. На них работает Quartz.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Engineering Vault · гайд сгенерирован Claude Code · открывай <code>content/</code> в Obsidian, пиши, публикуй.
+  </footer>
+</div>
+
+<script>
+  // Scrollspy: подсветка активного пункта оглавления
+  (function () {
+    var links = Array.prototype.slice.call(document.querySelectorAll('nav.toc a'));
+    var map = {};
+    links.forEach(function (l) { map[l.getAttribute('href').slice(1)] = l; });
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          links.forEach(function (l) { l.classList.remove('active'); });
+          var a = map[e.target.id];
+          if (a) a.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+    document.querySelectorAll('main section').forEach(function (s) { obs.observe(s); });
+  })();
+</script>

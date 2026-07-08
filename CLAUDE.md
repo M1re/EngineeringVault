@@ -13,6 +13,18 @@ should understand deeply. Notes live in `content/` and are published as a websit
    note (a `> [!warning] Unverified` callout) or leave it out. Prefer primary sources.
 3. **English only** for note content (frontmatter, headings, body). This is the audience's language.
 
+## Feedback ledger (binding)
+
+`.claude/feedback.md` is the author's accumulated feedback. Two duties, both mandatory:
+
+1. **Obey it.** Before writing or editing anything in this repo, read `.claude/feedback.md` and
+   follow every rule. Treat each entry as binding; never repeat a listed mistake.
+2. **Keep it current — automatically.** Whenever the author expresses a correction, dislike, or
+   preference about how you write or work — anywhere in normal conversation, without being asked —
+   distill it into a general rule and append it to `.claude/feedback.md` in that same turn. Do not
+   wait to be told, and do not require the `/feedback` command; that command is only a manual
+   shortcut for the same action.
+
 ## Repository layout
 
 ```
