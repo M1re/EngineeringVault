@@ -15,10 +15,8 @@ const config: QuartzConfig = {
     // No third-party analytics on a public knowledge base. Set a provider later if you want stats.
     analytics: null,
     locale: "en-US",
-    // TODO: set this to your real published URL.
-    //   GitHub project page:  "USERNAME.github.io/EngineeringVault"
-    //   or a custom domain:   "vault.example.com"
-    baseUrl: "USERNAME.github.io/EngineeringVault",
+    // Published on GitHub Pages as a project page. (Change to a custom domain later if you want.)
+    baseUrl: "M1re.github.io/EngineeringVault",
     // "Templates" (capital T) matters: GitHub's Linux runner is case-sensitive.
     ignorePatterns: ["private", "templates", "Templates", ".obsidian"],
     defaultDateType: "modified",
