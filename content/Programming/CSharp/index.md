@@ -1,8 +1,8 @@
 ---
 publish: true
 title: C#
-created: 2026-07-09T20:28:33.875+03:00
-modified: 2026-07-09T20:28:33.876+03:00
+created: 2026-07-09T20:32:52.468+03:00
+modified: 2026-07-09T20:32:52.468+03:00
 tags:
   - FolderNote
 ---

@@ -2,7 +2,7 @@
 publish: true
 title: Records
 created: 2026-07-09
-modified: 2026-07-09T20:28:33.876+03:00
+modified: 2026-07-09T20:32:52.467+03:00
 tags:
   - programming
   - csharp

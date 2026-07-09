@@ -1,8 +1,8 @@
 ---
 publish: true
 title: AI & ML
-created: 2026-07-08T12:23:31.074+03:00
-modified: 2026-07-09T20:28:33.869+03:00
+created: 2026-07-09T20:32:52.457+03:00
+modified: 2026-07-09T20:32:52.458+03:00
 tags:
   - FolderNote
 ---

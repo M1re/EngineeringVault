@@ -1,8 +1,8 @@
 ---
 publish: true
 title: Concurrency & Parallelism
-created: 2026-07-09T20:28:33.872+03:00
-modified: 2026-07-09T20:28:33.872+03:00
+created: 2026-07-09T20:32:52.471+03:00
+modified: 2026-07-09T20:32:52.471+03:00
 tags:
   - FolderNote
 ---

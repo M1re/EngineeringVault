@@ -1,8 +1,8 @@
 ---
 publish: true
 title: Data Persistence
-created: 2026-07-08T12:23:27.336+03:00
-modified: 2026-07-09T20:28:33.868+03:00
+created: 2026-07-09T20:32:52.460+03:00
+modified: 2026-07-09T20:32:52.460+03:00
 tags:
   - FolderNote
 ---

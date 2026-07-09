@@ -1,8 +1,8 @@
 ---
 publish: true
 title: Security
-created: 2026-07-08T12:23:32.572+03:00
-modified: 2026-07-09T20:28:33.869+03:00
+created: 2026-07-09T20:32:52.420+03:00
+modified: 2026-07-09T20:32:52.420+03:00
 tags:
   - FolderNote
 ---
