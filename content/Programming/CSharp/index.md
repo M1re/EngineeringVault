@@ -2,7 +2,7 @@
 publish: true
 title: C#
 created: 2026-07-09T22:21:39.193+03:00
-modified: 2026-07-09T22:21:39.193+03:00
+modified: 2026-07-09T22:49:22.915+03:00
 tags:
   - FolderNote
 ---

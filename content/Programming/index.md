@@ -2,7 +2,7 @@
 publish: true
 title: Programming
 created: 2026-07-09T21:15:52.721+03:00
-modified: 2026-07-09T21:15:52.722+03:00
+modified: 2026-07-09T21:43:37.030+03:00
 tags:
   - FolderNote
 ---
