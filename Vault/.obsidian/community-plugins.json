@@ -8,5 +8,6 @@
   "datacore",
   "quartz-syncer",
   "folder-notes",
-  "homepage"
+  "homepage",
+  "obsidian-shellcommands"
 ]
