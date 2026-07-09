@@ -59,6 +59,20 @@ Notes go live through **Quartz Syncer**, not a git commit:
 
 Live site: https://m1re.github.io/EngineeringVault/
 
+### Auto-publish (optional, zero-click)
+
+Instead of opening the Publication Center each time, run the watcher:
+
+```bash
+npm run watch-publish        # add --dry to test without publishing
+```
+
+It watches `Vault/` and, whenever a note with `publish: true` changes, waits ~25s then runs the
+Quartz Syncer CLI (`quartz-syncer:publish`) for you. So: tick the `publish` box (or edit a published
+note) → the site updates on its own. Requirements: **Obsidian must be running** with the CLI enabled
+(**Settings → General → Advanced → Command line interface**). Drafts (`publish: false`) are ignored.
+To start it automatically at login, schedule `npm run watch-publish` with Windows Task Scheduler.
+
 > [!note] One rule above all
 > Anything we build must look the same in Obsidian **and** on the deployed site. Prefer Datacore
 > (precompiled by Quartz Syncer) or plain Markdown/HTML — never a feature that only works in one.
