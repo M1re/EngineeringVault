@@ -6,16 +6,17 @@
 //   node scripts/watch-publish.mjs           # live: actually publishes
 //   node scripts/watch-publish.mjs --dry     # dry run: logs, never publishes
 //
-// The Obsidian CLI redirector path can be overridden with the OBSIDIAN_COM env var.
+// CLI resolution: uses `obsidian` from PATH (added when you enable the CLI), so it is portable
+// across machines. Override with the OBSIDIAN_COM env var if needed (e.g. a full path to Obsidian.com).
 
 import chokidar from "chokidar"
 import { readFileSync } from "node:fs"
-import { execFile } from "node:child_process"
+import { exec } from "node:child_process"
 import path from "node:path"
 
 const REPO = process.cwd()
 const VAULT = path.join(REPO, "Vault")
-const OBSIDIAN_COM = process.env.OBSIDIAN_COM || "D:/Obsidian/Obsidian.com"
+const OBSIDIAN = process.env.OBSIDIAN_COM || "obsidian"
 const DEBOUNCE_MS = Number(process.env.PUBLISH_DEBOUNCE_MS || 25000)
 const DRY = process.argv.includes("--dry")
 
@@ -48,13 +49,14 @@ function runPublish() {
     return
   }
   publishing = true
+  const cmd = `"${OBSIDIAN}" quartz-syncer:publish`
   if (DRY) {
-    console.log(`[${now()}] DRY RUN — would run: ${OBSIDIAN_COM} quartz-syncer:publish`)
+    console.log(`[${now()}] DRY RUN — would run: ${cmd}`)
     publishing = false
     return
   }
   console.log(`[${now()}] running quartz-syncer:publish …`)
-  execFile(OBSIDIAN_COM, ["quartz-syncer:publish"], { windowsHide: true }, (err, stdout, stderr) => {
+  exec(cmd, { windowsHide: true }, (err, stdout, stderr) => {
     publishing = false
     const out = (stdout || "").trim() || (stderr || "").trim()
     if (err) console.error(`[${now()}] publish FAILED: ${out || err.message}`)
@@ -79,6 +81,6 @@ watcher.on("all", (event, file) => {
 
 console.log(`Auto-publish watcher${DRY ? " (DRY RUN)" : ""}`)
 console.log(`  watching: ${VAULT}`)
-console.log(`  cli:      ${OBSIDIAN_COM} quartz-syncer:publish`)
+console.log(`  cli:      ${OBSIDIAN} quartz-syncer:publish`)
 console.log(`  debounce: ${DEBOUNCE_MS / 1000}s   (Obsidian must be running)`)
 console.log(`Press Ctrl+C to stop.`)
