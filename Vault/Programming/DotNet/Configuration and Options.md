@@ -8,7 +8,5 @@ publish: true
 created: 2026-07-09
 ---
 
-# Configuration and Options
-
 > [!warning] Stub
 > Not written yet.

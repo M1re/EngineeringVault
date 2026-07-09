@@ -7,8 +7,6 @@ tags:
 publish: true
 ---
 
-# AI & ML
-
 The concepts behind modern machine learning — enough to reason about, build with, and integrate ML systems.
 
 > [!abstract] Scope
@@ -95,10 +93,10 @@ return function FolderDashboard() {
 .fd { margin: 0.5rem 0 1rem; }
 .fd-total { margin-bottom: 1rem; }
 .fd-cap { display: flex; justify-content: space-between; font-size: 0.76rem; color: var(--text-muted, #9ca3af); margin-bottom: 6px; }
-.fd-bar { height: 8px; background: var(--background-modifier-border, #e5e5e5); border-radius: 999px; overflow: hidden; }
+.fd-bar { height: 8px; background: rgba(128, 128, 128, 0.22); border-radius: 999px; overflow: hidden; }
 .fd-fill { height: 100%; background: rgb(var(--fd-rgb, 63,182,168)); border-radius: 999px; }
 .fd-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 0.75rem; }
-.fd-card { position: relative; border: 1px solid var(--background-modifier-border, #e5e5e5); border-radius: 8px; padding: 0.8rem 0.9rem; transition: border-color 120ms, background-color 120ms; }
+.fd-card { position: relative; border: 1px solid rgba(128, 128, 128, 0.22); border-radius: 8px; padding: 0.8rem 0.9rem; transition: border-color 120ms, background-color 120ms; }
 .fd-card:hover { border-color: rgba(var(--fd-rgb), 0.5); background: rgba(var(--fd-rgb), 0.08); }
 .fd-card-head { display: flex; align-items: center; gap: 0.5rem; }
 .fd-icon { display: flex; color: rgb(var(--fd-rgb)); }

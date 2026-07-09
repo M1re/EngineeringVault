@@ -9,8 +9,6 @@ status: done
 publish: true
 ---
 
-# Idempotency
-
 > [!summary] In one sentence
 > An operation is **idempotent** if performing it many times has the same effect as performing it once — which is what makes safe retries possible in an unreliable network.
 

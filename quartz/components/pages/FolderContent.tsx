@@ -102,21 +102,13 @@ export default ((opts?: Partial<FolderContentOptions>) => {
         : htmlToJsx(fileData.filePath!, tree)
     ) as ComponentChildren
 
+    // The folder-note's own datacorejsx dashboard already lists children, so we intentionally
+    // do NOT render Quartz's automatic "N items under this folder" listing (avoids duplication).
+    void allPagesInFolder
+    void listProps
     return (
       <div class="popover-hint">
         <article class={classes}>{content}</article>
-        <div class="page-listing">
-          {options.showFolderCount && (
-            <p>
-              {i18n(cfg.locale).pages.folderContent.itemsUnderFolder({
-                count: allPagesInFolder.length,
-              })}
-            </p>
-          )}
-          <div>
-            <PageList {...listProps} />
-          </div>
-        </div>
       </div>
     )
   }

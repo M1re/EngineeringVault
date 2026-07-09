@@ -8,7 +8,5 @@ publish: true
 created: 2026-07-09
 ---
 
-# Locks and Synchronization
-
 > [!warning] Stub
 > Not written yet.
