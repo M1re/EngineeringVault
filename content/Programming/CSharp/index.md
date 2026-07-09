@@ -1,9 +1,8 @@
 ---
-banner: "attachments/banners/aurora.svg"
 publish: true
 title: C#
-created: 2026-07-09T22:21:39.193+03:00
-modified: 2026-07-09T22:49:22.915+03:00
+created: 2026-07-09T23:01:25.061+03:00
+modified: 2026-07-09T23:01:25.062+03:00
 tags:
   - FolderNote
 ---
