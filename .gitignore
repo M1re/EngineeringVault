@@ -22,5 +22,6 @@ Vault/.trash/
 # Claude Code: personal/local settings never go to the public repo
 .claude/settings.local.json
 
-# Auto-publish watcher log
+# Auto-publish watcher runtime files
 scripts/watch-publish.log
+scripts/.watch-publish.lock

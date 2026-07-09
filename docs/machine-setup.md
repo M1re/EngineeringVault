@@ -37,12 +37,13 @@ npm install
 
 ## 4. Turn on auto-publish
 
-```powershell
-powershell -ExecutionPolicy Bypass -File scripts\install-autostart.ps1
-```
+Install the **Shell commands** community plugin, add a command
+`wscript "scripts\autopublish-launcher.vbs"`, and set its event to *Obsidian starts*. The watcher
+then runs whenever Obsidian is open, and editing a `publish: true` note auto-publishes to the site.
+A singleton lock stops duplicate instances.
 
-This adds a hidden launcher to your Startup folder. From the next login, editing a `publish: true`
-note auto-publishes to the site. (Run it now without logging out: `wscript "scripts\autopublish-launcher.vbs"`.)
+Alternative — start it at Windows login instead of with Obsidian:
+`powershell -ExecutionPolicy Bypass -File scripts\install-autostart.ps1`.
 
 ## 5. Claude Code
 
