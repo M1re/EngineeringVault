@@ -1,18 +1,15 @@
 ---
-title: Security
-icon: lock
-color: "#ef4444"
+title: "Concurrency & Parallelism"
+color: "#0ea5e9"
 tags:
   - FolderNote
 publish: true
 ---
 
-# Security
-
-Thinking like an attacker so you can build like a defender — a baseline every senior+ engineer is expected to own.
+# Concurrency & Parallelism
 
 > [!abstract] Scope
-> Cryptography, authentication, common vulnerability classes, and defensive engineering practices.
+> _Sub-topic of [[Programming/index|Programming]]. Overview coming._
 
 ## Contents
 

@@ -1,18 +1,15 @@
 ---
-title: Security
-icon: lock
-color: "#ef4444"
+title: "Clean Code"
+color: "#f59e0b"
 tags:
   - FolderNote
 publish: true
 ---
 
-# Security
-
-Thinking like an attacker so you can build like a defender — a baseline every senior+ engineer is expected to own.
+# Clean Code
 
 > [!abstract] Scope
-> Cryptography, authentication, common vulnerability classes, and defensive engineering practices.
+> _Sub-topic of [[Programming/index|Programming]]. Overview coming._
 
 ## Contents
 

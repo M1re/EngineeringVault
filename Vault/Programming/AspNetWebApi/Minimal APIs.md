@@ -1,0 +1,14 @@
+---
+title: "Minimal APIs"
+tags:
+  - programming
+  - aspnet
+status: creation
+publish: true
+created: 2026-07-09
+---
+
+# Minimal APIs
+
+> [!warning] Stub
+> Not written yet.

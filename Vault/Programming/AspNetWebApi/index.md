@@ -1,18 +1,15 @@
 ---
-title: Security
-icon: lock
-color: "#ef4444"
+title: "ASP.NET Web API"
+color: "#10b981"
 tags:
   - FolderNote
 publish: true
 ---
 
-# Security
-
-Thinking like an attacker so you can build like a defender — a baseline every senior+ engineer is expected to own.
+# ASP.NET Web API
 
 > [!abstract] Scope
-> Cryptography, authentication, common vulnerability classes, and defensive engineering practices.
+> _Sub-topic of [[Programming/index|Programming]]. Overview coming._
 
 ## Contents
 
