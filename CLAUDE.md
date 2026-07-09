@@ -60,8 +60,8 @@ created: YYYY-MM-DD
 ---
 ```
 
-Required body sections, in order:
-- `# Title`
+Required body sections, in order (do **not** add a top-level `# Title` heading — Quartz renders the
+frontmatter `title` as the page heading, so a body `# Title` would show the title twice):
 - `> [!summary] In one sentence` — a crisp definition
 - `## Why it matters` — when it shows up in real systems
 - `## How it works` — the mechanics, deep enough to *understand* not just recognise

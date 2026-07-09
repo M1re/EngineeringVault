@@ -6,8 +6,6 @@ publish: false
 created: {{date:YYYY-MM-DD}}
 ---
 
-# {{title}}
-
 > [!summary] In one sentence
 > <!-- Explain it to a smart engineer who has never heard the term. One or two sentences. -->
 
