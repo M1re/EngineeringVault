@@ -35,12 +35,12 @@ npm install
 5. (Optional) **Settings → General → "Open Obsidian on system startup"** — so the watcher always has
    Obsidian to talk to.
 
-## 4. Turn on auto-publish
+## 4. Auto-publish — already configured
 
-Install the **Shell commands** community plugin, add a command
-`wscript "scripts\autopublish-launcher.vbs"`, and set its event to *Obsidian starts*. The watcher
-then runs whenever Obsidian is open, and editing a `publish: true` note auto-publishes to the site.
-A singleton lock stops duplicate instances.
+Nothing to set up: the **Shell commands** plugin config travels with the vault and is set to run the
+watcher on the *Obsidian starts* event. Once community plugins are enabled (step 3.2), editing a
+`publish: true` note auto-publishes to the site; the watcher exits by itself when Obsidian closes,
+and a singleton lock prevents duplicate instances.
 
 Alternative — start it at Windows login instead of with Obsidian:
 `powershell -ExecutionPolicy Bypass -File scripts\install-autostart.ps1`.

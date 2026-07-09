@@ -30,11 +30,20 @@ How this stays healthy (so it never bloats and drags down quality):
 - Anything we build (dashboards, UI, dynamic elements, layout) must render the **same in Obsidian
   and on the deployed site**. Use tech that works in both — Datacore precompiled by Quartz Syncer,
   or plain Markdown/HTML — and never ship a feature that only works in one of the two.
+- Default to **full automation** and **path-agnostic, no-personal-data** solutions: prefer writing/
+  committing a config file over asking for manual GUI clicks; never hardcode absolute paths or
+  machine/user-specific data — derive them — so future installs and machine moves are trivial.
 - Keep this ledger lean: record proactively, merge duplicates, promote mature rules into structure.
 
 ## Archive (log)
 
 <!-- Dated history. Newest first. Not required reading; kept for provenance. -->
+
+### 2026-07-09
+
+- Bias to full automation, path-agnostic, no personal/machine-specific data: prefer committing a
+  config that travels via git over manual GUI steps; derive paths, never hardcode absolute ones.
+  Update the new-machine setup guide whenever the setup changes.
 
 ### 2026-07-08
 

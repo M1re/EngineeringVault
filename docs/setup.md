@@ -71,11 +71,10 @@ It watches `Vault/` and, whenever a note with `publish: true` changes, waits ~25
 Quartz Syncer CLI (`quartz-syncer:publish`) for you. So: tick the `publish` box (or edit a published
 note) → the site updates on its own. Requirements: **Obsidian must be running** with the CLI enabled
 (**Settings → General → Advanced → Command line interface**). Drafts (`publish: false`) are ignored.
-**Start it together with Obsidian (recommended):** install the **Shell commands** plugin, add a
-command `wscript "scripts\autopublish-launcher.vbs"`, and set its event trigger to *Obsidian starts*.
-The watcher then launches whenever Obsidian does, and **exits by itself when Obsidian closes**
-(a singleton lock prevents duplicate instances). So one command on *Obsidian starts* is enough.
-Alternative — start it at Windows login instead: `scripts\install-autostart.ps1`.
+**Starts with Obsidian (already configured):** the **Shell commands** plugin is set up (its config is
+committed with the vault) to run the watcher on the *Obsidian starts* event. The watcher launches
+whenever Obsidian does and **exits by itself when Obsidian closes** (a singleton lock prevents
+duplicates). Alternative — start it at Windows login instead: `scripts\install-autostart.ps1`.
 
 > [!note] One rule above all
 > Anything we build must look the same in Obsidian **and** on the deployed site. Prefer Datacore
