@@ -2,7 +2,7 @@
 publish: true
 title: Idempotency
 created: 2026-07-08
-modified: 2026-07-08T16:20:59.746+03:00
+modified: 2026-07-09T19:49:50.159+03:00
 tags:
   - architecture
   - reliability
@@ -73,3 +73,5 @@ The uniqueness constraint (often a `UNIQUE` index in the database) is what makes
 - Stripe API docs — _Idempotent Requests_
 - _Designing Data-Intensive Applications_, Martin Kleppmann — Ch. 8–9 (unreliable networks, exactly-once)
 - RFC 9110 (HTTP Semantics) — §9.2.2 Idempotent Methods
+
+<!-- watcher round-trip test 19:49:50 -->
