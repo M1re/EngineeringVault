@@ -7,8 +7,5 @@ tags:
   - programming
   - csharp
 ---
-
-# Pattern Matching
-
 > [!warning] Stub
 > Not written yet.

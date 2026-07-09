@@ -7,8 +7,5 @@ tags:
   - programming
   - csharp
 ---
-
-# Classes and Structs
-
 > [!warning] Stub
 > Not written yet.

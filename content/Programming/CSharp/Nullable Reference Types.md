@@ -7,8 +7,5 @@ tags:
   - programming
   - csharp
 ---
-
-# Nullable Reference Types
-
 > [!warning] Stub
 > Not written yet.

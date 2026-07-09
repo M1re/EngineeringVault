@@ -7,8 +7,5 @@ tags:
   - programming
   - csharp
 ---
-
-# Spans
-
 > [!warning] Stub
 > Not written yet.

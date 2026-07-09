@@ -7,8 +7,5 @@ tags:
   - programming
   - csharp
 ---
-
-# Generics
-
 > [!warning] Stub
 > Not written yet.

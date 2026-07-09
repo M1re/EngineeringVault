@@ -7,8 +7,5 @@ tags:
   - programming
   - csharp
 ---
-
-# LINQ
-
 > [!warning] Stub
 > Not written yet.

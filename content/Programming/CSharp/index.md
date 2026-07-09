@@ -7,8 +7,6 @@ tags:
   - FolderNote
 ---
 
-# C\#
-
 > [!abstract] Scope
 > _Sub-topic of [[Programming/index|Programming]]. Overview coming._
 

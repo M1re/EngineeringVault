@@ -7,8 +7,5 @@ tags:
   - programming
   - csharp
 ---
-
-# Delegates and Events
-
 > [!warning] Stub
 > Not written yet.

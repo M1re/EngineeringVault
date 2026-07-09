@@ -7,8 +7,5 @@ tags:
   - programming
   - csharp
 ---
-
-# Exceptions
-
 > [!warning] Stub
 > Not written yet.
