@@ -2,14 +2,12 @@
 publish: true
 title: Idempotency
 created: 2026-07-08
-modified: 2026-07-09T19:52:43.389+03:00
+modified: 2026-07-09T21:15:52.697+03:00
 tags:
   - architecture
   - reliability
   - api-design
 ---
-
-# Idempotency
 
 > [!summary] In one sentence
 > An operation is **idempotent** if performing it many times has the same effect as performing it once — which is what makes safe retries possible in an unreliable network.
