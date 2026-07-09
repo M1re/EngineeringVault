@@ -31,9 +31,7 @@ npm install
    in the repo, so nothing to reinstall).
 3. **Settings → General → Advanced → Command line interface** → turn **on** (needed by auto-publish).
 4. **Settings → Quartz Syncer → Git**: paste a **GitHub Personal Access Token**
-   (fine-grained, repo `M1re/EngineeringVault`, permission *Contents: Read and write*).
-   The token is not stored in the repo — create a fresh one at
-   github.com → Settings → Developer settings → Fine-grained tokens.
+   (fine-grained, permission *Contents: Read and write*).
 5. (Optional) **Settings → General → "Open Obsidian on system startup"** — so the watcher always has
    Obsidian to talk to.
 
