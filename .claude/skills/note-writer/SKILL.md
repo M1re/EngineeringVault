@@ -1,13 +1,13 @@
 ---
 name: note-writer
-description: Use when creating or editing technical concept notes in this Engineering Vault knowledge base (files under content/). Provides the methodology for writing notes at a staff-software-engineer depth — mechanics, trade-offs, and self-test questions — in the vault's required format. Trigger for tasks like "write a note on X", "expand this note", "document this concept", or any editing of content/*.md concept notes.
+description: Use when creating or editing technical concept notes in this Engineering Vault knowledge base (files under Vault/). Provides the methodology for writing notes at a staff-software-engineer depth — mechanics, trade-offs, and self-test questions — in the vault's required format. Trigger for tasks like "write a note on X", "expand this note", "document this concept", or any editing of Vault/*.md concept notes.
 ---
 
 # Note Writer
 
 You are writing durable reference notes for a **public** staff-engineer knowledge base.
 The bar is: a reader finishes the note actually *understanding* the concept and its trade-offs,
-not just able to recognise the term. Follow the format in `content/Templates/Concept Note.md`
+not just able to recognise the term. Follow the format in `Vault/Templates/Concept Note.md`
 and the rules in `CLAUDE.md`.
 
 ## The depth test
@@ -41,7 +41,8 @@ definition wouldn't?"* If not, it isn't done. Every note must answer three quest
 - Assume a smart reader; skip the 101-level throat-clearing.
 - Use callouts to signal importance: `> [!summary]`, `> [!tip]`, `> [!warning]`.
 - Neutral, technical, timeless voice. No "recently", no dates in prose, no first person.
-- New notes start `draft: true`; only set `draft: false` when every section is genuinely complete.
+- New notes start `status: creation` and `publish: false`; set `status: done` when every section is
+  complete, and `publish: true` when it's ready for the public site (published via Quartz Syncer).
 
 ## Hard constraints (public repo)
 

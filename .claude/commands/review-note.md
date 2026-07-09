@@ -18,4 +18,5 @@ Check and report on:
 5. **Links:** at least one `## Related` wikilink; note is linked from its section `index.md`.
 
 Report findings as a short checklist (✅ / ⚠️ / ❌). Do not edit the file unless I ask —
-just tell me what to fix. If the note is publish-ready, say so and remind me to set `draft: false`.
+just tell me what to fix. If the note is publish-ready, say so and remind me to set `status: done`
+and `publish: true` (then publish via the Quartz Syncer Publication Center).

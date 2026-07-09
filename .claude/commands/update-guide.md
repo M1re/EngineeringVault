@@ -4,7 +4,7 @@ description: Regenerate docs/repo-guide.html from the current repo and redeploy 
 
 Bring the repository guide back in sync with the repo's actual state.
 
-1. Re-scan the repo: folder structure under `content/`, the files in `.claude/`
+1. Re-scan the repo: folder structure under `Vault/`, the files in `.claude/`
    (commands, skills, hooks, settings), `quartz.config.ts`, `.github/workflows/`, `docs/`.
    Note anything that changed since the guide was last written.
 2. Edit `docs/repo-guide.html` so every claim matches reality (file names, sections, counts,

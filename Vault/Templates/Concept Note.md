@@ -1,7 +1,8 @@
 ---
 title: "{{title}}"
 tags: []
-draft: true
+status: creation
+publish: false
 created: {{date:YYYY-MM-DD}}
 ---
 

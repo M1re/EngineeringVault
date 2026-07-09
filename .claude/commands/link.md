@@ -5,7 +5,7 @@ argument-hint: <path or title of the note to link up>
 
 Improve the connectivity of this note in the graph: **$ARGUMENTS**
 
-1. Read the note and scan the rest of `content/` for genuinely related concepts.
+1. Read the note and scan the rest of `Vault/` for genuinely related concepts.
 2. Propose `[[wikilinks]]` to add — both inline (where a concept is mentioned) and in the
    `## Related` section. Only suggest links that add real value; avoid link spam.
 3. Where a useful target note does not exist yet, suggest it as a "note to write" (an

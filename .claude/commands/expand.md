@@ -5,7 +5,7 @@ argument-hint: <path or title of the note to expand>
 
 Expand and deepen this note: **$ARGUMENTS**
 
-1. Read the note. If only a title was given, find the matching file under `content/`.
+1. Read the note. If only a title was given, find the matching file under `Vault/`.
 2. Raise it to the staff-engineer bar defined in `CLAUDE.md`:
    - Strengthen **How it works** with concrete mechanics, a diagram-in-text or code snippet if useful.
    - Make **Trade-offs & pitfalls** the strongest section: real failure modes, costs, limits.
