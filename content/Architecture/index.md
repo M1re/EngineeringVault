@@ -2,14 +2,14 @@
 publish: true
 title: Architecture
 created: 2026-07-08T12:23:29.578+03:00
-modified: 2026-07-09T16:32:10.679+03:00
+modified: 2026-07-09T16:55:34.294+03:00
 tags:
   - FolderNote
 ---
 
 # Architecture
 
-Designing systems that stay correct, available, and affordable as they grow — the core of staff-level work.
+Designing systems that stay correct, available, and affordable as they grow — the core of staff-level work.test!!!
 
 > [!abstract] Scope
 > Distributed systems, system design, scalability patterns, and the trade-offs behind every architectural decision.
