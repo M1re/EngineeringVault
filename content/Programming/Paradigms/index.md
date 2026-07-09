@@ -1,22 +1,20 @@
 ---
 publish: true
-title: Security
-created: 2026-07-08T12:23:32.572+03:00
-modified: 2026-07-09T20:28:33.869+03:00
+title: Paradigms
+created: 2026-07-09T20:28:33.871+03:00
+modified: 2026-07-09T20:28:33.871+03:00
 tags:
   - FolderNote
 ---
 
-# Security
-
-Thinking like an attacker so you can build like a defender — a baseline every senior+ engineer is expected to own.
+# Paradigms
 
 > [!abstract] Scope
-> Cryptography, authentication, common vulnerability classes, and defensive engineering practices.
+> _Sub-topic of [[Programming/index|Programming]]. Overview coming._
 
 ## Contents
 
-<div class="fd"><div class="fd-empty">Empty — add notes or sub-topics here.</div><style>
+<div class="fd"><div style="--fd-rgb: 63, 182, 168;" class="fd-total"><div class="fd-cap"><span>0/4 done</span><span>0%</span></div><div class="fd-bar"><div style="width: 0%;" class="fd-fill"></div></div></div><ul class="fd-list"><li class="fd-item"><a class="internal-link" href="Programming/Paradigms/Design Patterns.md" data-tooltip-position="top" aria-label="Design Patterns">Design Patterns</a><span class="fd-pill wip">In progress</span></li><li class="fd-item"><a class="internal-link" href="Programming/Paradigms/Functional Programming.md" data-tooltip-position="top" aria-label="Functional Programming">Functional Programming</a><span class="fd-pill wip">In progress</span></li><li class="fd-item"><a class="internal-link" href="Programming/Paradigms/Object-Oriented Programming.md" data-tooltip-position="top" aria-label="Object-Oriented Programming">Object-Oriented Programming</a><span class="fd-pill wip">In progress</span></li><li class="fd-item"><a class="internal-link" href="Programming/Paradigms/SOLID Principles.md" data-tooltip-position="top" aria-label="SOLID Principles">SOLID Principles</a><span class="fd-pill wip">In progress</span></li></ul><style>
 .fd { margin: 0.5rem 0 1rem; }
 .fd-total { margin-bottom: 1rem; }
 .fd-cap { display: flex; justify-content: space-between; font-size: 0.76rem; color: var(--text-muted, #9ca3af); margin-bottom: 6px; }

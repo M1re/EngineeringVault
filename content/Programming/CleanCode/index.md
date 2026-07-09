@@ -1,22 +1,20 @@
 ---
 publish: true
-title: Security
-created: 2026-07-08T12:23:32.572+03:00
-modified: 2026-07-09T20:28:33.869+03:00
+title: Clean Code
+created: 2026-07-09T20:28:33.890+03:00
+modified: 2026-07-09T20:28:33.890+03:00
 tags:
   - FolderNote
 ---
 
-# Security
-
-Thinking like an attacker so you can build like a defender — a baseline every senior+ engineer is expected to own.
+# Clean Code
 
 > [!abstract] Scope
-> Cryptography, authentication, common vulnerability classes, and defensive engineering practices.
+> _Sub-topic of [[Programming/index|Programming]]. Overview coming._
 
 ## Contents
 
-<div class="fd"><div class="fd-empty">Empty — add notes or sub-topics here.</div><style>
+<div class="fd"><div style="--fd-rgb: 63, 182, 168;" class="fd-total"><div class="fd-cap"><span>0/3 done</span><span>0%</span></div><div class="fd-bar"><div style="width: 0%;" class="fd-fill"></div></div></div><ul class="fd-list"><li class="fd-item"><a class="internal-link" href="Programming/CleanCode/Code Smells.md" data-tooltip-position="top" aria-label="Code Smells">Code Smells</a><span class="fd-pill wip">In progress</span></li><li class="fd-item"><a class="internal-link" href="Programming/CleanCode/Naming.md" data-tooltip-position="top" aria-label="Naming">Naming</a><span class="fd-pill wip">In progress</span></li><li class="fd-item"><a class="internal-link" href="Programming/CleanCode/Refactoring.md" data-tooltip-position="top" aria-label="Refactoring">Refactoring</a><span class="fd-pill wip">In progress</span></li></ul><style>
 .fd { margin: 0.5rem 0 1rem; }
 .fd-total { margin-bottom: 1rem; }
 .fd-cap { display: flex; justify-content: space-between; font-size: 0.76rem; color: var(--text-muted, #9ca3af); margin-bottom: 6px; }
