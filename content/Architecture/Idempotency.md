@@ -2,7 +2,7 @@
 publish: true
 title: Idempotency
 created: 2026-07-08
-modified: 2026-07-09T21:15:52.697+03:00
+modified: 2026-07-09T21:43:37.017+03:00
 tags:
   - architecture
   - reliability

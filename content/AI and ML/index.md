@@ -2,7 +2,7 @@
 publish: true
 title: AI & ML
 created: 2026-07-09T21:15:52.696+03:00
-modified: 2026-07-09T21:15:52.696+03:00
+modified: 2026-07-09T21:43:37.016+03:00
 tags:
   - FolderNote
 ---
@@ -21,8 +21,8 @@ The concepts behind modern machine learning — enough to reason about, build wi
 .fd-bar { height: 8px; background: rgba(128, 128, 128, 0.22); border-radius: 999px; overflow: hidden; }
 .fd-fill { height: 100%; background: rgb(var(--fd-rgb, 63,182,168)); border-radius: 999px; }
 .fd-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 0.75rem; }
-.fd-card { position: relative; border: 1px solid rgba(128, 128, 128, 0.22); border-radius: 8px; padding: 0.8rem 0.9rem; transition: border-color 120ms, background-color 120ms; }
-.fd-card:hover { border-color: rgba(var(--fd-rgb), 0.5); background: rgba(var(--fd-rgb), 0.08); }
+.fd-card { position: relative; border: 1px solid rgba(128, 128, 128, 0.22) !important; border-radius: 8px; padding: 0.8rem 0.9rem; background: transparent !important; transition: border-color 120ms, background-color 120ms; }
+.fd-card:hover { border-color: rgba(var(--fd-rgb), 0.55) !important; background: rgba(var(--fd-rgb), 0.08) !important; }
 .fd-card-head { display: flex; align-items: center; gap: 0.5rem; }
 .fd-icon { display: flex; color: rgb(var(--fd-rgb)); }
 .fd-icon svg { width: 20px; height: 20px; }
