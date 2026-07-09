@@ -27,6 +27,9 @@ How this stays healthy (so it never bloats and drags down quality):
 - Keep UI honest and minimal: don't show static elements that look like live data (e.g. a legend
   implying statuses that don't exist), and match the existing theme's accent colours rather than
   inventing new ones.
+- Anything we build (dashboards, UI, dynamic elements, layout) must render the **same in Obsidian
+  and on the deployed site**. Use tech that works in both — Datacore precompiled by Quartz Syncer,
+  or plain Markdown/HTML — and never ship a feature that only works in one of the two.
 - Keep this ledger lean: record proactively, merge duplicates, promote mature rules into structure.
 
 ## Archive (log)
@@ -35,6 +38,8 @@ How this stays healthy (so it never bloats and drags down quality):
 
 ### 2026-07-08
 
+- Rule: everything we build must look the same in Obsidian **and** in the deployed version — pick
+  tech that renders in both (Datacore + Quartz Syncer, or plain Markdown/HTML).
 - Progress model is simple **done/total** (not the 4-status spaced-repetition ramp). The dashboard
   must not show a legend/segments implying statuses that don't exist; the overall bar uses the
   theme's teal accent (matches the tip callout), not grey.
