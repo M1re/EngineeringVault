@@ -2,7 +2,7 @@
 publish: true
 title: Architecture
 created: 2026-07-08T12:23:29.578+03:00
-modified: 2026-07-09T14:37:34.875+03:00
+modified: 2026-07-09T16:32:10.679+03:00
 tags:
   - FolderNote
 ---
