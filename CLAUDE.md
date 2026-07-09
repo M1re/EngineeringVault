@@ -85,6 +85,11 @@ Required body sections, in order:
 - Every new note should link to at least one existing note and be linked from its section `index.md`.
 - Section landing pages are always `<Section>/index.md` — folder-notes with `tags: [FolderNote]`,
   an `icon` (lucide name), a `color` (hex), and `publish: true`.
+- **Nesting:** Section → sub-topic → note. Every folder at every level (section AND sub-topic) is a
+  folder-note (`index.md`, `tags: [FolderNote]`, `title`, optional `color`/`icon`, `publish: true`)
+  carrying the same recursive dashboard: it lists immediate sub-folders as progress cards and direct
+  notes as a status list. Folder names must be URL-safe (`CSharp`, `DotNet`) with a pretty `title`
+  (`C#`, `.NET`) — never put `#`, spaces, or a leading dot in a folder name.
 
 ## Publishing (Quartz Syncer)
 
