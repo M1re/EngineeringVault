@@ -1,0 +1,65 @@
+/* ==========================================================================
+   Notion-inspired theme for Obsidian — mirrors the Quartz site palette so the
+   vault looks the same locally and on the deployed site.
+   Enable via Settings → Appearance → CSS snippets → "notion".
+   ========================================================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+body {
+  --font-text: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+  --font-interface: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, sans-serif;
+}
+
+/* ---- Dark palette (Notion dark) ---- */
+.theme-dark {
+  --background-primary: #191919;
+  --background-primary-alt: #1c1c1c;
+  --background-secondary: #202020;
+  --background-secondary-alt: #191919;
+  --background-modifier-border: #2f2f2f;
+  --background-modifier-border-hover: #3a3a3a;
+  --background-modifier-border-focus: #4a4a4a;
+  --text-normal: #d4d4d4;
+  --text-muted: #9b9b9b;
+  --text-faint: #6b6b6b;
+  --text-accent: #4a9eda;
+  --text-accent-hover: #6cb6ff;
+  --interactive-accent: #4a9eda;
+  --interactive-accent-hover: #6cb6ff;
+  --text-selection: rgba(74, 158, 218, 0.2);
+}
+
+/* ---- Light palette (Notion light) ---- */
+.theme-light {
+  --background-primary: #ffffff;
+  --background-primary-alt: #fbfbfa;
+  --background-secondary: #f7f7f5;
+  --background-secondary-alt: #ffffff;
+  --background-modifier-border: #e9e9e7;
+  --background-modifier-border-hover: #dcdcda;
+  --text-normal: #37352f;
+  --text-muted: #787774;
+  --text-faint: #9b9a97;
+  --text-accent: #2383e2;
+  --text-accent-hover: #1a6fc4;
+  --interactive-accent: #2383e2;
+  --interactive-accent-hover: #1a6fc4;
+  --text-selection: rgba(35, 131, 226, 0.14);
+}
+
+/* ---- Notion-ish typography ---- */
+.inline-title,
+.markdown-preview-view h1,
+.cm-header-1 {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* Comfortable reading rhythm */
+.markdown-preview-view,
+.markdown-source-view.mod-cm6 .cm-line {
+  line-height: 1.7;
+}

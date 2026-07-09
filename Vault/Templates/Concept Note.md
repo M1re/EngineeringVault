@@ -4,6 +4,7 @@ tags: []
 status: creation
 publish: false
 created: {{date:YYYY-MM-DD}}
+# banner: "attachments/banners/your-cover.gif"   # optional Notion-style cover
 ---
 
 > [!summary] In one sentence

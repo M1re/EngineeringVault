@@ -1,4 +1,5 @@
 ---
+banner: "attachments/banners/aurora.svg"
 title: "C#"
 color: "#8b5cf6"
 tags:

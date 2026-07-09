@@ -1,4 +1,5 @@
 ---
+banner: "attachments/banners/aurora.svg"
 publish: true
 title: C#
 created: 2026-07-09T22:21:39.193+03:00

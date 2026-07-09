@@ -1,4 +1,40 @@
 @use "./base.scss";
 @use "./syncer";
 
-// put your custom CSS here!
+// ---------------------------------------------------------------------------
+// Notion-inspired refinements
+// ---------------------------------------------------------------------------
+
+// Internal links read as plain accent-coloured text, not boxed pills (Notion style)
+a.internal {
+  background-color: transparent;
+  border-radius: 0;
+  padding: 0;
+  color: var(--secondary);
+  text-decoration: none;
+  font-weight: inherit;
+
+  &:hover {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    background-color: transparent;
+  }
+}
+
+// Big, bold page title like a Notion cover heading
+.article-title {
+  font-weight: 700;
+  font-size: 2.5rem;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin-top: 1.25rem;
+}
+
+// Comfortable reading rhythm
+article {
+  p,
+  li {
+    line-height: 1.7;
+  }
+}
+

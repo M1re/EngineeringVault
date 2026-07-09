@@ -24,32 +24,33 @@ const config: QuartzConfig = {
       fontOrigin: "googleFonts",
       cdnCaching: true,
       typography: {
-        header: "Schibsted Grotesk",
-        body: "Source Sans Pro",
+        header: "Inter",
+        body: "Inter",
         code: "IBM Plex Mono",
       },
       colors: {
+        // Notion-inspired palette
         lightMode: {
-          light: "#faf8f8",
-          lightgray: "#e5e5e5",
-          gray: "#b8b8b8",
-          darkgray: "#4e4e4e",
-          dark: "#2b2b2b",
-          secondary: "#284b63",
-          tertiary: "#84a59d",
-          highlight: "rgba(143, 159, 169, 0.15)",
-          textHighlight: "#fff23688",
+          light: "#ffffff", // page background
+          lightgray: "#e9e9e7", // borders / dividers
+          gray: "#c7c6c3", // faint lines, graph links
+          darkgray: "#37352f", // body text (Notion warm near-black)
+          dark: "#2f2c26", // headings / strong text
+          secondary: "#2383e2", // links / accent (Notion blue)
+          tertiary: "#5b9bd5", // hover accent
+          highlight: "rgba(55, 53, 47, 0.06)", // internal-link background
+          textHighlight: "#fdecc8", // ==highlight== marker
         },
         darkMode: {
-          light: "#161618",
-          lightgray: "#393639",
-          gray: "#646464",
-          darkgray: "#d4d4d4",
-          dark: "#ebebec",
-          secondary: "#7b97aa",
-          tertiary: "#84a59d",
-          highlight: "rgba(143, 159, 169, 0.15)",
-          textHighlight: "#b3aa0288",
+          light: "#191919", // page background
+          lightgray: "#2f2f2f", // borders / dividers
+          gray: "#5a5a5a", // faint lines, graph links
+          darkgray: "#c5c5c5", // body text
+          dark: "#eaeaea", // headings / strong text
+          secondary: "#4a9eda", // links / accent
+          tertiary: "#6cb6ff", // hover accent
+          highlight: "rgba(255, 255, 255, 0.055)", // internal-link background
+          textHighlight: "#e5b32e55", // ==highlight== marker
         },
       },
     },
