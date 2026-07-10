@@ -19,10 +19,20 @@
   </defs>
   <rect width="1600" height="400" fill="url(#bg)"/>
   <rect width="1600" height="400" fill="url(#dots)"/>
-  <rect width="1600" height="400" fill="url(#glow)"/>
-  <rect width="1600" height="400" fill="url(#glow2)"/>
+  <rect width="1600" height="400" fill="url(#glow)">
+    <animate attributeName="opacity" values="0.65;1;0.65" dur="7s" repeatCount="indefinite"/>
+  </rect>
+  <rect width="1600" height="400" fill="url(#glow2)">
+    <animate attributeName="opacity" values="1;0.55;1" dur="7s" repeatCount="indefinite"/>
+  </rect>
   <g stroke="#ffffff" stroke-opacity="0.08" fill="none" stroke-width="1.5">
-    <path d="M-50 320 Q 400 220 800 300 T 1650 260"/>
-    <path d="M-50 360 Q 420 260 820 340 T 1650 300"/>
+    <path d="M-50 320 Q 400 220 800 300 T 1650 260">
+      <animateTransform attributeName="transform" type="translate"
+        values="0 0; -40 8; 0 0" dur="12s" repeatCount="indefinite"/>
+    </path>
+    <path d="M-50 360 Q 420 260 820 340 T 1650 300">
+      <animateTransform attributeName="transform" type="translate"
+        values="0 0; 40 -6; 0 0" dur="14s" repeatCount="indefinite"/>
+    </path>
   </g>
 </svg>
