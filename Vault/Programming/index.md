@@ -1,4 +1,5 @@
 ---
+banner: "attachments/banners/aurora.svg"
 title: Programming
 icon: code-2
 color: "#6366f1"

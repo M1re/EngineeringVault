@@ -8,6 +8,15 @@ import style from "./styles/banner.scss"
 // and on the deployed site. The value may be an external URL or a vault-relative
 // path such as `attachments/banners/foo.gif`.
 const Banner: QuartzComponent = ({ fileData, displayClass }: QuartzComponentProps) => {
+  // Covers belong to topics and sub-topics only — i.e. folder-notes.
+  const tags = fileData.frontmatter?.tags
+  const isFolderNote = Array.isArray(tags)
+    ? tags.some((t) => String(t).toLowerCase() === "foldernote")
+    : String(tags ?? "").toLowerCase() === "foldernote"
+  if (!isFolderNote) {
+    return null
+  }
+
   const raw = fileData.frontmatter?.banner as string | undefined
   if (!raw || typeof raw !== "string") {
     return null

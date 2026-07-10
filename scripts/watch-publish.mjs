@@ -25,6 +25,15 @@ const DEBOUNCE_MS = Number(process.env.PUBLISH_DEBOUNCE_MS || 15000)
 const DRY = process.argv.includes("--dry")
 
 const now = () => new Date().toLocaleTimeString()
+
+// --- kill switch ----------------------------------------------------------
+// Presence of scripts/.autopublish-disabled fully disables the auto-publisher.
+// Survives Obsidian restarts and is version-controlled; re-enable by deleting it.
+const DISABLED_FLAG = path.join(REPO, "scripts", ".autopublish-disabled")
+if (existsSync(DISABLED_FLAG)) {
+  console.log(`[${now()}] auto-publish disabled (${path.basename(DISABLED_FLAG)} present) — exiting`)
+  process.exit(0)
+}
 const rel = (f) => path.relative(VAULT, f)
 
 // --- singleton lock -------------------------------------------------------

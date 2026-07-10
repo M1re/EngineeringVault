@@ -1,5 +1,4 @@
 ---
-banner: "attachments/banners/aurora.svg"
 title: Engineering Vault
 tags:
   - MetricsIgnore

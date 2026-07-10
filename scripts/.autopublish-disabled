@@ -1,0 +1,9 @@
+Auto-publish watcher is intentionally DISABLED.
+
+While this file exists, scripts/watch-publish.mjs exits immediately on launch,
+so nothing is published automatically. Publish manually instead:
+  - Obsidian → Quartz Syncer Publication Center, or
+  - the Syncer CLI on demand.
+
+To re-enable the automatic watcher: delete this file.
+See GitHub issue #1 for context.

@@ -1,4 +1,5 @@
 ---
+banner: "attachments/banners/aurora.svg"
 publish: true
 title: Programming
 created: 2026-07-09T21:15:52.721+03:00
