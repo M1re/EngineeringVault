@@ -6,6 +6,7 @@ color: "#f59e0b"
 tags:
   - FolderNote
 publish: true
+banner_y: 0.175
 ---
 
 Designing systems that stay correct, available, and affordable as they grow — the core of staff-level work.
