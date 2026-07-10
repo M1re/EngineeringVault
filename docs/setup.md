@@ -59,22 +59,18 @@ Notes go live through **Quartz Syncer**, not a git commit:
 
 Live site: https://m1re.github.io/EngineeringVault/
 
-### Auto-publish (optional, zero-click)
+> [!tip] Covers / banners
+> To keep the `banner` field (and `color`/`status`/`icon`) in published notes, turn **ON**
+> Quartz Syncer → **"Include all properties"**. See [covers.md](covers.md) for the full
+> cover / GIF workflow.
 
-Instead of opening the Publication Center each time, run the watcher:
+### Auto-publish (currently disabled)
 
-```bash
-npm run watch-publish        # add --dry to test without publishing
-```
-
-It watches `Vault/` and, whenever a note with `publish: true` changes, waits ~25s then runs the
-Quartz Syncer CLI (`quartz-syncer:publish`) for you. So: tick the `publish` box (or edit a published
-note) → the site updates on its own. Requirements: **Obsidian must be running** with the CLI enabled
-(**Settings → General → Advanced → Command line interface**). Drafts (`publish: false`) are ignored.
-**Starts with Obsidian (already configured):** the **Shell commands** plugin is set up (its config is
-committed with the vault) to run the watcher on the *Obsidian starts* event. The watcher launches
-whenever Obsidian does and **exits by itself when Obsidian closes** (a singleton lock prevents
-duplicates). Alternative — start it at Windows login instead: `scripts\install-autostart.ps1`.
+There is a watcher (`scripts/watch-publish.mjs`) that used to publish automatically on every
+`publish: true` change. It's **disabled** — it raced with manual edits and wedged Syncer. The
+kill-switch is the file `scripts/.autopublish-disabled`; while it exists the watcher exits on
+launch. Publishing is manual (the Publication Center above, or the CLI). Tracked in
+[issue #1](https://github.com/M1re/EngineeringVault/issues/1); **re-enable by deleting that file**.
 
 > [!note] One rule above all
 > Anything we build must look the same in Obsidian **and** on the deployed site. Prefer Datacore
