@@ -1,4 +1,5 @@
 ---
+banner: "attachments/banners/aurora.svg"
 title: Cloud
 icon: cloud
 color: "#3b82f6"

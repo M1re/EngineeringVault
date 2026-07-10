@@ -1,10 +1,11 @@
 ---
-banner: "attachments/banners/aurora.svg"
-title: "C#"
+banner: "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExNTQxdTBib2JiZm05dWoxNnBiZzdsZnkyaW5pN3dvc3Uza3NoYjRmZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/wkXjVGhDMLMRkFmd6E/giphy.gif"
+title: C#
 color: "#8b5cf6"
 tags:
   - FolderNote
 publish: true
+banner_y: 0.48
 ---
 
 > [!abstract] Scope

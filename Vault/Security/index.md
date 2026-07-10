@@ -1,4 +1,5 @@
 ---
+banner: "attachments/banners/aurora.svg"
 title: Security
 icon: lock
 color: "#ef4444"

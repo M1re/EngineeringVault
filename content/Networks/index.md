@@ -1,4 +1,5 @@
 ---
+banner: "attachments/banners/aurora.svg"
 publish: true
 title: Networks
 created: 2026-07-09T21:15:52.700+03:00

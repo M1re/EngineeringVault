@@ -1,4 +1,5 @@
 ---
+banner: "attachments/banners/aurora.svg"
 title: Networks
 icon: network
 color: "#10b981"

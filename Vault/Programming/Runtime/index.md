@@ -1,4 +1,5 @@
 ---
+banner: "attachments/banners/aurora.svg"
 title: "Runtime & Memory"
 color: "#14b8a6"
 tags:

@@ -1,4 +1,5 @@
 ---
+banner: "attachments/banners/aurora.svg"
 title: Architecture
 icon: building-2
 color: "#f59e0b"

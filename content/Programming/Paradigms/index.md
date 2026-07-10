@@ -1,4 +1,5 @@
 ---
+banner: "attachments/banners/aurora.svg"
 publish: true
 title: Paradigms
 created: 2026-07-09T21:15:52.716+03:00

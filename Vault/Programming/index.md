@@ -6,6 +6,7 @@ color: "#6366f1"
 tags:
   - FolderNote
 publish: true
+banner_y: 0.5
 ---
 
 Languages, paradigms, and the craft of writing code that survives contact with production.

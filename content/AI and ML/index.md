@@ -1,4 +1,5 @@
 ---
+banner: "attachments/banners/aurora.svg"
 publish: true
 title: AI & ML
 created: 2026-07-09T21:15:52.696+03:00

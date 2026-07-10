@@ -1,4 +1,5 @@
 ---
+banner: "attachments/banners/aurora.svg"
 title: Data Persistence
 icon: database
 color: "#14b8a6"

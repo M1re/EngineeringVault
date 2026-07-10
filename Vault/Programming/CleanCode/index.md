@@ -1,4 +1,5 @@
 ---
+banner: "attachments/banners/aurora.svg"
 title: "Clean Code"
 color: "#f59e0b"
 tags:

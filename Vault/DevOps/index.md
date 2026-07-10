@@ -1,4 +1,5 @@
 ---
+banner: "attachments/banners/aurora.svg"
 title: DevOps
 icon: area-chart
 color: "#64748b"

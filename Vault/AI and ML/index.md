@@ -1,4 +1,5 @@
 ---
+banner: "attachments/banners/aurora.svg"
 title: AI & ML
 icon: brain-circuit
 color: "#a855f7"

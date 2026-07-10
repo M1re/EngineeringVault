@@ -1,4 +1,5 @@
 ---
+banner: "attachments/banners/aurora.svg"
 title: "Paradigms"
 color: "#6366f1"
 tags:

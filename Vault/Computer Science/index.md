@@ -1,4 +1,5 @@
 ---
+banner: "attachments/banners/aurora.svg"
 title: Computer Science
 icon: flask-round
 color: "#0ea5e9"

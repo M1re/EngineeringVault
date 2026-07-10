@@ -1,4 +1,5 @@
 ---
+banner: "attachments/banners/aurora.svg"
 title: "Concurrency & Parallelism"
 color: "#0ea5e9"
 tags:

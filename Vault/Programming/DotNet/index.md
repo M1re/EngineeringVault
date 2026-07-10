@@ -1,4 +1,5 @@
 ---
+banner: "attachments/banners/aurora.svg"
 title: ".NET"
 color: "#a855f7"
 tags:

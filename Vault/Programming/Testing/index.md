@@ -1,4 +1,5 @@
 ---
+banner: "attachments/banners/aurora.svg"
 title: "Testing"
 color: "#ef4444"
 tags:

@@ -1,4 +1,5 @@
 ---
+banner: "attachments/banners/aurora.svg"
 title: "ASP.NET Web API"
 color: "#10b981"
 tags:

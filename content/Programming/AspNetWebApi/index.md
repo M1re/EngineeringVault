@@ -1,4 +1,5 @@
 ---
+banner: "attachments/banners/aurora.svg"
 publish: true
 title: ASP.NET Web API
 created: 2026-07-09T21:15:52.704+03:00
