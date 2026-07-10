@@ -21,7 +21,11 @@ Install from **Settings → Community plugins → Browse**. The ones this setup 
 | **Folder Notes** | Lets a section's `index.md` act as the folder's note (icon, color, dashboard). |
 | **Homepage** | Opens `index` on startup. |
 | **Obsidian Git** | Backs up the whole repo to GitHub (separate from publishing). |
+| **Banners** | Renders the Notion-style cover image/GIF on topics & sub-topics (the `banner` field). |
 | **Excalidraw**, **Advanced Tables**, **Linter**, **Templater** | Diagrams, tables, formatting, templates. |
+
+Also enable the **`notion`** CSS snippet (**Settings → Appearance → CSS snippets**) — it applies the
+Notion-inspired palette + Inter font so the vault matches the site.
 
 ## 3. Writing a note
 
@@ -31,7 +35,9 @@ Install from **Settings → Community plugins → Browse**. The ones this setup 
    - `status: creation` while writing → `status: done` when complete (this fills the progress bar).
    - `publish: false` by default → `publish: true` when it's ready for the public site.
 3. Section folder-notes (`<Section>/index.md`) carry `tags: [FolderNote]`, `icon` (a
-   [lucide](https://lucide.dev) icon name like `code-2`), `color` (hex), and `publish: true`.
+   [lucide](https://lucide.dev) icon name like `code-2`), `color` (hex), `publish: true`, and a
+   `banner` cover. Scaffold new ones from the *Folder Note* template; set a cover with **Set Cover**
+   (see [covers.md](covers.md)).
 
 ## 4. Working with Claude Code
 

@@ -32,7 +32,13 @@ and on the deployed site** (see `.claude/feedback.md`).
 
 8. **Questions bank page** — aggregate every "Questions to test yourself" section into one
    Datacore-driven review page. *Why:* a spaced-repetition study surface.
-9. **Site theme pass** — apply/tune a Quartz theme (e.g. saberzero1/quartz-themes) so the site's
-   overall look matches your Obsidian. *Why:* cohesive brand. Cosmetic.
+9. ~~**Site theme pass**~~ — ✅ **Done.** Notion-inspired palette + Inter in both surfaces
+   (`quartz.config.ts` / `notion.css`), plus cover images/GIFs on folder-notes (Banner component +
+   Banners plugin + Set Cover command). See [covers.md](covers.md).
 10. **Graph + search + meta polish** — tune the graph (local/depth), add a tags page, set a custom
     favicon, OG image, and site description. *Why:* discoverability and shareable link previews.
+
+## Tracked in GitHub issues
+
+- [#1](https://github.com/M1re/EngineeringVault/issues/1) — revisit the auto-publish watcher (disabled).
+- [#2](https://github.com/M1re/EngineeringVault/issues/2) — auto-mirror cover images into `content/`.

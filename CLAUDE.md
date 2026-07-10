@@ -100,8 +100,17 @@ frontmatter `title` as the page heading, so a body `# Title` would show the titl
   Actions builds and deploys to Pages. Never edit `content/` by hand — Syncer owns it.
 - Only notes with `publish: true` reach the site; everything else stays private in `Vault/`.
 - `status: done` marks a note complete and fills the home dashboard's progress bar.
+- Keep Syncer **"Include all properties"** ON (so `banner`/`color`/`status`/`icon` survive), and
+  publish **manually** — the auto-publish watcher is disabled (`scripts/.autopublish-disabled`, issue #1).
 - **Anything we build must render the same in Obsidian AND on the deployed site** — use tech that
   works in both (Datacore + Quartz Syncer, or plain Markdown/HTML). See `.claude/feedback.md`.
+
+## Look & feel & covers
+
+Notion-inspired theme mirrored in both surfaces: `quartz.config.ts` + Quartz components (site) and
+`Vault/.obsidian/snippets/notion.css` + the **Banners** plugin (Obsidian). Folder-notes carry a
+`banner` cover (default `attachments/banners/aurora.svg`); set it with the **Set Cover** Templater
+command and run `node scripts/sync-banners.mjs` before publishing. Details: `docs/covers.md`.
 
 ## Automation available in this repo
 
