@@ -1,11 +1,15 @@
 ---
-banner: "attachments/banners/aurora.svg"
 publish: true
 title: AI & ML
+description: Models, training, and practical machine learning.
 created: 2026-07-09T21:15:52.696+03:00
-modified: 2026-07-09T21:43:37.016+03:00
+modified: 2026-07-10T18:14:30.683+03:00
+published: 2026-07-10T18:14:30.683+03:00
 tags:
   - FolderNote
+banner: attachments/banners/aurora.svg
+icon: brain-circuit
+color: "#a855f7"
 ---
 
 The concepts behind modern machine learning — enough to reason about, build with, and integrate ML systems.

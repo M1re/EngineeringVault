@@ -1,11 +1,13 @@
 ---
-banner: "attachments/banners/aurora.svg"
 publish: true
 title: ASP.NET Web API
 created: 2026-07-09T21:15:52.704+03:00
-modified: 2026-07-09T21:43:37.020+03:00
+modified: 2026-07-10T17:44:01.636+03:00
+published: 2026-07-10T17:44:01.636+03:00
 tags:
   - FolderNote
+banner: attachments/banners/aurora.svg
+color: "#10b981"
 ---
 
 > [!abstract] Scope
@@ -13,82 +15,7 @@ tags:
 
 ## Contents
 
-```datacorejsx
-return function FolderDashboard() {
-  const cur = dc.useCurrentFile();
-  const dir = (cur?.$path || "").split("/").slice(0, -1).join("/");
-  const prefix = dir ? dir + "/" : "";
-
-  const firstString = (v) =>
-    Array.isArray(v) ? (v.length ? String(v[0]).trim() : "") : (v == null ? "" : String(v).trim());
-  const hasTag = (p, t) => (p.$tags ?? []).some((x) => String(x).replace(/^#/, "") === t);
-  const isMeta = (p) => hasTag(p, "MetricsIgnore");
-  const isDone = (p) => firstString(p.value("status")).toLowerCase() === "done";
-  const hexToRgbTriple = (v) => {
-    let h = firstString(v).replace(/^#/, "");
-    if (h.length === 3) h = h.split("").map((c) => c + c).join("");
-    if (!/^[0-9a-fA-F]{6}$/.test(h)) return null;
-    const n = parseInt(h, 16);
-    return `${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}`;
-  };
-  const ICONS = {
-    "code-2": `<path d="m18 16 4-4-4-4"/><path d="m6 8-4 4 4 4"/><path d="m14.5 4-5 16"/>`,
-    "brain-circuit": `<path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M9 13a4.5 4.5 0 0 0 3-4"/><path d="M12 13h4"/><path d="M12 18h6a2 2 0 0 1 2 2v1"/><path d="M12 8h8"/><path d="M16 8V5a2 2 0 0 1 2-2"/>`,
-    network: `<rect x="16" y="16" width="6" height="6" rx="1"/><rect x="2" y="16" width="6" height="6" rx="1"/><rect x="9" y="2" width="6" height="6" rx="1"/><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3"/><path d="M12 12V8"/>`,
-    "flask-round": `<path d="M10 2v6.292a7 7 0 1 0 4 0V2"/><path d="M5 15h14"/><path d="M8.5 2h7"/>`,
-    folder: `<path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/>`,
-  };
-  const wrapSvg = (inner) =>
-    `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${inner}</svg>`;
-
-  const all = dc.useQuery("@page");
-  const under = all.filter((p) => prefix && p.$path.startsWith(prefix) && p.$path !== cur?.$path && !isMeta(p));
-
-  const progress = (base) => {
-    let total = 0, done = 0;
-    for (const p of under) {
-      if (!p.$path.startsWith(base + "/") || hasTag(p, "FolderNote")) continue;
-      total++;
-      if (isDone(p)) done++;
-    }
-    return { total, done, pct: total ? Math.round((done / total) * 100) : 0 };
-  };
-
-  const childFolders = [];
-  const directNotes = [];
-  for (const p of under) {
-    const parts = p.$path.slice(prefix.length).split("/");
-    if (hasTag(p, "FolderNote") && parts.length === 2 && /^index\.md$/i.test(parts[1])) {
-      childFolders.push(p);
-    } else if (!hasTag(p, "FolderNote") && parts.length === 1) {
-      directNotes.push(p);
-    }
-  }
-
-  const cards = childFolders
-    .map((fn) => {
-      const childDir = prefix + fn.$path.slice(prefix.length).split("/")[0];
-      return {
-        fn,
-        title: firstString(fn.value("title")) || childDir.split("/").pop(),
-        rgb: hexToRgbTriple(fn.value("color")) || "125, 125, 125",
-        iconSvg: wrapSvg(ICONS[firstString(fn.value("icon"))] ?? ICONS.folder),
-        ...progress(childDir),
-      };
-    })
-    .sort((a, b) => String(a.title).localeCompare(String(b.title)));
-
-  const notes = [...directNotes].sort((a, b) => String(a.$name || "").localeCompare(String(b.$name || "")));
-
-  let oTotal = 0, oDone = 0;
-  for (const p of under) {
-    if (hasTag(p, "FolderNote")) continue;
-    oTotal++;
-    if (isDone(p)) oDone++;
-  }
-  const oPct = oTotal ? Math.round((oDone / oTotal) * 100) : 0;
-
-  const CSS = `
+<div class="fd"><div style="--fd-rgb: 63, 182, 168;" class="fd-total"><div class="fd-cap"><span>0/7 done</span><span>0%</span></div><div class="fd-bar"><div style="width: 0%;" class="fd-fill"></div></div></div><ul class="fd-list"><li class="fd-item"><a class="internal-link" href="Programming/AspNetWebApi/Authentication.md" data-tooltip-position="top" aria-label="Authentication">Authentication</a><span class="fd-pill wip">In progress</span></li><li class="fd-item"><a class="internal-link" href="Programming/AspNetWebApi/Authorization.md" data-tooltip-position="top" aria-label="Authorization">Authorization</a><span class="fd-pill wip">In progress</span></li><li class="fd-item"><a class="internal-link" href="Programming/AspNetWebApi/CORS.md" data-tooltip-position="top" aria-label="CORS">CORS</a><span class="fd-pill wip">In progress</span></li><li class="fd-item"><a class="internal-link" href="Programming/AspNetWebApi/Filters.md" data-tooltip-position="top" aria-label="Filters">Filters</a><span class="fd-pill wip">In progress</span></li><li class="fd-item"><a class="internal-link" href="Programming/AspNetWebApi/Middleware Pipeline.md" data-tooltip-position="top" aria-label="Middleware Pipeline">Middleware Pipeline</a><span class="fd-pill wip">In progress</span></li><li class="fd-item"><a class="internal-link" href="Programming/AspNetWebApi/Minimal APIs.md" data-tooltip-position="top" aria-label="Minimal APIs">Minimal APIs</a><span class="fd-pill wip">In progress</span></li><li class="fd-item"><a class="internal-link" href="Programming/AspNetWebApi/Model Binding.md" data-tooltip-position="top" aria-label="Model Binding">Model Binding</a><span class="fd-pill wip">In progress</span></li></ul><style>
 .fd { margin: 0.5rem 0 1rem; }
 .fd-total { margin-bottom: 1rem; }
 .fd-cap { display: flex; justify-content: space-between; font-size: 0.76rem; color: var(--text-muted, #9ca3af); margin-bottom: 6px; }
@@ -112,44 +39,4 @@ return function FolderDashboard() {
 .fd-pill.done { background: rgba(63, 182, 168, 0.18); color: #3fb6a8; }
 .fd-pill.wip { background: rgba(128, 128, 128, 0.15); color: var(--text-muted, #9ca3af); }
 .fd-empty { opacity: 0.6; font-size: 0.9rem; }
-`;
-
-  return (
-    <div class="fd">
-      <style dangerouslySetInnerHTML={{ __html: CSS }} />
-      {oTotal > 0 ? (
-        <div class="fd-total" style={{ "--fd-rgb": "63, 182, 168" }}>
-          <div class="fd-cap"><span>{oDone}/{oTotal} done</span><span>{oPct}%</span></div>
-          <div class="fd-bar"><div class="fd-fill" style={{ width: `${oPct}%` }} /></div>
-        </div>
-      ) : null}
-      {cards.length ? (
-        <div class="fd-grid">
-          {cards.map((c) => (
-            <div class="fd-card" style={{ "--fd-rgb": c.rgb }}>
-              <div class="fd-card-head">
-                <span class="fd-icon" dangerouslySetInnerHTML={{ __html: c.iconSvg }} />
-                <span class="fd-name">{c.title}</span>
-              </div>
-              <div class="fd-card-cap"><span>{c.done}/{c.total} done</span><span>{c.pct}%</span></div>
-              <div class="fd-bar"><div class="fd-fill" style={{ width: `${c.pct}%` }} /></div>
-              <span class="fd-link"><dc.Link link={c.fn.$link} /></span>
-            </div>
-          ))}
-        </div>
-      ) : null}
-      {notes.length ? (
-        <ul class="fd-list">
-          {notes.map((p) => (
-            <li class="fd-item">
-              <dc.Link link={p.$link} />
-              <span class={`fd-pill ${isDone(p) ? "done" : "wip"}`}>{isDone(p) ? "Done" : "In progress"}</span>
-            </li>
-          ))}
-        </ul>
-      ) : null}
-      {!cards.length && !notes.length ? <div class="fd-empty">Empty — add notes or sub-topics here.</div> : null}
-    </div>
-  );
-}
-```
+</style></div>

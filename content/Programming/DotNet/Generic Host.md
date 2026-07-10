@@ -2,10 +2,12 @@
 publish: true
 title: Generic Host
 created: 2026-07-09
-modified: 2026-07-09T21:15:52.714+03:00
+modified: 2026-07-09T21:43:37.029+03:00
+published: 2026-07-09T21:43:37.029+03:00
 tags:
   - programming
   - dotnet
+status: creation
 ---
 
 > [!warning] Stub

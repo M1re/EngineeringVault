@@ -1,11 +1,13 @@
 ---
-banner: "attachments/banners/aurora.svg"
 publish: true
 title: .NET
-created: 2026-07-09T21:15:52.714+03:00
-modified: 2026-07-09T21:43:37.029+03:00
+created: 2026-07-10T17:37:03.252+03:00
+modified: 2026-07-10T17:44:01.640+03:00
+published: 2026-07-10T17:44:01.640+03:00
 tags:
   - FolderNote
+banner: attachments/banners/aurora.svg
+color: "#a855f7"
 ---
 
 > [!abstract] Scope

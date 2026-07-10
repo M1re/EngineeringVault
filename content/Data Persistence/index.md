@@ -1,11 +1,15 @@
 ---
-banner: "attachments/banners/aurora.svg"
 publish: true
 title: Data Persistence
+description: Databases, indexing, transactions, storage engines.
 created: 2026-07-09T21:15:52.699+03:00
-modified: 2026-07-09T21:43:37.018+03:00
+modified: 2026-07-10T18:14:30.682+03:00
+published: 2026-07-10T18:14:30.682+03:00
 tags:
   - FolderNote
+banner: attachments/banners/aurora.svg
+icon: database
+color: "#14b8a6"
 ---
 
 How data is stored, indexed, kept consistent, and scaled — the part of the stack that is hardest to get right and most expensive to get wrong.

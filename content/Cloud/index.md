@@ -1,11 +1,15 @@
 ---
-banner: "attachments/banners/aurora.svg"
 publish: true
 title: Cloud
+description: Cloud-native design, serverless, and providers.
 created: 2026-07-09T21:15:52.697+03:00
-modified: 2026-07-09T21:43:37.017+03:00
+modified: 2026-07-10T18:14:30.684+03:00
+published: 2026-07-10T18:14:30.684+03:00
 tags:
   - FolderNote
+banner: attachments/banners/aurora.svg
+icon: cloud
+color: "#3b82f6"
 ---
 
 Designing for someone else's computers — the economics, primitives, and failure modes of cloud-native systems.

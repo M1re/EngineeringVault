@@ -1,11 +1,16 @@
 ---
-banner: "attachments/banners/aurora.svg"
 publish: true
 title: Architecture
+description: Distributed systems, patterns, and scalability.
 created: 2026-07-09T21:15:52.697+03:00
-modified: 2026-07-09T21:43:37.017+03:00
+modified: 2026-07-10T18:14:30.683+03:00
+published: 2026-07-10T18:14:30.683+03:00
 tags:
   - FolderNote
+banner: attachments/banners/aurora.svg
+icon: building-2
+color: "#f59e0b"
+banner_y: 0.175
 ---
 
 Designing systems that stay correct, available, and affordable as they grow — the core of staff-level work.
@@ -15,7 +20,7 @@ Designing systems that stay correct, available, and affordable as they grow — 
 
 ## Contents
 
-<div class="fd"><div style="--fd-rgb: 63, 182, 168;" class="fd-total"><div class="fd-cap"><span>1/1 done</span><span>100%</span></div><div class="fd-bar"><div style="width: 100%;" class="fd-fill"></div></div></div><ul class="fd-list"><li class="fd-item"><a class="internal-link" href="Architecture/Idempotency.md" data-tooltip-position="top" aria-label="Idempotency">Idempotency</a><span class="fd-pill done">Done</span></li></ul><style>
+<div class="fd"><div style="--fd-rgb: 63, 182, 168;" class="fd-total"><div class="fd-cap"><span>1/1 done</span><span>100%</span></div><div class="fd-bar"><div style="width: 100%;" class="fd-fill"></div></div></div><div class="fd-grid"><div style="--fd-rgb: 245, 158, 11;" class="fd-card"><div class="fd-card-head"><span class="fd-icon"><svg xmlns="http://www.w3.org/2000/svg" stroke-linejoin="round" stroke-linecap="round" stroke-width="2" stroke="currentColor" fill="none" viewBox="0 0 24 24"><path d="M10 12h4"/><path d="M10 8h4"/><path d="M14 21v-3a2 2 0 0 0-4 0v3"/><path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2"/><path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"/></svg></span><span class="fd-name">Reliability</span></div><div class="fd-card-cap"><span>1/1 done</span><span>100%</span></div><div class="fd-bar"><div style="width: 100%;" class="fd-fill"></div></div><span class="fd-link"><a class="internal-link" href="Architecture/Reliability/index.md" data-tooltip-position="top" aria-label="index">index</a></span></div></div><style>
 .fd { margin: 0.5rem 0 1rem; }
 .fd-total { margin-bottom: 1rem; }
 .fd-cap { display: flex; justify-content: space-between; font-size: 0.76rem; color: var(--text-muted, #9ca3af); margin-bottom: 6px; }

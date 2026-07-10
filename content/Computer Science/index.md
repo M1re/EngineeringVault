@@ -1,11 +1,15 @@
 ---
-banner: "attachments/banners/aurora.svg"
 publish: true
 title: Computer Science
+description: Algorithms, data structures, and foundations.
 created: 2026-07-09T21:15:52.698+03:00
-modified: 2026-07-09T21:43:37.018+03:00
+modified: 2026-07-10T18:14:30.682+03:00
+published: 2026-07-10T18:14:30.682+03:00
 tags:
   - FolderNote
+banner: attachments/banners/aurora.svg
+icon: flask-round
+color: "#0ea5e9"
 ---
 
 The theoretical foundations that make you reason about correctness and cost, not just make things work.

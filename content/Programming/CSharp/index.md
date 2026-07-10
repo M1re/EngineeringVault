@@ -1,11 +1,14 @@
 ---
-banner: "attachments/banners/aurora.svg"
 publish: true
 title: C#
 created: 2026-07-09T23:01:25.061+03:00
-modified: 2026-07-09T23:01:25.062+03:00
+modified: 2026-07-10T17:44:01.639+03:00
+published: 2026-07-10T17:44:01.639+03:00
 tags:
   - FolderNote
+banner: https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExNTQxdTBib2JiZm05dWoxNnBiZzdsZnkyaW5pN3dvc3Uza3NoYjRmZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/wkXjVGhDMLMRkFmd6E/giphy.gif
+color: "#8b5cf6"
+banner_y: 0.48
 ---
 
 > [!abstract] Scope

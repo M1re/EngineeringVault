@@ -2,10 +2,12 @@
 publish: true
 title: Object-Oriented Programming
 created: 2026-07-09
-modified: 2026-07-09T21:15:52.716+03:00
+modified: 2026-07-09T21:43:37.031+03:00
+published: 2026-07-09T21:43:37.031+03:00
 tags:
   - programming
   - paradigms
+status: creation
 ---
 
 > [!warning] Stub

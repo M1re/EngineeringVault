@@ -1,11 +1,15 @@
 ---
-banner: "attachments/banners/aurora.svg"
 publish: true
 title: Networks
+description: Protocols, TCP/IP, and how packets move.
 created: 2026-07-09T21:15:52.700+03:00
-modified: 2026-07-09T21:43:37.019+03:00
+modified: 2026-07-10T18:14:30.682+03:00
+published: 2026-07-10T18:14:30.682+03:00
 tags:
   - FolderNote
+banner: attachments/banners/aurora.svg
+icon: network
+color: "#10b981"
 ---
 
 How bytes actually travel between machines — the layer most engineers treat as magic until it breaks.

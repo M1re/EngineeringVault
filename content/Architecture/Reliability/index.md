@@ -1,25 +1,23 @@
 ---
 publish: true
-title: DevOps
-description: CI/CD, containers, and observability.
-created: 2026-07-09T21:15:52.699+03:00
-modified: 2026-07-10T18:14:30.685+03:00
-published: 2026-07-10T18:14:30.685+03:00
+title: Reliability
+description: Idempotency, retries, timeouts, and staying correct under failure.
+created: 2026-07-10T19:09:20.950+03:00
+modified: 2026-07-10T19:09:20.950+03:00
+published: 2026-07-10T19:09:20.950+03:00
 tags:
   - FolderNote
 banner: attachments/banners/aurora.svg
-icon: area-chart
-color: "#64748b"
+color: "#f59e0b"
+icon: building-2
 ---
 
-Shipping software safely and repeatedly — the automation and feedback loops that keep systems healthy in production.
-
 > [!abstract] Scope
-> CI/CD, containers and orchestration, observability, and the SRE practices that connect development to operations.
+> _Sub-topic of [[Architecture/index|Architecture]]. Overview coming._
 
 ## Contents
 
-<div class="fd"><div class="fd-empty">Empty — add notes or sub-topics here.</div><style>
+<div class="fd"><div style="--fd-rgb: 63, 182, 168;" class="fd-total"><div class="fd-cap"><span>1/1 done</span><span>100%</span></div><div class="fd-bar"><div style="width: 100%;" class="fd-fill"></div></div></div><ul class="fd-list"><li class="fd-item"><a class="internal-link" href="Architecture/Reliability/Idempotency.md" data-tooltip-position="top" aria-label="Idempotency">Idempotency</a><span class="fd-pill done">Done</span></li></ul><style>
 .fd { margin: 0.5rem 0 1rem; }
 .fd-total { margin-bottom: 1rem; }
 .fd-cap { display: flex; justify-content: space-between; font-size: 0.76rem; color: var(--text-muted, #9ca3af); margin-bottom: 6px; }

@@ -1,11 +1,16 @@
 ---
-banner: "attachments/banners/aurora.svg"
 publish: true
 title: Programming
-created: 2026-07-09T21:15:52.721+03:00
-modified: 2026-07-09T21:43:37.030+03:00
+description: Languages, paradigms, and runtime internals.
+created: 2026-07-10T08:06:28.614+03:00
+modified: 2026-07-10T18:14:30.681+03:00
+published: 2026-07-10T18:14:30.681+03:00
 tags:
   - FolderNote
+banner: attachments/banners/aurora.svg
+icon: code-2
+color: "#6366f1"
+banner_y: 0.5
 ---
 
 Languages, paradigms, and the craft of writing code that survives contact with production.
