@@ -64,27 +64,23 @@ body {
   line-height: 1.7;
 }
 
-/* Banners plugin (Obsidian only). The plugin sets --banner-height on :root (default
-   250px); the cover is an absolutely-positioned overlay of that height, and the note
-   content is pushed down by ~the same amount. Override it on :root so the cover AND
-   the offset shrink together (setting it lower on a child desyncs them), then push
-   the content a small, clean gap below the cover instead of the default overlap.
+/* Banners plugin (Obsidian only) — reading-view spacing. The plugin sets
+   --banner-height on :root (default 250px) and pushes the note body down by ~a full
+   cover-height, which leaves a screen-tall void between the properties panel and the
+   text. Fix: set a saner cover height on :root, collapse the body offset to a small
+   gap, and give the properties panel a little top clearance below the cover.
    No effect on the deployed site (that uses the Quartz Banner component). */
 :root {
-  --banner-height: 190px !important;
+  --banner-height: 200px !important;
 }
-/* small, even gap between the cover and the properties panel (both views) */
-.markdown-source-view .metadata-container,
-.markdown-reading-view .metadata-container {
-  margin-top: 18px;
+/* Reading view: the properties panel is already cleared below the cover on its
+   own; the plugin also pushes the body down by a whole cover-height, which leaves
+   a screen-tall void between the properties and the text. Collapse that to a small
+   gap so the body sits right under the properties. */
+.markdown-preview-view .obsidian-banner-wrapper {
+  margin-top: 16px !important;
 }
-/* reading view: body sits just under the cover */
-body .obsidian-banner-wrapper {
-  margin-top: calc(var(--banner-height) + 18px);
-}
-/* Live Preview: the plugin's spacer is ~one cover tall and shoves the body a whole
-   screen down. The cover clearance is already handled above, so collapse the spacer
-   to a small gap — body then follows the properties instead of a huge void. */
-.markdown-source-view.mod-cm6 .cm-line.has-banner:not(.has-banner-icon) .obsidian-banner-spacer {
-  height: 28px !important;
+/* nudge the properties panel clear of the cover's bottom edge */
+.markdown-preview-view .metadata-container {
+  margin-top: 34px;
 }
