@@ -1,3 +1,4 @@
+<%* if ((tp.file.content || "").trim()) { new Notice("Internal skeleton — use New Sub-topic / New Topic instead."); return; } -%>
 ---
 banner: "attachments/banners/aurora.svg"
 title: "<% tp.file.folder(false) %>"

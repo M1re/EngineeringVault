@@ -27,17 +27,25 @@ Install from **Settings → Community plugins → Browse**. The ones this setup 
 Also enable the **`notion`** CSS snippet (**Settings → Appearance → CSS snippets**) — it applies the
 Notion-inspired palette + Inter font so the vault matches the site.
 
-## 3. Writing a note
+## 3. Creating topics, sub-topics, and notes
 
-1. Create a note in a section folder, e.g. `Vault/Networks/DNS.md` (use the *Concept Note* template:
-   Command palette → *Insert template*).
-2. Frontmatter uses **`status`** and **`publish`** (not `draft`):
-   - `status: creation` while writing → `status: done` when complete (this fills the progress bar).
-   - `publish: false` by default → `publish: true` when it's ready for the public site.
-3. Section folder-notes (`<Section>/index.md`) carry `tags: [FolderNote]`, `icon` (a
-   [lucide](https://lucide.dev) icon name like `code-2`), `color` (hex), `publish: true`, and a
-   `banner` cover. Scaffold new ones from the *Folder Note* template; set a cover with **Set Cover**
-   (see [covers.md](covers.md)).
+Everything is scaffolded by three **Templater commands** (Command palette → *Templater: Open insert
+template modal*, or bind hotkeys). Hierarchy: **Topic → Sub-topic → Note**; notes live only inside a
+sub-topic.
+
+| Command | Makes | Asks for |
+| --- | --- | --- |
+| **New Topic** | a section (Programming, Security…) + a card on the home page | title, folder, description, colour, icon |
+| **New Sub-topic** | a sub-topic under a topic (C#, .NET…) | parent topic, title, folder, colour, icon |
+| **New Note** | a concept note inside a sub-topic | sub-topic, title, tags (thematic; existing + new) |
+
+Each folder-note gets a `banner` cover (default aurora) — change it per note with **Set Cover** (see
+[covers.md](covers.md)). Frontmatter uses **`status`** (`creation` → `done`, fills the progress bar)
+and **`publish`** (`false` → `true` when ready for the site).
+
+> [!warning] Don't pick "Concept Note" / "Folder Note" in the template list
+> Those are internal skeletons (they now refuse to insert into a note). Always use the **New …**
+> commands — they create files in the right place instead of pasting into the current note.
 
 ## 4. Working with Claude Code
 

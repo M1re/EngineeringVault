@@ -1,3 +1,4 @@
+<%* if ((tp.file.content || "").trim()) { new Notice("Internal skeleton — use the New Note command instead."); return; } -%>
 ---
 title: "{{title}}"
 tags: []

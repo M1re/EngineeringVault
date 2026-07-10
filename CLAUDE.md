@@ -107,13 +107,13 @@ frontmatter `title` as the page heading, so a body `# Title` would show the titl
 
 ## Look & feel & covers
 
-Notion-inspired theme mirrored in both surfaces: `quartz.config.ts` + Quartz components (site) and
-`Vault/.obsidian/snippets/notion.css` + the **Banners** plugin (Obsidian). Folder-notes carry a
-`banner` cover (default `attachments/banners/aurora.svg`); set it with the **Set Cover** Templater
-command and run `node scripts/sync-banners.mjs` before publishing. Details: `docs/covers.md`.
+Notion-inspired theme mirrored in both surfaces: `quartz.config.ts` + Quartz components (site);
+`.obsidian/snippets/notion.css` + the **Banners** plugin (Obsidian). Folder-notes carry a `banner`
+cover; set it with **Set Cover** and run `node scripts/sync-banners.mjs` before publishing. See `docs/covers.md`.
 
 ## Automation available in this repo
 
 - Slash commands in `.claude/commands/` (e.g. `/new-note`, `/expand`, `/review-note`).
+- **New Topic / Sub-topic / Note** Templater commands scaffold the hierarchy natively in Obsidian.
 - A skill in `.claude/skills/` for writing notes at the right depth and format.
 - A pre-write hook that blocks obvious secrets/personal data (see `.claude/settings.json`).
