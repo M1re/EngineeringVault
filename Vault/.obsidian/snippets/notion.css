@@ -73,11 +73,18 @@ body {
 :root {
   --banner-height: 190px !important;
 }
-/* reading view: clear the cover with a small gap */
-body .obsidian-banner-wrapper {
-  margin-top: calc(var(--banner-height) + 10px);
+/* small, even gap between the cover and the properties panel (both views) */
+.markdown-source-view .metadata-container,
+.markdown-reading-view .metadata-container {
+  margin-top: 18px;
 }
-/* editing (Live Preview) view: same, via the plugin's spacer line */
+/* reading view: body sits just under the cover */
+body .obsidian-banner-wrapper {
+  margin-top: calc(var(--banner-height) + 18px);
+}
+/* Live Preview: the plugin's spacer is ~one cover tall and shoves the body a whole
+   screen down. The cover clearance is already handled above, so collapse the spacer
+   to a small gap — body then follows the properties instead of a huge void. */
 .markdown-source-view.mod-cm6 .cm-line.has-banner:not(.has-banner-icon) .obsidian-banner-spacer {
-  height: calc(var(--banner-height) + 10px) !important;
+  height: 28px !important;
 }
