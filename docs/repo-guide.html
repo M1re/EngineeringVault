@@ -202,22 +202,23 @@
     <div class="meta">
       <a href="https://github.com/M1re/EngineeringVault">↗ github.com/M1re/EngineeringVault</a>
       <a href="https://m1re.github.io/EngineeringVault/">↗ m1re.github.io/EngineeringVault</a>
-      <span>Obsidian · Quartz v4 · Claude Code · GitHub Pages</span>
+      <span>Obsidian · Datacore · Quartz Syncer · GitHub Pages</span>
     </div>
   </header>
 
   <nav class="toc" aria-label="Оглавление">
     <ol>
       <li><a href="#big"><span class="num">01</span>Общая картина</a></li>
-      <li><a href="#model"><span class="num">02</span>Главная идея</a></li>
+      <li><a href="#model"><span class="num">02</span>Vault и content</a></li>
       <li><a href="#tree"><span class="num">03</span>Дерево файлов</a></li>
-      <li><a href="#content"><span class="num">04</span>Папка content</a></li>
+      <li><a href="#notes"><span class="num">04</span>Заметки и дашборды</a></li>
       <li><a href="#claude"><span class="num">05</span>4 слоя Claude</a></li>
-      <li><a href="#quartz"><span class="num">06</span>Движок Quartz</a></li>
-      <li><a href="#pipeline"><span class="num">07</span>Цепочка публикации</a></li>
-      <li><a href="#drafts"><span class="num">08</span>Черновики</a></li>
-      <li><a href="#cheat"><span class="num">09</span>Шпаргалка</a></li>
-      <li><a href="#glossary"><span class="num">10</span>Словарь</a></li>
+      <li><a href="#quartz"><span class="num">06</span>Quartz + Syncer</a></li>
+      <li><a href="#pipeline"><span class="num">07</span>Публикация</a></li>
+      <li><a href="#status"><span class="num">08</span>status / publish</a></li>
+      <li><a href="#covers"><span class="num">09</span>Тема и обложки</a></li>
+      <li><a href="#cheat"><span class="num">10</span>Шпаргалка</a></li>
+      <li><a href="#glossary"><span class="num">11</span>Словарь</a></li>
     </ol>
   </nav>
 
@@ -228,36 +229,37 @@
       <div class="grid2">
         <div class="card">
           <span class="tag site">1 · ХРАНИЛИЩЕ</span>
-          <h3 style="margin-top:.6rem">Obsidian-заметки</h3>
-          <p>Папка <code>content/</code> — это твои заметки в формате Markdown. Ты открываешь её в Obsidian и пишешь. Только это и есть «контент».</p>
+          <h3 style="margin-top:.6rem">Vault (Obsidian)</h3>
+          <p>Папка <code>Vault/</code> — твои заметки в Markdown. Ты открываешь <strong>её</strong> в Obsidian и пишешь. Только тут живёт «контент».</p>
         </div>
         <div class="card">
           <span class="tag site">2 · САЙТ</span>
-          <h3 style="margin-top:.6rem">Генератор Quartz</h3>
-          <p>Quartz берёт заметки из <code>content/</code> и собирает из них красивый сайт с поиском, графом и навигацией. Публикуется на GitHub Pages.</p>
+          <h3 style="margin-top:.6rem">Quartz + Syncer</h3>
+          <p>Плагин Quartz Syncer компилирует опубликованные заметки в <code>content/</code>, а Quartz собирает из них сайт с поиском, графом и навигацией на GitHub Pages.</p>
         </div>
         <div class="card">
           <span class="tag auto">3 · ПОМОЩНИК</span>
           <h3 style="margin-top:.6rem">Автоматизация Claude</h3>
-          <p>Папка <code>.claude/</code> и <code>CLAUDE.md</code> — правила, команды, навыки и защита, чтобы Claude помогал писать заметки в едином стиле и не давал утечь личным данным.</p>
+          <p>Папка <code>.claude/</code> и <code>CLAUDE.md</code> — правила, команды, навыки и защита, чтобы Claude помогал писать в едином стиле и не давал утечь личным данным.</p>
         </div>
       </div>
       <div class="note">
         <span class="lbl">Ключ ко всему</span>
-        <p>Весь репозиторий делится на два цвета: <span class="tag site">бирюзовое</span> — контент и сайт (то, что видят люди), <span class="tag auto">оранжевое</span> — автоматизация (то, что помогает тебе писать). Я использую эти цвета по всему гайду.</p>
+        <p>Весь репозиторий делится на два цвета: <span class="tag site">бирюзовое</span> — контент и сайт (то, что видят люди), <span class="tag auto">оранжевое</span> — автоматизация (то, что помогает тебе писать). Эти цвета используются по всему гайду.</p>
       </div>
     </section>
 
     <section id="model">
-      <h2><span class="num">02</span> Главная идея: content — это всё, остальное — механика</h2>
-      <p>Самое частое, на чём спотыкаются новички: «зачем столько файлов вокруг?». Ответ простой:</p>
-      <div class="card">
-        <p style="margin:0"><strong>Публикуется только <code>content/</code>.</strong> Всё остальное в корне — это «завод», который собирает сайт и помогает тебе писать. На сам сайт эти файлы не попадают.</p>
+      <h2><span class="num">02</span> Vault пишешь ты, content генерит Syncer</h2>
+      <p>Самое частое, на чём спотыкаются новички: две очень похожие папки. Запомни разницу — она главная:</p>
+      <div class="grid2">
+        <div class="card"><span class="tag site">Vault/</span><p style="margin-top:.5rem"><strong>Открываешь в Obsidian и пишешь.</strong> Здесь живут все заметки, шаблоны, картинки и настройки Obsidian.</p></div>
+        <div class="card"><span class="tag auto">content/</span><p style="margin-top:.5rem"><strong>Генерирует Quartz Syncer</strong> при публикации — руками не трогать. Это скомпилированная копия того, что ушло на сайт.</p></div>
       </div>
-      <p>Поэтому в Obsidian ты открываешь как vault <strong>именно <code>content/</code></strong>, а не корень репозитория. Тогда тебе видны только заметки, а «завод» (Quartz, конфиги, <code>.claude</code>) не мешается под ногами.</p>
+      <p>То есть как vault в Obsidian ты открываешь <strong>именно <code>Vault/</code></strong>. Публикуется не «весь репозиторий» — только заметки с <code>publish: true</code>, и попадают они на сайт через Syncer, а не через обычный git-commit.</p>
       <div class="note warn">
-        <span class="lbl">Помни</span>
-        <p>Если открыть в Obsidian корень репозитория вместо <code>content/</code> — Obsidian создаст лишнюю папку <code>.obsidian</code> в корне (такое уже случилось один раз, мы её удалили). Всегда открывай <code>content/</code>.</p>
+        <span class="lbl">Не редактируй content/</span>
+        <p><code>content/</code> — собственность Syncer. Любая ручная правка там затрётся при следующей публикации. Пишешь всегда в <code>Vault/</code>.</p>
       </div>
     </section>
 
@@ -266,67 +268,67 @@
       <p>Вот вся репа с пояснениями. Бирюзовое — контент/сайт, оранжевое — автоматизация Claude.</p>
       <div class="tree"><pre><span class="dir">EngineeringVault/</span>            <span class="cmt"># корень репо (то, что на GitHub)</span>
 │
-├── <span class="dir">content/</span>                 <span class="cmt"># ← ЭТО открываешь в Obsidian. Только это публикуется</span>
-│   ├── index.md             <span class="cmt"># главная страница сайта (карта разделов)</span>
-│   ├── <span class="dir">Programming/</span>         <span class="cmt"># раздел; внутри index.md = обложка раздела</span>
-│   ├── <span class="dir">Computer Science/</span>    <span class="cmt"># … и ещё 7 разделов (всего 9)</span>
-│   ├── <span class="dir">Architecture/</span>
+├── <span class="dir">Vault/</span>                   <span class="cmt"># ← ЭТО открываешь в Obsidian. Твои заметки</span>
+│   ├── index.md             <span class="cmt"># главная: дашборд разделов (Datacore)</span>
+│   ├── <span class="dir">Programming/</span>         <span class="cmt"># раздел; index.md = folder-note (обложка+дашборд)</span>
 │   │   ├── index.md
-│   │   └── Idempotency.md    <span class="cmt"># образцовая заметка — эталон формата</span>
-│   ├── <span class="dir">Templates/</span>           <span class="cmt"># шаблон заметки (на сайт НЕ идёт)</span>
-│   ├── <span class="dir">attachments/</span>         <span class="cmt"># картинки, диаграммы</span>
-│   └── <span class="dir">.obsidian/</span>           <span class="cmt"># настройки Obsidian + плагины</span>
+│   │   ├── <span class="dir">CSharp/</span>          <span class="cmt"># саб-топик — тоже folder-note</span>
+│   │   └── …                <span class="cmt"># ещё 7 саб-топиков</span>
+│   ├── <span class="dir">Architecture/</span>        <span class="cmt"># … и ещё 8 разделов (всего 9)</span>
+│   │   └── Idempotency.md   <span class="cmt"># образцовая заметка — эталон формата</span>
+│   ├── <span class="dir">Templates/</span>           <span class="cmt"># шаблоны заметок (на сайт НЕ идут)</span>
+│   ├── <span class="dir">attachments/banners/</span> <span class="cmt"># обложки: картинки и гифки</span>
+│   └── <span class="dir">.obsidian/</span>           <span class="cmt"># настройки Obsidian + плагины (едут в репо)</span>
+│
+├── <span class="auto">content/</span>                 <span class="cmt"># ГЕНЕРИТ Quartz Syncer — руками НЕ трогать</span>
 │
 ├── <span class="auto">.claude/</span>                 <span class="cmt"># автоматизация Claude Code</span>
-│   ├── <span class="auto">commands/</span>            <span class="cmt"># твои слэш-команды: /new-note /expand …</span>
+│   ├── <span class="auto">commands/</span>            <span class="cmt"># слэш-команды: /new-note /expand /review-note …</span>
 │   ├── <span class="auto">skills/</span>              <span class="cmt"># навык note-writer (Claude включает сам)</span>
-│   ├── <span class="auto">hooks/</span>              <span class="cmt"># check-secrets.js — блокирует секреты</span>
-│   ├── <span class="auto">settings.json</span>        <span class="cmt"># сюда подключён хук (едет в репо)</span>
-│   ├── <span class="auto">settings.local.json</span>  <span class="cmt"># личные настройки (в .gitignore)</span>
+│   ├── <span class="auto">hooks/</span>              <span class="cmt"># check-secrets.js, check-ledger-size.js</span>
+│   ├── <span class="auto">settings.json</span>        <span class="cmt"># сюда подключены хуки (едет в репо)</span>
 │   └── <span class="auto">launch.json</span>          <span class="cmt"># конфиг локального превью сайта</span>
 │
 ├── <span class="auto">CLAUDE.md</span>                <span class="cmt"># «конституция»: правила, Claude читает всегда</span>
+├── <span class="auto">.claude/feedback.md</span>      <span class="cmt"># журнал правок автора (обязателен к соблюдению)</span>
 │
-├── <span class="dir">quartz/</span>                  <span class="cmt"># движок сайта — НЕ трогаем</span>
-├── <span class="dir">quartz.config.ts</span>         <span class="cmt"># настройки сайта: заголовок, baseUrl, тема</span>
-├── <span class="dir">quartz.layout.ts</span>         <span class="cmt"># раскладка страниц: сайдбар, граф, backlinks</span>
-├── package.json            <span class="cmt"># список зависимостей Quartz</span>
-├── package-lock.json       <span class="cmt"># точные версии (для стабильной сборки)</span>
+├── <span class="dir">quartz/</span>                  <span class="cmt"># движок сайта (+ components/Banner.tsx) — не трогаем</span>
+├── <span class="dir">quartz.config.ts</span>         <span class="cmt"># тема (Notion-палитра, шрифт Inter), baseUrl</span>
+├── <span class="dir">quartz.layout.ts</span>         <span class="cmt"># раскладка страниц: сайдбар, граф, обложка</span>
 │
-├── <span class="dir">.github/workflows/</span>
-│   └── deploy.yml           <span class="cmt"># авто-публикация при каждом push</span>
-│
-├── <span class="auto">docs/setup.md</span>            <span class="cmt"># инструкция: плагины и рабочий процесс</span>
-├── README.md               <span class="cmt"># описание проекта (видно на GitHub)</span>
-└── .gitignore              <span class="cmt"># что НЕ загружать в репо</span>
+├── <span class="auto">scripts/</span>                 <span class="cmt"># sync-banners.mjs, watch-publish.mjs (выключен) …</span>
+├── <span class="auto">docs/</span>                    <span class="cmt"># setup.md, machine-setup.md, covers.md, этот гайд</span>
+├── <span class="dir">.github/workflows/deploy.yml</span> <span class="cmt"># сборка сайта на каждый push в main</span>
+└── README.md
 </pre></div>
     </section>
 
-    <section id="content">
-      <h2><span class="num">04</span> Папка <code>content/</code> подробно</h2>
-      <p>Здесь живёт всё, что станет сайтом. Три вещи, которые стоит понять:</p>
+    <section id="notes">
+      <h2><span class="num">04</span> Заметки, разделы и дашборды</h2>
+      <p>Всё, что станет сайтом, живёт в <code>Vault/</code>. Три вещи, которые стоит понять:</p>
 
-      <h3>Разделы и «обложки»</h3>
-      <p>Каждый раздел — это папка (<code>Programming/</code>, <code>Networks/</code> …). Внутри лежит файл <code>index.md</code> — он становится <strong>обложкой раздела</strong> на сайте. У него тег <code>moc</code> (Map of Content — карта содержимого).</p>
+      <h3>9 разделов и folder-notes</h3>
+      <p>Знания разложены на 9 разделов: Programming, Computer Science, Data Persistence, Networks, Architecture, AI and ML, Security, Cloud, DevOps. Каждый раздел (и каждый саб-топик внутри) — это папка с файлом <code>index.md</code>, который становится её <strong>folder-note</strong>: у него <code>tags: [FolderNote]</code>, <code>title</code>, <code>color</code>, <code>icon</code>, <code>publish: true</code> и <code>banner</code> (обложка). Вложенность: <strong>раздел → саб-топик → заметка</strong>.</p>
 
       <h3>Из чего состоит заметка</h3>
-      <p>Открой <code>Architecture/Idempotency.md</code> — это эталон. Сверху идёт <strong>frontmatter</strong> (служебный блок между <code>---</code>), потом тело по фиксированной структуре:</p>
+      <p>Открой <code>Architecture/Idempotency.md</code> — это эталон. Сверху <strong>frontmatter</strong> (блок между <code>---</code>), потом тело по фиксированной структуре:</p>
       <div class="tree"><pre><span class="cmt">---</span>
-<span class="dir">title</span>: Idempotency        <span class="cmt"># заголовок</span>
+<span class="dir">title</span>: Idempotency        <span class="cmt"># заголовок (его рисует сайт — H1 в теле НЕ пишем)</span>
 <span class="dir">tags</span>: [architecture]     <span class="cmt"># теги для графа и поиска</span>
-<span class="dir">draft</span>: false            <span class="cmt"># true = скрыто с сайта</span>
+<span class="dir">status</span>: done            <span class="cmt"># creation = в работе, done = готово (прогресс-бар)</span>
+<span class="dir">publish</span>: true           <span class="cmt"># false = приватно, true = на сайт</span>
 <span class="cmt">---</span>
-<span class="cmt"># дальше тело: In one sentence → Why it matters →</span>
-<span class="cmt"># How it works → Trade-offs → Questions → Related → References</span></pre></div>
+<span class="cmt"># тело: In one sentence → Why it matters → How it works →</span>
+<span class="cmt"># Trade-offs → Questions → Related → References</span></pre></div>
       <p>Эта структура заставляет раскрывать тему на уровне staff-инженера: не «определение из учебника», а механика + компромиссы + сложные вопросы.</p>
 
-      <h3>Связи вместо папок</h3>
-      <p>Заметки связываются <strong>вики-ссылками</strong> <code>[[Название]]</code>. Именно из них строится граф на сайте. Ссылка на ещё не написанную заметку — это нормально: она становится «маркером на будущее».</p>
+      <h3>Живые дашборды и связи</h3>
+      <p>Каждый <code>index.md</code> несёт блок <code>datacorejsx</code> — <strong>Datacore-дашборд</strong>: карточки саб-топиков с прогрессом + список заметок со статус-пилюлями. Он рекурсивный и одинаковый на всех уровнях. Заметки связываются <strong>вики-ссылками</strong> <code>[[Название]]</code> — из них строится граф; ссылка на ещё не написанную заметку это нормально, «маркер на будущее».</p>
     </section>
 
     <section id="claude">
       <h2><span class="num">05</span> Четыре слоя автоматизации Claude</h2>
-      <p>Это самая важная часть для понимания. У Claude четыре разных инструмента, и они отличаются <strong>тем, кто их запускает</strong>. Разложим:</p>
+      <p>У Claude четыре разных инструмента, и они отличаются <strong>тем, кто их запускает</strong>. Разложим:</p>
 
       <div class="card">
         <div class="layer">
@@ -334,7 +336,7 @@
           <div>
             <div class="who">Запускается сам · читается каждую сессию</div>
             <h4><code>CLAUDE.md</code> — «Конституция»</h4>
-            <p>Файл с правилами базы: структура, стиль заметок, запрет личных данных, формат frontmatter. Claude автоматически подгружает его каждый раз, когда ты работаешь в этой папке. Это фон, который действует всегда.</p>
+            <p>Правила базы: структура, стиль заметок, запрет личных данных, формат frontmatter, публикация. Claude подгружает его автоматически каждый раз в этой папке — фон, который действует всегда. Рядом <code>.claude/feedback.md</code> — журнал твоих правок, тоже обязателен.</p>
           </div>
         </div>
         <div class="layer">
@@ -342,23 +344,23 @@
           <div>
             <div class="who">Запускаешь ты · вручную командой</div>
             <h4>Слэш-команды <code>.claude/commands/</code> — «Кнопки»</h4>
-            <p>Готовые сценарии, которые ты вызываешь явно: <code>/new-note</code>, <code>/expand</code>, <code>/review-note</code>, <code>/link</code>. Каждый — это заранее написанный подробный промпт. Печатаешь команду — Claude выполняет сценарий.</p>
+            <p>Готовые сценарии-промпты: <code>/new-note</code>, <code>/expand</code>, <code>/review-note</code>, <code>/link</code>, а также <code>/feedback</code>, <code>/consolidate-feedback</code> и <code>/update-guide</code>. Печатаешь команду — Claude выполняет сценарий.</p>
           </div>
         </div>
         <div class="layer">
           <div class="badge">✦</div>
           <div>
             <div class="who">Включает сам Claude · когда уместно</div>
-            <h4>Навык (skill) <code>note-writer</code> — «Мастерство»</h4>
-            <p>Методология письма на staff-уровне. В отличие от команды, ты его <em>не вызываешь</em> — Claude сам подхватывает навык, когда видит, что ты пишешь или правишь заметку. Это «насмотренность», которая включается автоматически.</p>
+            <h4>Навык <code>note-writer</code> — «Мастерство»</h4>
+            <p>Методология письма на staff-уровне. Ты его <em>не вызываешь</em> — Claude сам подхватывает навык, когда видит, что ты пишешь или правишь заметку. «Насмотренность», которая включается автоматически.</p>
           </div>
         </div>
         <div class="layer">
           <div class="badge" style="background:var(--auto-soft);color:var(--danger)">!</div>
           <div>
             <div class="who">Запускает система · автоматически на событие</div>
-            <h4>Хук <code>check-secrets.js</code> — «Охранник»</h4>
-            <p>Скрипт, который срабатывает <strong>перед каждой записью файла</strong>. Сканирует текст на секреты и личные данные (ключи, токены, email) и <strong>блокирует запись</strong>, если что-то найдёт. Ты уже видел его в деле. Работает только внутри репозитория — публичную часть.</p>
+            <h4>Хуки <code>.claude/hooks/</code> — «Охрана»</h4>
+            <p><code>check-secrets.js</code> срабатывает <strong>перед каждой записью файла</strong>: сканирует на секреты и личные данные (ключи, токены, email) и <strong>блокирует запись</strong>, если что-то найдёт (работает только внутри репозитория). <code>check-ledger-size.js</code> следит, чтобы <code>CLAUDE.md</code> и журнал правок не разрастались.</p>
           </div>
         </div>
       </div>
@@ -369,16 +371,16 @@
     </section>
 
     <section id="quartz">
-      <h2><span class="num">06</span> Движок Quartz</h2>
-      <p>Quartz — это <strong>генератор статических сайтов</strong>: программа, которая превращает папку с Markdown в готовый HTML-сайт. «Статический» значит, что на выходе просто файлы — их дёшево и быстро отдавать, никакого сервера с базой не нужно.</p>
+      <h2><span class="num">06</span> Движок: Quartz + Quartz Syncer</h2>
+      <p><strong>Quartz</strong> — генератор статических сайтов: превращает Markdown в готовый HTML (никакого сервера с базой). <strong>Quartz Syncer</strong> — плагин Obsidian, мост между твоим vault и сайтом: он прекомпилирует Datacore/Dataview-дашборды в статический HTML и пушит результат в <code>content/</code>. Только он трогает <code>content/</code>.</p>
       <div class="tablewrap">
         <table>
           <thead><tr><th>Файл</th><th>За что отвечает</th></tr></thead>
           <tbody>
-            <tr><td><code>quartz.config.ts</code></td><td>Главные настройки: заголовок сайта, <code>baseUrl</code> (адрес публикации), тема, шрифты, что игнорировать. Тут мы прописали <code>M1re.github.io/EngineeringVault</code>.</td></tr>
-            <tr><td><code>quartz.layout.ts</code></td><td>Раскладка страниц: где сайдбар, граф, оглавление, backlinks.</td></tr>
-            <tr><td><code>quartz/</code></td><td>Сам код движка. Его <strong>не трогаем</strong> — он обновляется отдельно.</td></tr>
-            <tr><td><code>package.json</code></td><td>Список библиотек, от которых зависит Quartz. Ставятся командой <code>npm install</code>.</td></tr>
+            <tr><td><code>quartz.config.ts</code></td><td>Главные настройки: заголовок, <code>baseUrl</code> (<code>M1re.github.io/EngineeringVault</code>), тема (Notion-палитра + шрифт Inter), что игнорировать.</td></tr>
+            <tr><td><code>quartz.layout.ts</code></td><td>Раскладка страниц: сайдбар, граф, оглавление, порядок разделов (Programming→DevOps), обложка над заголовком.</td></tr>
+            <tr><td><code>quartz/components/Banner.tsx</code></td><td>Наш компонент: рисует обложку (<code>banner</code>) поверх folder-notes. Читает то же поле, что и плагин Banners в Obsidian.</td></tr>
+            <tr><td><code>quartz/</code></td><td>Код движка. Его <strong>не трогаем</strong> — обновляется отдельно.</td></tr>
           </tbody>
         </table>
       </div>
@@ -387,39 +389,59 @@
 
     <section id="pipeline">
       <h2><span class="num">07</span> Цепочка публикации: от заметки до сайта</h2>
-      <p>Что происходит, когда ты хочешь опубликовать изменения. Каждый шаг — автоматический, кроме первых двух (их делаешь ты):</p>
+      <p>Что происходит при публикации. Первые два шага делаешь ты, дальше — автоматика:</p>
       <div class="pipe">
-        <div class="step s-site"><div class="k">Ты · Obsidian</div><div class="v">Пишешь заметку, ставишь draft: false</div></div>
+        <div class="step s-site"><div class="k">Ты · Obsidian</div><div class="v">Пишешь заметку, ставишь publish: true</div></div>
         <div class="arrow">→</div>
-        <div class="step s-auto"><div class="k">Ты · Obsidian Git</div><div class="v">Commit-and-sync (кнопка / по таймеру)</div></div>
+        <div class="step s-site"><div class="k">Ты · Quartz Syncer</div><div class="v">Publication Center → Publish</div></div>
         <div class="arrow">→</div>
-        <div class="step s-auto"><div class="k">GitHub</div><div class="v">push в ветку main</div></div>
+        <div class="step s-auto"><div class="k">GitHub</div><div class="v">Syncer пушит content/ в main</div></div>
         <div class="arrow">→</div>
         <div class="step s-auto"><div class="k">GitHub Actions</div><div class="v">deploy.yml запускается сам</div></div>
         <div class="arrow">→</div>
-        <div class="step s-site"><div class="k">Сборка</div><div class="v">npm ci + quartz build → public/</div></div>
+        <div class="step s-site"><div class="k">Сборка</div><div class="v">quartz build → public/</div></div>
         <div class="arrow">→</div>
         <div class="step s-site"><div class="k">GitHub Pages</div><div class="v">Сайт обновлён 🎉</div></div>
       </div>
-      <p><strong>GitHub Actions</strong> — это робот-сборщик на серверах GitHub. Файл <code>.github/workflows/deploy.yml</code> — его инструкция: «на каждый push в main поставь Node, собери Quartz, выложи результат на Pages». Тебе не нужно ничего собирать вручную — достаточно запушить.</p>
-      <div class="note">
-        <span class="lbl">Обрати внимание</span>
-        <p>Между push и обновлением сайта проходит 1–2 минуты (робот собирает). Статус сборки виден во вкладке <strong>Actions</strong> на GitHub.</p>
+      <p><strong>GitHub Actions</strong> — робот-сборщик на серверах GitHub. Файл <code>.github/workflows/deploy.yml</code> — его инструкция: «на каждый push в main поставь Node, собери Quartz, выложи на Pages». Тебе не нужно собирать вручную — Syncer пушит, робот собирает.</p>
+      <div class="note warn">
+        <span class="lbl">Авто-публикация выключена</span>
+        <p>Раньше был watcher (<code>scripts/watch-publish.mjs</code>), публиковавший сам на каждое изменение. Он <strong>отключён</strong> — конфликтовал с ручными правками и заклинивал Syncer. Рубильник: файл <code>scripts/.autopublish-disabled</code> (удалить → снова включится). Пока публикуем руками. Отслеживается в issue #1.</p>
       </div>
     </section>
 
-    <section id="drafts">
-      <h2><span class="num">08</span> Черновики: что видно, а что нет</h2>
-      <p>У каждой заметки в frontmatter есть поле <code>draft</code>. Это твой рубильник видимости:</p>
+    <section id="status">
+      <h2><span class="num">08</span> status и publish: что готово, что видно</h2>
+      <p>У заметки два независимых поля-рубильника во frontmatter:</p>
       <div class="grid2">
-        <div class="card"><span class="tag auto">draft: true</span><p style="margin-top:.5rem">Заметка <strong>скрыта</strong> с сайта. Черновик, над которым ты ещё работаешь. Новые заметки Claude создаёт именно такими.</p></div>
-        <div class="card"><span class="tag site">draft: false</span><p style="margin-top:.5rem">Заметка <strong>публикуется</strong>. Ставишь, когда всё готово и проверено.</p></div>
+        <div class="card"><span class="tag auto">publish: false</span><p style="margin-top:.5rem">Заметка <strong>приватна</strong> — остаётся только в <code>Vault/</code>. Новые заметки Claude создаёт именно такими.</p></div>
+        <div class="card"><span class="tag site">publish: true</span><p style="margin-top:.5rem">Заметка <strong>идёт на сайт</strong>. Syncer публикует только такие.</p></div>
+        <div class="card"><span class="tag auto">status: creation</span><p style="margin-top:.5rem">Заметка <strong>в работе</strong> — не заполняет прогресс-бар на дашбордах.</p></div>
+        <div class="card"><span class="tag site">status: done</span><p style="margin-top:.5rem">Заметка <strong>готова</strong> — заполняет прогресс-бар раздела.</p></div>
       </div>
-      <p>За это отвечает плагин Quartz <code>RemoveDrafts</code> — при сборке он просто выкидывает все черновики. Поэтому можно смело держать в репозитории недописанные заметки: на публичный сайт они не попадут, пока ты сам не переключишь флаг.</p>
+      <div class="note">
+        <span class="lbl">Важно для сайта</span>
+        <p>Чтобы нестандартные поля (<code>banner</code>, <code>color</code>, <code>status</code>, <code>icon</code>) доехали до сайта, в настройках Quartz Syncer должно быть включено <strong>«Include all properties»</strong>.</p>
+      </div>
+    </section>
+
+    <section id="covers">
+      <h2><span class="num">09</span> Тема и обложки (Notion-стиль)</h2>
+      <p>Вид базы сделан «под Notion» и <strong>одинаков в Obsidian и на сайте</strong> — это железное правило. Тема зеркалится в двух местах от одних и тех же данных:</p>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Что</th><th>На сайте (Quartz)</th><th>В Obsidian</th></tr></thead>
+          <tbody>
+            <tr><td>Палитра + шрифт Inter</td><td><code>quartz.config.ts</code></td><td>сниппет <code>.obsidian/snippets/notion.css</code></td></tr>
+            <tr><td>Обложка (banner)</td><td><code>components/Banner.tsx</code></td><td>плагин <strong>Banners</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Обложки (<code>banner</code>) есть <strong>только у топиков и саб-топиков</strong> (folder-notes), по умолчанию <code>attachments/banners/aurora.svg</code>. Поставить свою картинку или гифку — командой <strong>Set Cover</strong> (Templater): выбираешь файл из <code>attachments</code> или вставляешь URL. Перед публикацией на сайт: <code>node scripts/sync-banners.mjs</code> (копирует картинку в <code>content/</code>). Подробно — в <code>docs/covers.md</code>.</p>
     </section>
 
     <section id="cheat">
-      <h2><span class="num">09</span> Шпаргалка на каждый день</h2>
+      <h2><span class="num">10</span> Шпаргалка на каждый день</h2>
       <div class="tablewrap">
         <table>
           <thead><tr><th>Хочу…</th><th>Делаю</th></tr></thead>
@@ -428,9 +450,10 @@
             <tr><td>Углубить заметку</td><td><code>/expand Idempotency</code></td></tr>
             <tr><td>Проверить перед публикацией</td><td><code>/review-note Idempotency</code></td></tr>
             <tr><td>Проставить связи в графе</td><td><code>/link Idempotency</code></td></tr>
+            <tr><td>Поставить обложку</td><td>команда <strong>Set Cover</strong> (Templater) → выбрать файл/URL</td></tr>
             <tr><td>Посмотреть сайт локально</td><td><code>npx quartz build --serve</code> → <code>localhost:8080</code></td></tr>
-            <tr><td>Опубликовать</td><td>draft: false → Obsidian Git: <em>Commit-and-sync</em></td></tr>
-            <tr><td>Проверить статус публикации</td><td>GitHub → вкладка <strong>Actions</strong></td></tr>
+            <tr><td>Опубликовать</td><td><code>publish: true</code> → Quartz Syncer → <em>Publish</em></td></tr>
+            <tr><td>Проверить статус сборки</td><td>GitHub → вкладка <strong>Actions</strong></td></tr>
           </tbody>
         </table>
       </div>
@@ -441,23 +464,26 @@
     </section>
 
     <section id="glossary">
-      <h2><span class="num">10</span> Словарь терминов</h2>
+      <h2><span class="num">11</span> Словарь терминов</h2>
       <div class="tablewrap">
         <table>
           <tbody>
-            <tr><td><strong>Vault</strong></td><td>«Хранилище» — папка, которую открывает Obsidian. У тебя это <code>content/</code>.</td></tr>
-            <tr><td><strong>Frontmatter</strong></td><td>Блок метаданных вверху заметки между <code>---</code> (title, tags, draft).</td></tr>
-            <tr><td><strong>Wikilink</strong></td><td>Ссылка вида <code>[[Название]]</code> между заметками. Основа графа.</td></tr>
-            <tr><td><strong>MOC</strong></td><td>Map of Content — заметка-карта, собирающая ссылки на тему. Наши <code>index.md</code>.</td></tr>
+            <tr><td><strong>Vault</strong></td><td>«Хранилище» — папка, которую открывает Obsidian. У тебя это <code>Vault/</code>.</td></tr>
+            <tr><td><strong>content/</strong></td><td>Скомпилированная копия сайта, которую генерит Quartz Syncer. Руками не трогать.</td></tr>
+            <tr><td><strong>Frontmatter</strong></td><td>Блок метаданных вверху заметки между <code>---</code> (title, tags, status, publish).</td></tr>
+            <tr><td><strong>Folder-note</strong></td><td><code>index.md</code> папки с <code>tags: [FolderNote]</code> — обложка+дашборд раздела или саб-топика.</td></tr>
+            <tr><td><strong>Datacore</strong></td><td>Плагин Obsidian, рисующий живые дашборды (карточки прогресса, списки заметок).</td></tr>
             <tr><td><strong>Quartz</strong></td><td>Генератор статических сайтов, превращающий заметки в веб-сайт.</td></tr>
+            <tr><td><strong>Quartz Syncer</strong></td><td>Плагин Obsidian: компилирует заметки в <code>content/</code> и пушит на GitHub.</td></tr>
+            <tr><td><strong>Wikilink</strong></td><td>Ссылка вида <code>[[Название]]</code> между заметками. Основа графа.</td></tr>
+            <tr><td><strong>banner</strong></td><td>Обложка (картинка/гифка) над заголовком folder-note. Notion-стиль.</td></tr>
             <tr><td><strong>Static site</strong></td><td>Сайт из готовых HTML-файлов, без сервера с базой. Быстро и дёшево.</td></tr>
             <tr><td><strong>GitHub Pages</strong></td><td>Бесплатный хостинг статических сайтов прямо из репозитория.</td></tr>
             <tr><td><strong>GitHub Actions</strong></td><td>Робот-автоматизация на серверах GitHub. Собирает и публикует сайт.</td></tr>
-            <tr><td><strong>Hook</strong></td><td>Скрипт, который Claude запускает сам на событие (у нас — перед записью файла).</td></tr>
+            <tr><td><strong>Hook</strong></td><td>Скрипт, который система запускает сама на событие (у нас — перед записью файла).</td></tr>
             <tr><td><strong>Skill</strong></td><td>Навык, который Claude включает сам, когда задача подходит.</td></tr>
             <tr><td><strong>Slash-команда</strong></td><td>Твой готовый промпт, вызываемый через <code>/имя</code>.</td></tr>
             <tr><td><strong>baseUrl</strong></td><td>Адрес, по которому опубликован сайт. Нужен, чтобы ссылки и стили работали.</td></tr>
-            <tr><td><strong>npm / Node.js</strong></td><td>Среда и менеджер пакетов JavaScript. На них работает Quartz.</td></tr>
           </tbody>
         </table>
       </div>
@@ -465,7 +491,7 @@
   </main>
 
   <footer>
-    Engineering Vault · гайд сгенерирован Claude Code · открывай <code>content/</code> в Obsidian, пиши, публикуй.
+    Engineering Vault · гайд сгенерирован Claude Code · открывай <code>Vault/</code> в Obsidian, пиши, публикуй через Quartz Syncer.
   </footer>
 </div>
 

@@ -63,3 +63,11 @@ body {
 .markdown-source-view.mod-cm6 .cm-line {
   line-height: 1.7;
 }
+
+/* Banners plugin (Obsidian only): the cover is an absolutely-positioned overlay
+   whose height (`--banner-height`) also reserves the vertical gap above the note
+   body. The default is tall — shrink it to match the site's compact cover. Has no
+   effect on the deployed site (that uses the Quartz Banner component). */
+.obsidian-banner-wrapper {
+  --banner-height: 200px !important;
+}
