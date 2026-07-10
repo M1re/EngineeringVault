@@ -64,10 +64,20 @@ body {
   line-height: 1.7;
 }
 
-/* Banners plugin (Obsidian only): the cover is an absolutely-positioned overlay
-   whose height (`--banner-height`) also reserves the vertical gap above the note
-   body. The default is tall — shrink it to match the site's compact cover. Has no
-   effect on the deployed site (that uses the Quartz Banner component). */
-.obsidian-banner-wrapper {
-  --banner-height: 200px !important;
+/* Banners plugin (Obsidian only). The plugin sets --banner-height on :root (default
+   250px); the cover is an absolutely-positioned overlay of that height, and the note
+   content is pushed down by ~the same amount. Override it on :root so the cover AND
+   the offset shrink together (setting it lower on a child desyncs them), then push
+   the content a small, clean gap below the cover instead of the default overlap.
+   No effect on the deployed site (that uses the Quartz Banner component). */
+:root {
+  --banner-height: 190px !important;
+}
+/* reading view: clear the cover with a small gap */
+body .obsidian-banner-wrapper {
+  margin-top: calc(var(--banner-height) + 10px);
+}
+/* editing (Live Preview) view: same, via the plugin's spacer line */
+.markdown-source-view.mod-cm6 .cm-line.has-banner:not(.has-banner-icon) .obsidian-banner-spacer {
+  height: calc(var(--banner-height) + 10px) !important;
 }
