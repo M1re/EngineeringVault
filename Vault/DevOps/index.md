@@ -1,6 +1,7 @@
 ---
 banner: "attachments/banners/aurora.svg"
 title: DevOps
+description: "CI/CD, containers, and observability."
 icon: area-chart
 color: "#64748b"
 tags:

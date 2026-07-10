@@ -45,6 +45,7 @@ const block = tpl.slice(tpl.indexOf("## Contents")).trimEnd() || "## Contents";
 const content = `---
 banner: "attachments/banners/aurora.svg"
 title: "${title}"
+description: "${desc.replace(/"/g, '\\"')}"
 color: "${color}"
 icon: ${icon}
 tags:
@@ -59,22 +60,7 @@ ${block}
 await app.vault.createFolder(folder);
 const file = await app.vault.create(`${folder}/index.md`, content);
 
-// 6. Register on the home dashboard (append to the hardcoded TOPICS array).
-const esc = (s) => s.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
-const home = app.vault.getAbstractFileByPath("index.md");
-if (home) {
-  let ht = await app.vault.read(home);
-  const start = ht.indexOf("const TOPICS = [");
-  const close = start === -1 ? -1 : ht.indexOf("\n  ];", start);
-  if (close !== -1) {
-    const entry = `    { folder: "${esc(folder)}", title: "${esc(title)}", desc: "${esc(desc)}" },\n`;
-    ht = ht.slice(0, close + 1) + entry + ht.slice(close + 1);
-    await app.vault.modify(home, ht);
-  } else {
-    new Notice("Topic created, but couldn't find the home TOPICS list — add it there by hand.");
-  }
-}
-
+// The home dashboard discovers sections dynamically from their folder-notes — nothing to register.
 await app.workspace.getLeaf(false).openFile(file);
 new Notice(`Created topic "${title}"`);
 -%>

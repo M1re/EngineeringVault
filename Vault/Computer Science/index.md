@@ -1,6 +1,7 @@
 ---
 banner: "attachments/banners/aurora.svg"
 title: Computer Science
+description: "Algorithms, data structures, and foundations."
 icon: flask-round
 color: "#0ea5e9"
 tags:

@@ -1,6 +1,7 @@
 ---
 banner: "attachments/banners/aurora.svg"
 title: Cloud
+description: "Cloud-native design, serverless, and providers."
 icon: cloud
 color: "#3b82f6"
 tags:

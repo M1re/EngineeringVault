@@ -1,6 +1,7 @@
 ---
 banner: "attachments/banners/aurora.svg"
 title: Data Persistence
+description: "Databases, indexing, transactions, storage engines."
 icon: database
 color: "#14b8a6"
 tags:

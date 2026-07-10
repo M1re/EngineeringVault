@@ -1,6 +1,7 @@
 ---
 banner: "attachments/banners/aurora.svg"
 title: Architecture
+description: "Distributed systems, patterns, and scalability."
 icon: building-2
 color: "#f59e0b"
 tags:

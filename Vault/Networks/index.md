@@ -1,6 +1,7 @@
 ---
 banner: "attachments/banners/aurora.svg"
 title: Networks
+description: "Protocols, TCP/IP, and how packets move."
 icon: network
 color: "#10b981"
 tags:

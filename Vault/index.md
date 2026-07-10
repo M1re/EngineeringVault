@@ -9,17 +9,9 @@ A public knowledge base built to understand — not just memorize — what a **s
 
 ```datacorejsx
 return function TopicDashboard() {
-  const TOPICS = [
-    { folder: "Programming", title: "Programming", desc: "Languages, paradigms, and runtime internals." },
-    { folder: "Computer Science", title: "Computer Science", desc: "Algorithms, data structures, and foundations." },
-    { folder: "Data Persistence", title: "Data Persistence", desc: "Databases, indexing, transactions, storage engines." },
-    { folder: "Networks", title: "Networks", desc: "Protocols, TCP/IP, and how packets move." },
-    { folder: "Architecture", title: "Architecture", desc: "Distributed systems, patterns, and scalability." },
-    { folder: "AI and ML", title: "AI & ML", desc: "Models, training, and practical machine learning." },
-    { folder: "Security", title: "Security", desc: "Cryptography, auth, and defensive engineering." },
-    { folder: "Cloud", title: "Cloud", desc: "Cloud-native design, serverless, and providers." },
-    { folder: "DevOps", title: "DevOps", desc: "CI/CD, containers, and observability." },
-  ];
+  // Sections are discovered dynamically from their folder-notes; ORDER just sets the
+  // display order (curriculum). New sections not listed here appear at the end.
+  const ORDER = ["Programming", "Computer Science", "Data Persistence", "Networks", "Architecture", "AI and ML", "Security", "Cloud", "DevOps"];
 
   const ICONS = {
     "code-2": `<path d="m18 16 4-4-4-4"/><path d="m6 8-4 4 4 4"/><path d="m14.5 4-5 16"/>`,
@@ -51,12 +43,11 @@ return function TopicDashboard() {
 
   const pages = dc.useQuery("@page");
 
-  const folderNoteFor = new Map();
-  for (const p of pages) {
-    if (!hasTag(p, "FolderNote")) continue;
-    const dir = p.$path.slice(0, p.$path.lastIndexOf("/"));
-    folderNoteFor.set(dir, p);
-  }
+  const orderIdx = (folder) => { const i = ORDER.indexOf(folder); return i === -1 ? ORDER.length : i; };
+  const sections = pages
+    .filter((p) => hasTag(p, "FolderNote") && p.$path.split("/").length === 2 && /^index\.md$/i.test(p.$path.split("/")[1]))
+    .map((fn) => ({ fn, folder: fn.$path.split("/")[0] }))
+    .sort((a, b) => orderIdx(a.folder) - orderIdx(b.folder) || a.folder.localeCompare(b.folder));
 
   // Simple model: a note counts as done when its `status` is "done"; progress = done / total.
   const statsFor = (folder) => {
@@ -71,12 +62,14 @@ return function TopicDashboard() {
     return { total, done, pct: total > 0 ? Math.round((done / total) * 100) : 0 };
   };
 
-  const cards = TOPICS
-    .map((t) => {
-      const fn = folderNoteFor.get(t.folder);
-      const rgb = hexToRgbTriple(fn?.value("color")) || "125, 125, 125";
-      const iconSvg = wrapSvg(ICONS[firstString(fn?.value("icon"))] ?? DEFAULT_ICON);
-      return { ...t, fn, rgb, iconSvg, ...statsFor(t.folder) };
+  const cards = sections
+    .map((s) => {
+      const fn = s.fn;
+      const title = firstString(fn.value("title")) || s.folder;
+      const desc = firstString(fn.value("description"));
+      const rgb = hexToRgbTriple(fn.value("color")) || "125, 125, 125";
+      const iconSvg = wrapSvg(ICONS[firstString(fn.value("icon"))] ?? DEFAULT_ICON);
+      return { folder: s.folder, title, desc, fn, rgb, iconSvg, ...statsFor(s.folder) };
     })
     .map((c, index) => ({
       ...c,

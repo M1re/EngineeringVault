@@ -1,6 +1,7 @@
 ---
 banner: "attachments/banners/aurora.svg"
 title: AI & ML
+description: "Models, training, and practical machine learning."
 icon: brain-circuit
 color: "#a855f7"
 tags:

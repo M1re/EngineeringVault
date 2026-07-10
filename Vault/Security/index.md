@@ -1,6 +1,7 @@
 ---
 banner: "attachments/banners/aurora.svg"
 title: Security
+description: "Cryptography, auth, and defensive engineering."
 icon: lock
 color: "#ef4444"
 tags:

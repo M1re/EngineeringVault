@@ -1,6 +1,7 @@
 ---
 banner: "attachments/banners/aurora.svg"
 title: Programming
+description: "Languages, paradigms, and runtime internals."
 icon: code-2
 color: "#6366f1"
 tags:
