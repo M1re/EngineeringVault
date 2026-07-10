@@ -36,6 +36,18 @@ definition wouldn't?"* If not, it isn't done. Every note must answer three quest
 6. **Right-size it.** A tight, correct note beats a long vague one. Split genuinely separate
    concepts into separate notes and link them.
 
+## Tags
+
+Tags are **thematic and cross-cutting**, not a copy of the folder path. The tree already says
+*where* a note lives (Programming → .NET → Reflection); tags say *what concepts it touches*, so
+notes cluster across folders in the graph and on tag pages.
+
+- Lowercase kebab-case (`garbage-collection`, `api-design`, `tls`).
+- Tag by concept, not location — don't add `programming` / `dotnet` just because of the folder.
+- Reuse existing tags where they fit (the **New Note** command lists them); coin new ones sparingly.
+- 2–4 is usually right; a note with no shared concepts can have none. Structural tags
+  (`FolderNote`, `MetricsIgnore`) are separate and not for concept notes.
+
 ## Style
 
 - Assume a smart reader; skip the 101-level throat-clearing.

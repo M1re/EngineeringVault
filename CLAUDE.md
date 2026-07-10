@@ -53,7 +53,7 @@ Every concept note follows `Vault/Templates/Concept Note.md`. Frontmatter:
 ```yaml
 ---
 title: "Human Readable Title"
-tags: [lowercase-kebab-tags]
+tags: [thematic-kebab-tags]   # concepts the note touches, NOT the folder path
 status: creation   # creation = in progress; set to "done" when complete (fills the progress bar)
 publish: false     # false = stays private; set to true to publish to the site
 created: YYYY-MM-DD

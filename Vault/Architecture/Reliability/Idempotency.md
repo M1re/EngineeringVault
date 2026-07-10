@@ -1,9 +1,9 @@
 ---
 title: Idempotency
 tags:
-  - architecture
   - reliability
   - api-design
+  - distributed-systems
 created: 2026-07-08
 status: done
 publish: true
