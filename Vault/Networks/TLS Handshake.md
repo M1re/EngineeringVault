@@ -1,7 +1,6 @@
 ---
 title: TLS Handshake
-tags:
-  - networks
+tags: []
 status: creation
 publish: false
 created: 2026-07-08

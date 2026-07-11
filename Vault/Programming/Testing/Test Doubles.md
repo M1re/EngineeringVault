@@ -1,8 +1,6 @@
 ---
 title: "Test Doubles"
-tags:
-  - programming
-  - testing
+tags: []
 status: creation
 publish: true
 created: 2026-07-09

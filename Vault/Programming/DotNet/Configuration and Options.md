@@ -1,8 +1,6 @@
 ---
 title: "Configuration and Options"
-tags:
-  - programming
-  - dotnet
+tags: []
 status: creation
 publish: true
 created: 2026-07-09
