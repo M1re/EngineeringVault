@@ -7,34 +7,39 @@ publish: false
 created: {{date:YYYY-MM-DD}}
 ---
 
-> [!summary] In one sentence
-> <!-- Explain it to a smart engineer who has never heard the term. One or two sentences. -->
-
-## Why it matters
-
-<!-- When does this come up in real systems? Why should a staff engineer care? -->
+> [!summary]
+> <!-- The gist in 1–3 plain sentences a mid-level engineer gets immediately — plus one line on why it matters in real systems. -->
 
 ## How it works
 
-<!-- The mechanics. Go deep enough to actually understand it, not just recognize it.
-     Diagrams, step-by-step flows, or small code snippets are welcome. -->
+<!-- The mechanism, under the hood: what happens, when, who does it, what happens on failure.
+     Go deep, but keep sentences simple. Use ### subsections for the moving parts.
+     Add a Mermaid diagram where a picture beats prose (```mermaid … ``` — renders in both
+     Obsidian and the site). -->
 
-## Trade-offs & pitfalls
+## Pitfalls & trade-offs
 
-<!-- What breaks in production? What are the costs, limits, and common mistakes?
-     This section is what separates a real note from a definition. -->
+<!-- Real production failure modes and costs. Frame trade-offs as trade-offs:
+     "X buys you A at the cost of B" — not a feature list. -->
 
-## Questions to test yourself
+## In production
 
-<!-- 2-5 substantive questions a staff-level interview or design review might ask. -->
--
+<!-- A concrete, real production situation — not an abstract toy. What it looks like at scale /
+     under load / when it goes wrong, with a real number or a small, correct code snippet. -->
+
+## Questions
+
+<!-- Self-test: the question is visible, the answer is folded (`-`). The reader answers in their
+     head, then expands to check. 2–5 design/review-level questions, not "what is X". -->
+> [!question]- <a design- or review-level question>
+> <the answer — concrete and correct>
 
 ## Related
 
-<!-- Link to neighbouring notes: [[Some Other Concept]] -->
+<!-- At least one neighbour: [[Some Other Concept]] -->
 -
 
 ## References
 
-<!-- Books, papers, docs, talks. Prefer primary sources. -->
+<!-- Primary sources only: RFC, official docs, the standard, the canonical book/paper. -->
 -

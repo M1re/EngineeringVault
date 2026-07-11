@@ -62,13 +62,13 @@ created: YYYY-MM-DD
 
 Required body sections, in order (do **not** add a top-level `# Title` heading — Quartz renders the
 frontmatter `title` as the page heading, so a body `# Title` would show the title twice):
-- `> [!summary] In one sentence` — a crisp definition
-- `## Why it matters` — when it shows up in real systems
-- `## How it works` — the mechanics, deep enough to *understand* not just recognise
-- `## Trade-offs & pitfalls` — production reality; this is the most important section
-- `## Questions to test yourself` — 2–5 substantive staff-level questions
+- `> [!summary]` — the gist in 1–3 plain sentences (+ one line on why it matters)
+- `## How it works` — the mechanism, under the hood; `### subsections` and Mermaid diagrams welcome
+- `## Pitfalls & trade-offs` — real failure modes and "X buys A at the cost of B"
+- `## In production` — a concrete real-world production example, not a toy
+- `## Questions` — self-test as collapsible callouts: `> [!question]- <q>` with the answer inside
 - `## Related` — wikilinks to neighbouring notes
-- `## References` — primary sources
+- `## References` — primary sources (every note stands on these)
 
 ## Where the detailed rules live (loaded on demand)
 

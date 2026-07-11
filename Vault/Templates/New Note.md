@@ -76,27 +76,25 @@ publish: false
 created: ${today}
 ---
 
-> [!summary] In one sentence
-> <!-- Explain it to a smart engineer who has never heard the term. One or two sentences. -->
-
-## Why it matters
-
-<!-- When does this come up in real systems? Why should a staff engineer care? -->
+> [!summary]
+> <!-- The gist in 1–3 plain sentences a mid-level engineer gets immediately (+ one line on why it matters). -->
 
 ## How it works
 
-<!-- The mechanics. Go deep enough to actually understand it, not just recognise it.
-     Diagrams, step-by-step flows, or small code snippets are welcome. -->
+<!-- The mechanism, under the hood. Go deep but keep it simple; ### subsections and a Mermaid diagram where it helps. -->
 
-## Trade-offs & pitfalls
+## Pitfalls & trade-offs
 
-<!-- What breaks in production? What are the costs, limits, and common mistakes?
-     This section is what separates a real note from a definition. -->
+<!-- Real production failure modes and costs: "X buys you A at the cost of B" — not a feature list. -->
 
-## Questions to test yourself
+## In production
 
-<!-- 2-5 substantive questions a staff-level interview or design review might ask. -->
--
+<!-- A concrete, real production situation — not a toy — with a real number or a small correct snippet. -->
+
+## Questions
+
+> [!question]- <a design- or review-level question>
+> <the answer — concrete and correct>
 
 ## Related
 
@@ -104,7 +102,7 @@ created: ${today}
 
 ## References
 
-<!-- Books, papers, docs, talks. Prefer primary sources. -->
+<!-- Primary sources only: RFC, official docs, canonical book/paper. -->
 -
 `;
 

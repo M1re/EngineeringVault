@@ -7,8 +7,13 @@ description: Use when creating or editing technical concept notes in this Engine
 
 You are writing durable reference notes for a **public** staff-engineer knowledge base.
 The bar is: a reader finishes the note actually *understanding* the concept and its trade-offs,
-not just able to recognise the term. Follow the format in `Vault/Templates/Concept Note.md`
-and the rules in `CLAUDE.md`.
+not just able to recognise the term.
+
+**Audience:** a solid **mid-level** engineer levelling up toward staff — so explain the mechanism
+fully and don't hand-wave "you already know this"; skip only the trivial 101. **Simple words, deep
+content:** layer it — the plain gist first, then under the hood. Complex wording is not smartness.
+
+Follow the structure in `Vault/Templates/Concept Note.md` and the rules in `CLAUDE.md`.
 
 ## The depth test
 
@@ -59,11 +64,14 @@ judge of it; let the reviewer be the gate.
 
 ## Style
 
-- Assume a smart reader; skip the 101-level throat-clearing.
+- Write for a mid-level engineer levelling up: explain the mechanism fully; skip only trivial 101.
+- **Diagrams:** prefer **Mermaid** code blocks for flows, sequences, and architecture — they render
+  in both Obsidian and the site and diff in git; use Excalidraw only for freeform sketches.
+- **Questions** are collapsible self-test callouts: `> [!question]- <q>` with the answer folded inside.
 - Use callouts to signal importance: `> [!summary]`, `> [!tip]`, `> [!warning]`.
 - Neutral, technical, timeless voice. No "recently", no dates in prose, no first person.
 - New notes start `status: creation` and `publish: false`; set `status: done` when every section is
-  complete, and `publish: true` when it's ready for the public site (published via Quartz Syncer).
+  complete (and it passed the reviewer), then `publish: true` when ready for the site.
 
 ## Hard constraints (public repo)
 
