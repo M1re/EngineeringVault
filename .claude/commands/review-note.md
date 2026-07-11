@@ -1,22 +1,21 @@
 ---
-description: Review a note for quality, format compliance, and privacy before publishing
-argument-hint: <path or title of the note to review> (or "all" for recently changed)
+description: Independent quality/accuracy review of a note (via the reviewer subagent) before publishing
+argument-hint: <path or title of the note to review>
 ---
 
-Review this note before it goes public: **$ARGUMENTS**
+Run an independent review of **$ARGUMENTS** before it goes public.
 
-Check and report on:
+Delegate to the **`reviewer`** subagent (Agent tool, `subagent_type: "reviewer"`): give it the note's
+path and ask for a full pass against `.claude/skills/note-writer/references/verification.md`. It reads
+with fresh eyes, verifies shaky or version-specific claims against primary sources, and returns a
+findings list (must-fix vs nice-to-have) ending in a **PUBLISH-READY** / **NEEDS WORK** verdict.
 
-1. **Privacy (blocking):** any personal names, emails, employer/company names, internal
-   project names, private URLs, tokens, keys, or author-identifying info. This repo is PUBLIC —
-   flag every occurrence and propose a redaction. Nothing else matters if this fails.
-2. **Format compliance:** frontmatter fields present and valid; all required sections in order
-   per `CLAUDE.md`; code blocks have a language; callouts used well.
-3. **Depth:** does it explain mechanics and trade-offs, or just define the term? Point out
-   any section that reads like a textbook definition and suggest what's missing.
-4. **Accuracy:** flag any claim that looks wrong or unverified.
-5. **Links:** at least one `## Related` wikilink; note is linked from its section `index.md`.
+Then:
 
-Report findings as a short checklist (✅ / ⚠️ / ❌). Do not edit the file unless I ask —
-just tell me what to fix. If the note is publish-ready, say so and remind me to set `status: done`
-and `publish: true` (then publish via the Quartz Syncer Publication Center).
+- Relay the reviewer's findings to me, most-severe first.
+- Offer to apply the **must-fix** items (the reviewer only suggests — you make the edits, on my go).
+- If it comes back publish-ready, remind me to set `status: done` / `publish: true` and publish via
+  the Quartz Syncer Publication Center.
+
+Privacy is still blocking: if the reviewer flags any personal/private data (names, emails, employers,
+internal URLs, secrets), nothing else matters until it's redacted — this repo is PUBLIC.

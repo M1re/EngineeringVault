@@ -70,13 +70,12 @@ frontmatter `title` as the page heading, so a body `# Title` would show the titl
 - `## Related` — wikilinks to neighbouring notes
 - `## References` — primary sources
 
-## Writing style (staff-engineer bar)
+## Where the detailed rules live (loaded on demand)
 
-- Explain **mechanics and trade-offs**, not textbook definitions. Assume a smart reader.
-- Be concrete: real numbers, real failure modes, small code snippets, sequence of steps.
-- Prefer clarity over completeness. A short accurate note beats a long vague one.
-- Use Obsidian callouts (`> [!note]`, `> [!warning]`, `> [!tip]`) to highlight key points.
-- Fenced code blocks must declare a language.
+Keep CLAUDE.md small; domain detail lives in skills/subagents that load only when relevant:
+- Writing/expanding a note → the **note-writer** skill: the staff-engineer bar + the no-fabrication **verification protocol**.
+- Before a note is `done`/published → the **reviewer** subagent (`/review-note`): independent, suggest-only accuracy pass.
+- Covers/theme → `docs/covers.md`; creating topics/notes → the **New …** Templater commands.
 
 ## Linking conventions
 

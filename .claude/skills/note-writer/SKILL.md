@@ -27,6 +27,7 @@ definition wouldn't?"* If not, it isn't done. Every note must answer three quest
    niche, or that you're unsure about, verify against primary sources (RFCs, official docs, papers,
    the canonical book) rather than guessing. When you genuinely can't verify, write a
    `> [!warning] Unverified` callout instead of inventing detail. Never fabricate numbers or APIs.
+   Follow the full protocol in [`references/verification.md`](references/verification.md).
 2. **Lead with the one-sentence summary**, then widen: why it matters → mechanics → trade-offs.
 3. **Be concrete.** Prefer a small code snippet, a numbered sequence, or a real number over prose.
    Every code block declares its language.
@@ -47,6 +48,14 @@ notes cluster across folders in the graph and on tag pages.
 - Reuse existing tags where they fit (the **New Note** command lists them); coin new ones sparingly.
 - 2–4 is usually right; a note with no shared concepts can have none. Structural tags
   (`FolderNote`, `MetricsIgnore`) are separate and not for concept notes.
+
+## Before you call it done
+
+Run an **independent accuracy pass** before setting `status: done` / `publish: true`: hand the note
+to the **`reviewer`** subagent (the user can trigger it with `/review-note`). It reads with fresh
+eyes, checks against [`references/verification.md`](references/verification.md), and confirms shaky
+claims against primary sources — then returns must-fixes to apply. You wrote it, so you're the worst
+judge of it; let the reviewer be the gate.
 
 ## Style
 
