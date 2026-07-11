@@ -4,13 +4,13 @@ tags:
   - concurrency
   - parallelism
   - performance
-status: creation
-publish: false
+status: done
+publish: true
 created: 2026-07-11
 ---
 
 > [!summary]
-> **Concurrency** is *dealing with* many things at once — structuring a program so several tasks are in progress and make progress by taking turns. **Parallelism** is *doing* many things at once — literally executing on multiple cores at the same instant. Concurrency is about **structure and coordination**; parallelism is about **simultaneous execution**. It matters because they solve different problems and use different tools — confusing them is how you pick the wrong one and make things slower.
+> **Concurrency** is *dealing with* many things at once — structuring a program so several tasks are in progress by taking turns (structure and coordination). **Parallelism** is *doing* many things at once — executing on multiple cores at the same instant. They solve different problems with different tools, and confusing them is how you pick the wrong one and make things slower.
 
 ## How it works
 
@@ -33,19 +33,19 @@ flowchart LR
     end
 ```
 
-Microsoft's own docs use a kitchen analogy that nails it: cooking breakfast is *"asynchronous work that isn't parallel — one person (one thread) can handle all the tasks"* by starting the eggs, then the toast, then flipping back. One cook interleaving = concurrency; hiring a second cook = parallelism.
+Microsoft's own docs use a kitchen analogy that nails it: cooking breakfast is *"a good example of asynchronous work that isn't parallel. One person (or thread) can handle all the tasks"* — you start the eggs, then the toast, then flip back. One cook interleaving = concurrency; hiring a second cook = parallelism.
 
 In .NET the split maps to the work type:
 
 - **I/O-bound → concurrency** with `async`/`await`: one thread juggles many in-flight waits. See [[Async/Await]].
-- **CPU-bound → parallelism** with multiple threads: `Task.Run`, `Parallel.For`/`Parallel.ForEach`, or PLINQ, spread across cores.
+- **CPU-bound → parallelism**: `Parallel.For` / `Parallel.ForEach` or PLINQ spread one workload across cores. (`Task.Run` *offloads* a single computation off the current thread — that's responsiveness; it's only parallelism if you launch several at once.)
 - Both sit on top of threads and the [[Threads and the Thread Pool|thread pool]].
 
 ## Pitfalls & trade-offs
 
 - **Conflating them picks the wrong tool.** Throwing threads (parallelism) at I/O-bound work wastes them — they just sit blocked; use concurrency (`async`). Wrapping a CPU-bound loop in `async` doesn't speed it up; use parallelism. The "is this I/O-bound or CPU-bound?" question decides which.
 - **Concurrency's price is coordination.** The moment tasks share mutable state you get [[Race Conditions|race conditions]] and need [[Locks and Synchronization|synchronization]] — which brings [[Deadlocks|deadlocks]] and contention. Concurrency buys responsiveness and throughput at the cost of having to reason about every interleaving.
-- **Parallelism's price is overhead and Amdahl's law.** Threads cost creation and context-switching, and speedup is capped by the *serial* fraction of the work (Amdahl's law), so 2× cores is rarely 2× speed. Microsoft's docs warn the CPU work may "not be costly enough compared with the overhead of context switches."
+- **Parallelism's price is overhead and Amdahl's law.** Threads cost creation and context-switching, and speedup is capped by the *serial* fraction of the work (Amdahl's law), so 2× cores is rarely 2× speed. Microsoft's docs warn the CPU work may not be "costly enough compared with the overhead of context switches."
 - **More parallelism is not more throughput.** Past the core count — or once threads contend on a shared resource (a lock, a disk, a DB connection pool) — adding threads makes it *slower*.
 
 ## In production

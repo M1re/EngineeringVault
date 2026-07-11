@@ -47,8 +47,9 @@ Accuracy
 
 Depth & honesty
 - [ ] "How it works" explains the **mechanism** (what/when/who/on-failure), not a restated summary.
-- [ ] "Trade-offs & pitfalls" states real **costs and failure modes**, not benefits only.
-- [ ] "Questions to test yourself" are design/review-level, not "what is X".
+- [ ] "Pitfalls & trade-offs" states real **costs and failure modes**, not benefits only.
+- [ ] "In production" gives a concrete real-world example, not an abstract toy.
+- [ ] "Questions" are design/review-level self-test callouts (`> [!question]-`), not "what is X".
 
 Form
 - [ ] Every code fence declares a language; snippets are correct and minimal.

@@ -4,8 +4,8 @@ tags:
   - async
   - concurrency
   - io-bound
-status: creation
-publish: false
+status: done
+publish: true
 created: 2026-07-11
 ---
 
@@ -47,14 +47,14 @@ public async Task<int> CountDotNetAsync(string url)
 
 ### The context capture (why `ConfigureAwait` exists)
 
-By default, `await` captures the current `SynchronizationContext` and resumes the continuation on it. In a UI app that means resuming on the UI thread — convenient, because you can touch controls. In library code you rarely need it: `await X.ConfigureAwait(false)` skips the capture and resumes on any pool thread, which is faster and dodges a class of deadlocks. ASP.NET Core has **no** `SynchronizationContext`, so there it's moot.
+By default, `await` captures the current `SynchronizationContext` (or the current `TaskScheduler` if there's none) and resumes the continuation on it. In a UI app that means resuming on the UI thread — convenient, because you can touch controls. In library code you rarely need it: `await X.ConfigureAwait(false)` skips the capture and resumes on any pool thread, which is faster and dodges a class of deadlocks. ASP.NET Core has **no** `SynchronizationContext`, so there it's moot.
 
 ## Pitfalls & trade-offs
 
-- **Blocking on async is a deadlock waiting to happen.** Calling `.Result` or `.Wait()` from a thread that holds a single-threaded `SynchronizationContext` (a UI thread, classic ASP.NET) deadlocks: the continuation needs that context to resume, but you've blocked it waiting for the continuation. Buys a synchronous API at the cost of a hung app. Fix: `await` all the way down; use `GetAwaiter().GetResult()` only where truly unavoidable.
-- **`async void` is a trap.** Its exceptions can't be caught by the caller — they tear down the process — and it can't be awaited. Only ever for event handlers.
+- **Blocking on async is a deadlock waiting to happen.** Calling `.Result` or `.Wait()` from a thread that holds a single-threaded `SynchronizationContext` (a UI thread, classic ASP.NET) deadlocks: the continuation needs that context to resume, but you've blocked it waiting for the continuation. Buys a synchronous API at the cost of a hung app. Fix: `await` all the way down. (`GetAwaiter().GetResult()` is *not* a cure — in a captured context it deadlocks just the same; it only changes exception unwrapping.)
+- **`async void` is a trap.** With no `Task` to hold the failure, its exception is raised on the `SynchronizationContext` that was active when it started — not on the caller's `try/catch` — so it usually crashes the process; and it can't be awaited. Only ever for event handlers.
 - **`async` is not "faster".** It's about *not blocking* (throughput, responsiveness), not speed. A CPU-bound loop wrapped in `async` without `Task.Run` still pins the thread.
-- **It costs allocations.** Each awaiting call allocates a state machine and a `Task` on the heap. On hot paths that usually complete synchronously (cache hits), return `ValueTask` to avoid the allocation.
+- **It costs allocations — on the *suspend* path.** When an `await` actually suspends, the runtime boxes the state machine and allocates a `Task` on the heap. A call that completes synchronously boxes nothing (and the non-generic `Task` is cached and reused). On hot paths that usually finish synchronously, return `ValueTask<T>` to avoid allocating a `Task<T>` — but await a `ValueTask` only **once**.
 - **Exceptions are deferred.** A faulted `Task` stores its exception (in `Task.Exception`, an `AggregateException`) and only rethrows it when you `await` it — `await` unwraps and rethrows the first inner exception. Forget to await, and the failure is silently swallowed.
 
 ## In production

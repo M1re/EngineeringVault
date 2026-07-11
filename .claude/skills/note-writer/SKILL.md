@@ -54,13 +54,15 @@ notes cluster across folders in the graph and on tag pages.
 - 2–4 is usually right; a note with no shared concepts can have none. Structural tags
   (`FolderNote`, `MetricsIgnore`) are separate and not for concept notes.
 
-## Before you call it done
+## Before you commit — always review (automatic)
 
-Run an **independent accuracy pass** before setting `status: done` / `publish: true`: hand the note
-to the **`reviewer`** subagent (the user can trigger it with `/review-note`). It reads with fresh
-eyes, checks against [`references/verification.md`](references/verification.md), and confirms shaky
-claims against primary sources — then returns must-fixes to apply. You wrote it, so you're the worst
-judge of it; let the reviewer be the gate.
+After writing or editing a note, **automatically** run the **`reviewer`** subagent on it — don't
+wait to be asked. The flow is: **write → review → apply the must-fixes → commit the fixed note.**
+The reviewer reads with fresh eyes, checks against
+[`references/verification.md`](references/verification.md), and verifies shaky claims against primary
+sources, then returns must-fixes. Apply them, then set `status: done` / `publish: true` and commit.
+You wrote it, so you're the worst judge of it — never commit a note that hasn't passed the gate.
+(`/review-note` triggers the same reviewer manually.)
 
 ## Style
 

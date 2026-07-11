@@ -23,6 +23,8 @@ How this stays healthy (so it never bloats and drags down quality):
 - For the author's own explanations: simple language, still detailed and technically honest.
 - No AI slop: no filler, no hype, no restating the obvious, no padding to look thorough.
 - Never fabricate facts, APIs, numbers, or features. If unsure → `> [!warning] Unverified`, or omit.
+- Concept notes pass the **reviewer gate automatically before committing**: write → run the `reviewer`
+  subagent → apply its must-fixes → commit. Never commit an un-reviewed note.
 - Don't add AI-attribution / "made or maintained with Claude Code"-style credit lines — not to note
   content, and not to git commits (no `Co-Authored-By` trailer).
 - Keep UI honest and minimal: don't show static elements that look like live data (e.g. a legend
