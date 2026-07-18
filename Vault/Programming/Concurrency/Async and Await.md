@@ -15,13 +15,13 @@ created: 2026-07-11
 
 ## Blocking vs Async
 
-A thread is expensive. It holds about 1 MB of stack and takes one slot in the thread pool.
+A thread is expensive. Each one holds about 1 MB of stack memory and takes one slot in the thread pool.
 
-The normal way to wait for I/O is to block. The thread calls something like `socket.Receive()` and stops. The OS parks it until the data arrives. A database call takes about 20 ms. For all that time the thread does no useful work, yet it still holds its memory and its pool slot.
+The normal way to wait for an I/O operation is to block a thread. The thread calls something like `socket.Receive()` and then stops running. The OS parks that thread until the data arrives. A database call takes about 20 ms, and for all of that time the thread does no useful work. It still holds its 1 MB of stack and its pool slot the whole time.
 
-Now picture many requests at once. Each one blocks its own thread on some I/O. The pool runs out of threads. New requests have nothing to run on, so they wait in a queue. This is **thread-pool starvation**, and it is one of the most common ways a .NET service falls over under load.
+Now picture a server handling many requests at once. Each request blocks its own thread on some I/O. The pool runs out of free threads. New requests have no thread to run on, so they wait in a queue. This is **thread-pool starvation**, and it is one of the most common ways a .NET service falls over under load.
 
-`async`/`await` fixes this. While an I/O is in flight there is nothing for a thread to do, so it does not hold one. It hands the work to the OS, frees the thread, and picks up again only when the result is ready.
+`async`/`await` fixes this. While an I/O operation is in flight there is nothing for a thread to do, so the method does not keep one. It hands the operation to the OS, frees its thread back to the pool, and resumes only when the result is ready.
 
 ## I/O-bound & CPU-bound
 
@@ -36,9 +36,13 @@ The whole model turns on one question. While the work happens, is a thread doing
 
 ## State Machine
 
-The runtime has no `async` keyword. The C# compiler does all the work. For every `async` method it builds a **state machine**. This is a type that remembers where the method paused and what its local variables were, so it can continue later.
+The runtime has no `async` keyword. The C# compiler does all the work.
 
-It holds a few things:
+Start from the problem the compiler has to solve. A normal method keeps its local variables on the thread's stack. That stack space is released the moment the method returns. An async method breaks this rule. It returns early at an `await`, then resumes later to finish the rest. If its locals stayed on the stack, they would already be gone when it came back.
+
+So the compiler moves them into a **state machine**: a small value that holds the method's locals as fields, plus a marker for where the method stopped. While the method runs straight through, this value sits on the stack and costs nothing. The moment the method actually pauses at an `await`, it is copied to the heap. There it outlives the early return, so the method can pick up from it later. This is why an async call that finishes without ever pausing allocates nothing.
+
+The state machine holds a few things:
 
 - an `int` **state** field. It says which `await` the method is paused at. `-1` means not started or running, `-2` means done.
 - a **builder** that owns the returned `Task` and completes it. It is `AsyncTaskMethodBuilder<T>` for `async Task<T>`, `AsyncValueTaskMethodBuilder<T>` for `ValueTask<T>`, and `AsyncVoidMethodBuilder` for `async void`.
@@ -95,10 +99,10 @@ private struct StateMachine : IAsyncStateMachine   // a struct in Release, a cla
 }
 ```
 
-Read `MoveNext` twice and the model becomes clear.
+The trick is that `MoveNext` runs more than once, and the `state` field tells it where to continue each time. Follow the two runs.
 
-1. The **first call** runs the code up to the `await`. If the result is not ready, it saves the state, asks the builder to call `MoveNext` again when the awaiter finishes, and returns. The caller gets back a `Task` that is not done yet.
-2. The **second call** is the continuation. It jumps past the `await`, reads the result with `GetResult()`, runs the rest of the method, and calls `builder.SetResult(...)`. That marks the returned `Task` as complete and runs its own continuations.
+1. **First run.** The method starts the download and gets its awaiter. If the download is not finished, it sets `state = 0` (the marker for "paused at the first `await`"), asks the builder to call `MoveNext` again once the awaiter completes, and returns. The caller receives a `Task` that is not done yet, and the caller's thread is now free.
+2. **Second run.** When the download finishes, the runtime calls `MoveNext` again. This time `state` is `0`, so the `goto RESUME` at the top jumps straight past the `await`. The method reads the downloaded text with `GetResult()`, runs the rest of the body, and calls `builder.SetResult(...)`. That marks the returned `Task` as complete, which in turn runs whatever was awaiting it.
 
 ```mermaid
 sequenceDiagram
@@ -204,7 +208,7 @@ string[] results = await Task.WhenAll(a, b);   // about max(a, b), not a + b
 
 ## Pitfalls & Trade-offs
 
-**Blocking on an async call can deadlock.** This is the classic one.
+**1. Blocking on an async call can deadlock.** This is the classic one.
 
 ```csharp
 // In a UI event handler or a classic ASP.NET action:
@@ -227,7 +231,7 @@ public async Task<IActionResult> Get()
 
 `GetAwaiter().GetResult()` is not a fix. It deadlocks the same way. It only changes how the exception is unwrapped, with no `AggregateException` wrapper.
 
-**`async void` loses its errors.**
+**2. `async void` loses its errors.**
 
 ```csharp
 async void SaveButton_Click(object sender, EventArgs e)
@@ -238,7 +242,7 @@ async void SaveButton_Click(object sender, EventArgs e)
 
 There is no `Task`, so the caller cannot await the method and cannot catch its exception. The exception is raised on the `SynchronizationContext` that was active at the start, which usually crashes the process. Use `async void` only for event handlers, where the signature forces it. Everywhere else return `Task`.
 
-**`async` is not "faster".**
+**3. `async` is not "faster".**
 
 ```csharp
 async Task<long> SumAsync(int[] data)
@@ -251,7 +255,7 @@ async Task<long> SumAsync(int[] data)
 
 This awaits nothing, so it runs fully synchronously and pins the caller's thread. You added state-machine overhead for no gain. `async` improves throughput and responsiveness by not blocking. It does not speed up computation. For CPU work, use `Task.Run` or real parallelism.
 
-**Suspending costs allocations.** When an `await` actually pauses, the state machine is boxed onto the heap and a `Task` is allocated. A call that finishes synchronously boxes nothing. So on a hot, usually-synchronous path, prefer a shape that avoids the `Task`.
+**4. Suspending costs allocations.** When an `await` actually pauses, the state machine is boxed onto the heap and a `Task` is allocated. A call that finishes synchronously boxes nothing. So on a hot, usually-synchronous path, prefer a shape that avoids the `Task`.
 
 ```csharp
 // allocates a Task<byte[]> even on a cache hit:
@@ -263,7 +267,7 @@ ValueTask<byte[]> GetAsync(string k)
     => _cache.TryGetValue(k, out var v) ? new(v) : new(LoadAsync(k));
 ```
 
-**A `Task` you never await can swallow its error.**
+**5. A `Task` you never await can swallow its error.**
 
 ```csharp
 DoWorkAsync();   // no await: fire and forget
@@ -271,7 +275,7 @@ DoWorkAsync();   // no await: fire and forget
 
 A faulted `Task` stores its exception and only re-throws it when you await it or read `.Result`. If nothing ever observes it, the failure is silent. No crash, no log. Always await your tasks, or attach a continuation that handles the error on purpose.
 
-**Misusing `ValueTask` corrupts results silently.**
+**6. Misusing `ValueTask` corrupts results silently.**
 
 ```csharp
 ValueTask<int> vt = ReadAsync();
@@ -281,15 +285,35 @@ int b = await vt;   // wrong: awaiting the same ValueTask twice
 
 This is undefined behaviour. It can return wrong or torn values, and it throws no exception to warn you. Await a `ValueTask` once. If you need more, call `.AsTask()` first, or just use `Task<T>`.
 
-**Go async all the way, or not at all.** Mixing the two is where deadlocks and starvation start. A sync method deep in the tree that calls `.Result` on an async one is the usual culprit. One async leaf tends to make the whole call chain async. That is expected. Follow it through instead of blocking to bridge back to sync.
+**7. Go async all the way, or not at all.** Mixing the two is where deadlocks and starvation start. A sync method deep in the tree that calls `.Result` on an async one is the usual culprit. One async leaf tends to make the whole call chain async. That is expected. Follow it through instead of blocking to bridge back to sync.
 
 ## In Production
 
-A web API endpoint runs `await db.QueryAsync(...)`. The database call takes about 20 ms. During that time the request's thread goes back to the pool and serves other requests. A few threads can handle thousands of requests that are mostly just waiting.
+Take one ASP.NET Core endpoint that reads from a database. The query takes about 20 ms. Here are the two versions side by side.
 
-The blocking version instead holds one thread per in-flight request. Under load the pool runs dry. The pool adds new threads slowly, very roughly one every 500 ms while work is not draining. A separate hill-climbing algorithm then tunes the steady-state count for throughput. So requests pile up, latency spikes, and the service tips over. This is thread-pool starvation.
+```csharp
+// Blocking version. It holds one pool thread for the whole 20 ms query.
+[HttpGet("orders")]
+public IActionResult GetOrders()
+{
+    var orders = _db.QueryOrdersAsync().Result;   // this thread is stuck here for 20 ms
+    return Ok(orders);
+}
 
-The usual trigger is a single blocking call on a hot path. Some helper deep in the stack does `httpClient.GetStringAsync(u).Result`. Now each request holds a thread and blocks it, waiting for a continuation that itself needs a pool thread to run. The problem feeds on itself. In practice, "our API falls over at N users" is very often traced to, and fixed by, "stop calling `.Result`, go async end to end." The same hardware then serves far more users, because it stopped paying a whole thread to stand and wait.
+// Async version. The thread is freed during the query and serves other requests.
+[HttpGet("orders")]
+public async Task<IActionResult> GetOrders()
+{
+    var orders = await _db.QueryOrdersAsync();     // thread returns to the pool while the DB works
+    return Ok(orders);
+}
+```
+
+The difference does not show up with one user. It shows up under load. Say 200 requests arrive at once. The async version parks all 200 queries in the OS and hands their threads back, so a handful of threads serve everyone. The blocking version needs one thread stuck per in-flight request, so it wants 200 threads at once.
+
+The pool does not have 200 threads ready, and it grows slowly. It adds new threads very roughly one every 500 ms while work is not draining. (A separate hill-climbing algorithm then tunes the steady-state count for throughput.) So requests pile up in the queue, latency spikes, and the service tips over. This is **thread-pool starvation**.
+
+The usual trigger is a single blocking call buried on a hot path. Some helper deep in the stack does `httpClient.GetStringAsync(u).Result`. Now each request holds a thread and blocks it, waiting for a continuation that itself needs a pool thread to run. The problem feeds on itself. In practice, "our API falls over at N users" is very often traced to, and fixed by, "stop calling `.Result`, go async end to end." The same hardware then serves far more users, because it stopped paying a whole thread to stand and wait.
 
 ## Questions
 
