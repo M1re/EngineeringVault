@@ -2,8 +2,8 @@
 publish: true
 title: Async/Await
 created: 2026-07-11
-modified: 2026-07-18T15:30:00.000+03:00
-published: 2026-07-18T15:30:00.000+03:00
+modified: 2026-07-18T14:45:00.000+03:00
+published: 2026-07-18T14:45:00.000+03:00
 tags:
   - async
   - concurrency
@@ -42,7 +42,7 @@ The runtime has no `async` keyword. The C# compiler does all the work.
 
 Start from the problem the compiler has to solve. A normal method keeps its local variables on the thread's stack. That stack space is released the moment the method returns. An async method breaks this rule. It returns early at an `await`, then resumes later to finish the rest. If its locals stayed on the stack, they would already be gone when it came back.
 
-So the compiler moves them into a **state machine**: a small value that holds the method's locals as fields, plus a marker for where the method stopped. While the method runs straight through, this value sits on the stack and costs nothing. The moment the method actually pauses at an `await`, it is copied to the heap. There it outlives the early return, so the method can pick up from it later. This is why the fast path is cheap: a method that finishes without ever pausing never copies its state machine to the heap. (It may still allocate a `Task` for its result, unless that result is one the runtime caches. More on that under Task & ValueTask.)
+So the compiler moves them into a **state machine**: a small value that holds the method's locals as fields, plus a marker for where the method stopped. While the method runs straight through, this value sits on the stack and costs nothing. The moment the method actually pauses at an `await`, it is copied to the heap. There it outlives the early return, so the method can pick up from it later. This is why an async call that finishes without ever pausing allocates nothing.
 
 The state machine holds a few things:
 
@@ -142,25 +142,10 @@ For real async I/O the operation goes to the OS. Windows uses I/O completion por
 
 ## Synchronization Context
 
-First, what a `SynchronizationContext` is. It is an object that represents a place to run code. It has one key method, `Post`, which means "run this callback on the thread, or threads, that I stand for." Different kinds of app plug in different implementations.
+When an `await` pauses, the awaiter records where to continue. By default it takes `SynchronizationContext.Current`. If that is null, it takes `TaskScheduler.Current`, unless that is the default scheduler. It then posts the continuation back there.
 
-The *continuation* is the rest of your method after the `await`. When the awaited operation finishes, that continuation has to run on some thread. By default, `await` remembers the `SynchronizationContext` that was active when it paused. It reads `SynchronizationContext.Current`, or `TaskScheduler.Current` if there is no context (unless that is the default scheduler). When the result is ready, it calls that context's `Post` to run the continuation back on it, instead of on a random pool thread.
-
-Why this matters depends on the app.
-
-- A UI app (WPF, WinForms) has one special thread, the UI thread, and only that thread may touch UI controls. Its `SynchronizationContext` stands for that single thread. So the code after your `await` resumes on the UI thread, and updating a control is safe.
-
-```csharp
-async void OnClick(object sender, EventArgs e)   // a WinForms event handler
-{
-    string data = await FetchAsync();   // the UI thread is freed, so the app stays responsive
-    MyLabel.Text = data;                // runs back on the UI thread, so touching the control is legal
-}
-```
-
-Without the captured context, `MyLabel.Text = data` would run on a pool thread and throw a cross-thread error.
-
-- Classic ASP.NET had a per-request context. ASP.NET Core has none, so there is nothing to capture and the continuation just runs on any free pool thread. That is fine, because a request is not tied to one specific thread.
+- A UI app (WPF, WinForms) has a single-threaded context tied to the UI thread. Continuing on it means your code after `await` runs on the UI thread again, so you can touch controls.
+- Classic ASP.NET had a per-request context. ASP.NET Core has none, so continuations just run on a pool thread.
 
 `await task.ConfigureAwait(false)` says "I do not need the original context. Any pool thread is fine." In library code this is the right default. It is a little faster, and it avoids a common deadlock (see the pitfalls). In UI code, where you do need the UI thread afterwards, leave it on.
 
