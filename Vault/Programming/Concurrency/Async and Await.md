@@ -140,32 +140,28 @@ For real async I/O the operation goes to the OS. Windows uses I/O completion por
 
 ## Synchronization Context
 
-First, what a `SynchronizationContext` is. It is an object that represents a place to run code. It has one key method, `Post`, which means "run this callback on the thread, or threads, that I stand for." Different kinds of app plug in different implementations.
+A `SynchronizationContext` represents a place to run code. Its main method is `Post`, which means "run this callback on my thread." A UI framework installs one that points at the UI thread. ASP.NET Core installs none.
 
-The *continuation* is the rest of your method after the `await`. When the awaited operation finishes, that continuation has to run on some thread. By default, `await` remembers the `SynchronizationContext` that was active when it paused. It reads `SynchronizationContext.Current`, or `TaskScheduler.Current` if there is no context (unless that is the default scheduler). When the result is ready, it calls that context's `Post` to run the continuation back on it, instead of on a random pool thread.
+When `await` pauses, it captures the current context. When the result is ready, it uses `Post` to resume the rest of your method on that same context, rather than on a random pool thread.
 
-Why this matters depends on the app.
-
-- A UI app (WPF, WinForms) has one special thread, the UI thread, and only that thread may touch UI controls. Its `SynchronizationContext` stands for that single thread. So the code after your `await` resumes on the UI thread, and updating a control is safe.
+This matters most in UI apps. Only the UI thread may touch controls, and the context points at it. So the code after your `await` runs back on the UI thread, where updating a control is legal:
 
 ```csharp
 async void OnClick(object sender, EventArgs e)   // a WinForms event handler
 {
-    string data = await FetchAsync();   // the UI thread is freed, so the app stays responsive
-    MyLabel.Text = data;                // runs back on the UI thread, so touching the control is legal
+    string data = await FetchAsync();   // frees the UI thread; the app stays responsive
+    MyLabel.Text = data;                // resumes on the UI thread, so this is legal
 }
 ```
 
-Without the captured context, `MyLabel.Text = data` would run on a pool thread and throw a cross-thread error.
+Without that capture, the last line would run on a pool thread and throw a cross-thread error. ASP.NET Core has no context, so continuations just run on any free pool thread. That is fine, because a request is not tied to one thread.
 
-- Classic ASP.NET had a per-request context. ASP.NET Core has none, so there is nothing to capture and the continuation just runs on any free pool thread. That is fine, because a request is not tied to one specific thread.
+`await task.ConfigureAwait(false)` opts out of the capture: any pool thread is fine. Use it in library code. It is a little faster and it avoids a common deadlock (see the pitfalls). In UI code that needs the UI thread afterwards, leave it on.
 
-`await task.ConfigureAwait(false)` says "I do not need the original context. Any pool thread is fine." In library code this is the right default. It is a little faster, and it avoids a common deadlock (see the pitfalls). In UI code, where you do need the UI thread afterwards, leave it on.
+Do not confuse two things:
 
-Two things are easy to mix up.
-
-- `SynchronizationContext` is *where* the continuation runs. This is what `ConfigureAwait` controls.
-- `ExecutionContext` is *ambient state*, like `AsyncLocal<T>` values. This always flows across `await`. `ConfigureAwait(false)` does not stop it.
+- `SynchronizationContext` controls *where* the continuation runs. `ConfigureAwait` opts out of it.
+- `ExecutionContext` carries *ambient state* like `AsyncLocal<T>` values. It always flows across `await`, and `ConfigureAwait(false)` does not stop it.
 
 ## Task & ValueTask
 
