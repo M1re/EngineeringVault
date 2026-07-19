@@ -24,7 +24,7 @@ The OS keeps the list of threads and decides which core runs which, and for how 
 Open Task Manager on an 8-core laptop and a single .NET process can show 40-odd threads. If the chip has 8 cores, how are 40 threads running? They are not — not at the same time. Three different counts hide behind the word "thread".
 
 - **Cores** are the physical units that execute instructions. Eight of them.
-- **Hardware threads** are how many instruction streams a chip runs *simultaneously*. A modern core runs two at once (Intel's name is Hyper-Threading; the general term is SMT), so 8 cores give **16 hardware threads**. That is the real limit: at any single moment, 16 threads are running and not one more.
+- **Hardware threads** are how many instruction streams a chip runs *simultaneously*. Many modern cores run two at once (Intel's name is Hyper-Threading; the general term is SMT), so these 8 cores give **16 hardware threads**. That is the real limit: at any single moment, 16 threads are running and not one more.
 - **Software threads**, the ones the OS schedules, have no such cap. The other 30-odd in that process are **parked** — waiting on a network reply, a lock, a `Sleep`, or just waiting for a core to come free. The scheduler rotates them through the 16 hardware threads fast enough that it looks simultaneous.
 
 Most of a process's threads sit idle, and you spawned few of them. The GC runs its own threads, there is a finalizer thread, timers take one, the pool keeps a few warm, and each blocking library call can hold one. Read it this way: "16 hardware threads" is a throughput ceiling, "40 threads" is just an inventory.
@@ -37,7 +37,7 @@ The skin exists because the runtime needs to **control** these threads, and it c
 
 - **The GC has to stop them.** To reclaim memory, the collector often **moves** live objects to pack them tightly, then rewrites every reference to point at the new address. It cannot do that while your threads are reading and writing those same objects. So it pauses them — but only at a **safe point**, an instruction boundary where the runtime knows exactly which registers and stack slots hold object references. Knowing every managed thread is what lets the GC bring each one to a safe point and scan its stack.
 - **Identity.** The runtime stamps each thread with a `ManagedThreadId`, its own counter. It is deliberately not the OS thread id, which the runtime makes no promise to keep stable.
-- **Who keeps the program alive.** .NET splits threads into **foreground** and **background**. The process stays up while any foreground thread is still working; when the last one ends, .NET shuts down and background threads die where they stand. A hand-made `new Thread` is foreground; every pool thread is background — which is why a program never hangs waiting for pool work to drain.
+- **Who keeps the program alive.** .NET splits threads into **foreground** and **background**. The process stays up while any foreground thread is still working; when the last one ends, .NET shuts down and any running background threads are stopped at once. A hand-made `new Thread` is foreground; every pool thread is background — which is why a program never hangs waiting for pool work to drain.
 
 ```csharp
 var worker = new Thread(Drain);
@@ -113,7 +113,7 @@ That 500 ms drip is why a sudden flood of *blocking* work stalls: the pool physi
 
 ## The Pool and Async
 
-This is where [[Async and Await|async]] and the pool meet. An `await` on an I/O call keeps no thread while the network or disk works. When the result arrives, the runtime does not conjure a thread — it drops the **continuation** (the code after the `await`) onto the pool as a job, and a free worker runs it. (Desktop UI and old ASP.NET are the exception: there the continuation returns to a captured `SynchronizationContext`, unless `ConfigureAwait(false)` waived it.)
+This is where [[Async and Await|async]] and the pool meet. An `await` on an I/O call keeps no thread while the network or disk works. When the result arrives, the runtime does not conjure a thread — it drops the **continuation** (the code after the `await`) onto the pool as a job, and a free worker runs it. (Desktop UI and old ASP.NET are the exception: there the continuation returns to the thread it started on — a captured `SynchronizationContext` — unless `ConfigureAwait(false)` waived it.)
 
 So the two ideas are one machine. "`await` frees the thread" means the worker rejoined the crew. "Thread-pool starvation" means the crew is all blocked, so those waiting continuations have no one to run them and everything downstream stops.
 
