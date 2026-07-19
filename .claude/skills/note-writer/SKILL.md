@@ -48,6 +48,13 @@ not just recognises.
   water, no restating the summary.
 - **Concrete phrasings.** Name the object of the action: "block a thread", not "block"; "frees its
   thread back to the pool", not "frees it".
+- **Whiteboard register, not corporate abstraction — this is the most common way notes read as
+  "заумно".** Explain by *what actually happens*, with concrete verbs and nouns: "the GC freezes
+  every thread and reads its stack to see which objects are still used", not "the thread takes part
+  in runtime services the OS knows nothing about". Ban abstract-category filler ("takes part in",
+  "is responsible for", "participates in", "leverages", "a wrapper around it") and mid-sentence
+  hedges ("in normal use", "generally", "effectively"). If a sentence could describe ten different
+  systems, it is too abstract — name the specific thing that happens.
 - **Short sentences, simple punctuation.** One idea per sentence. Prefer a period over a semicolon, a
   mid-sentence colon, or a stacked-clause em-dash.
 - **Code where it explains better than prose** — not only in Pitfalls and In Production, but inside a

@@ -35,31 +35,31 @@ The rule: **hardware threads are how many run at the same instant; OS threads ar
 
 ## Managed Threads vs OS Threads
 
-You create threads in C# with the `Thread` class, but the CLR does not run threads. The OS does. So what exactly is a "managed thread"?
+You create threads with the `Thread` class, but .NET does not run threads itself. The OS does. So what is a "managed thread"?
 
-A managed `Thread` maps, in normal use, **one-to-one to a real OS thread**. When you start it, the CLR asks the OS to create an OS thread, and the OS scheduler runs it. A managed thread is therefore **not cheaper** than an OS thread. It is one, with a wrapper around it.
+When you call `new Thread(...).Start()`, .NET asks the OS to create a **real OS thread** — the same kind any program gets — and the OS scheduler runs it. So a managed thread is **not** a cheaper, lighter thing. It is an OS thread. Creating one costs what creating an OS thread costs.
 
-The CLR wraps it because a managed thread has to take part in runtime services that a raw OS thread knows nothing about:
+Then why does .NET give you its own `Thread` class instead of the OS thread directly? Because .NET has to keep track of every thread running your code, for three concrete jobs.
 
-- **Garbage collection.** To collect, the GC must stop every other managed thread and walk its stack to find live object references (the roots). It can only stop a thread at a **safe point** — a spot where the runtime knows exactly what the stack holds. So the CLR must know about every managed thread and be able to bring it to a safe point and suspend it. A thread the runtime never created could not be stopped and scanned this way. This is the core reason managed threads are not just OS threads.
-- **Managed identity and flowing state.** Each managed thread has a `ManagedThreadId` assigned by the CLR. It is stable and is **not** the OS thread id, which the CLR does not promise to keep fixed. The thread also carries the `ExecutionContext`, so `AsyncLocal<T>` and the security context travel with it.
-- **Foreground vs background.** This is a CLR concept, not an OS one. A **foreground** thread keeps the process alive: the process exits only after the last foreground thread finishes. A **background** thread does not — once the foreground threads are done, the runtime abandons the background ones and shuts down. `new Thread(...)` is foreground by default. Every thread-pool thread is background.
+- **Garbage collection.** The .NET garbage collector moves objects around in memory as it cleans up. Before it can, it has to freeze every thread running your code and look through each thread's stack to see which objects are still in use. It can only freeze a thread at a **safe point** — a spot in the code where .NET knows exactly what is on the stack. To do that, .NET must know about every thread it started and be able to stop it on demand. It could not do this with a thread it never created. This is the main reason managed threads exist.
+- **A thread id.** .NET gives each thread its own number, `ManagedThreadId`. It is not the OS thread's id — .NET keeps its own count.
+- **Foreground or background.** .NET decides whether your program may exit while a thread is still running. A **foreground** thread keeps the program alive: it stays open until the last foreground thread finishes. A **background** thread does not — once the foreground threads are done, .NET shuts the program down and drops any background threads still running. `new Thread(...)` gives you a foreground thread. Every thread-pool thread is a background thread.
 
 ```csharp
-var t = new Thread(Work);       // foreground by default: keeps the process alive
-t.IsBackground = true;          // now it will not hold the process open on its own
+var t = new Thread(Work);       // foreground by default: keeps the program alive
+t.IsBackground = true;          // now it will not hold the program open on its own
 t.Start();
-Console.WriteLine(t.ManagedThreadId);   // a CLR id, not the OS thread id
+Console.WriteLine(t.ManagedThreadId);   // .NET's own id, not the OS thread id
 ```
 
-The one-to-one mapping holds in practice, but the CLR does not guarantee it — the abstraction leaves room for a host to schedule managed threads onto fibers or move one across OS threads. Treat a managed thread as a **logical thread the runtime owns**, which normally sits on exactly one OS thread.
+In short: a managed thread is a real OS thread that .NET tracks, so it can freeze it for garbage collection, give it an id, and decide whether it keeps the program alive.
 
 ## The Cost of a Thread
 
 You cannot make a thread per unit of work. Two costs get in the way here, and a third (context switching) gets its own section next.
 
-- **Memory.** Each thread reserves a stack, 1 MB by default on Windows. A thousand threads reserve about a gigabyte of address space before running a line of your code. The reservation is address space, not committed physical memory, but it still bounds how many threads you can have.
-- **Creation.** Making a thread is a system call: the OS allocates the stack, sets up kernel bookkeeping, and registers the thread with the scheduler. That is slow relative to the microsecond-scale jobs you often want to run.
+- **Memory.** Each thread gets its own stack, 1 MB by default on Windows. A thousand threads is about a gigabyte, reserved before your code does anything.
+- **Creation.** Making a thread is a system call: the OS sets up the stack, its own bookkeeping, and a scheduler entry. That is slow next to the microsecond-scale jobs you often want to run.
 
 Because both costs are real, you reuse threads instead of creating one per job. That is what the thread pool is for.
 
