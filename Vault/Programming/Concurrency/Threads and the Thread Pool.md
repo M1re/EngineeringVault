@@ -11,93 +11,127 @@ created: 2026-07-09
 ---
 
 > [!summary]
-> A **thread** is the unit the operating system schedules onto a CPU core. Each one is expensive: about 1 MB of stack and a real cost to create and to switch between. The **thread pool** is a shared set of reusable worker threads that the runtime hands out for short jobs, so you never pay to create a thread per task. Almost all concurrent work in .NET — `Task.Run`, async continuations, timer callbacks — runs on the pool, which is why understanding it explains both throughput and starvation.
+> A **thread** is the unit the operating system schedules onto a CPU core. Each one is expensive: about 1 MB of stack, a real cost to create, and a context-switch cost every time the OS swaps it on or off a core. The **thread pool** is a shared set of reusable worker threads that the runtime hands out for short jobs, so you never pay to create a thread per task. Almost all concurrent work in .NET — `Task.Run`, async continuations, timer callbacks — runs on the pool, which is why understanding it explains both throughput and starvation.
 
 ## The Thread
 
 Your code has to run on something. That something is a thread.
 
-A thread is a single sequence of instructions that the CPU executes one after another. To run it, the operating system gives it three things: a **stack** (its own working memory for local variables and call frames), a set of **registers** (including the instruction pointer, which marks the next instruction), and a slot in the OS **scheduler**.
+A thread is a single sequence of instructions that a CPU core executes one after another. To run it, the operating system gives it three things: a **stack** (its own memory for local variables and call frames), a set of **registers** (including the instruction pointer, which marks the next instruction to run), and an entry in the OS **scheduler**.
 
-A machine has only a few CPU cores, but far more threads than cores. The OS scheduler solves this by **time-slicing**: it runs one thread on a core for a few milliseconds, saves its registers, loads another thread's registers, and runs that one. This save-and-load is a **context switch**. It happens preemptively, meaning the OS can pause a thread at any point, not just where the thread chooses.
+A machine has only a few cores but far more threads than cores. The scheduler shares the cores between them by running one thread for a short slice of time, then swapping in another. That swap is a context switch, and it has its own section below because its cost drives almost everything else here.
 
-In .NET a `Thread` object is a thin managed wrapper over one real OS thread. When you write `new Thread(...).Start()`, the runtime asks the OS to create an OS thread. So a managed thread is not cheaper than an OS thread. It is an OS thread.
+## Managed Threads vs OS Threads
+
+You create threads in C# with the `Thread` class, but the CLR does not run threads. The OS does. So what exactly is a "managed thread"?
+
+A managed `Thread` maps, in normal use, **one-to-one to a real OS thread**. When you start it, the CLR asks the OS to create an OS thread, and the OS scheduler runs it. A managed thread is therefore **not cheaper** than an OS thread. It is one, with a wrapper around it.
+
+The CLR wraps it because a managed thread has to take part in runtime services that a raw OS thread knows nothing about:
+
+- **Garbage collection.** To collect, the GC must stop every other managed thread and walk its stack to find live object references (the roots). It can only stop a thread at a **safe point** — a spot where the runtime knows exactly what the stack holds. So the CLR must know about every managed thread and be able to bring it to a safe point and suspend it. A thread the runtime never created could not be stopped and scanned this way. This is the core reason managed threads are not just OS threads.
+- **Managed identity and flowing state.** Each managed thread has a `ManagedThreadId` assigned by the CLR. It is stable and is **not** the OS thread id, which the CLR does not promise to keep fixed. The thread also carries the `ExecutionContext`, so `AsyncLocal<T>` and the security context travel with it.
+- **Foreground vs background.** This is a CLR concept, not an OS one. A **foreground** thread keeps the process alive: the process exits only after the last foreground thread finishes. A **background** thread does not — once the foreground threads are done, the runtime abandons the background ones and shuts down. `new Thread(...)` is foreground by default. Every thread-pool thread is background.
+
+```csharp
+var t = new Thread(Work);       // foreground by default: keeps the process alive
+t.IsBackground = true;          // now it will not hold the process open on its own
+t.Start();
+Console.WriteLine(t.ManagedThreadId);   // a CLR id, not the OS thread id
+```
+
+The one-to-one mapping holds in practice, but the CLR does not guarantee it — the abstraction leaves room for a host to schedule managed threads onto fibers or move one across OS threads. Treat a managed thread as a **logical thread the runtime owns**, which normally sits on exactly one OS thread.
 
 ## The Cost of a Thread
 
-You cannot just make a thread per unit of work. Three costs get in the way.
+You cannot make a thread per unit of work. Two costs get in the way here, and a third (context switching) gets its own section next.
 
-- **Memory.** Each thread reserves a stack, 1 MB by default on Windows. A thousand threads reserve about a gigabyte of address space before running any of your code.
-- **Creation.** Making a thread means a system call, a stack allocation, and kernel bookkeeping. That is slow relative to the tiny jobs you often want to run.
-- **Context switches.** Every switch costs a kernel transition and, worse, throws away the CPU caches the old thread had warmed up. Past a point, adding threads makes things *slower*, because the cores spend their time switching instead of working.
+- **Memory.** Each thread reserves a stack, 1 MB by default on Windows. A thousand threads reserve about a gigabyte of address space before running a line of your code. The reservation is address space, not committed physical memory, but it still bounds how many threads you can have.
+- **Creation.** Making a thread is a system call: the OS allocates the stack, sets up kernel bookkeeping, and registers the thread with the scheduler. That is slow relative to the microsecond-scale jobs you often want to run.
 
-So threads are a scarce, heavy resource. The thread pool exists to stop you from creating and destroying them for every small job.
+Because both costs are real, you reuse threads instead of creating one per job. That is what the thread pool is for.
+
+## Context Switching
+
+A core runs one thread at a time, but there are always more runnable threads than cores. Sharing the cores means repeatedly swapping threads on and off them. That swap is a **context switch**, and it is the cost that caps how many threads are useful.
+
+A switch happens for one of two reasons:
+
+- **Voluntary.** The thread blocks — it waits on I/O, a lock, or `Thread.Sleep` — and gives up the core because it has nothing to do.
+- **Involuntary (preemption).** The OS interrupts a thread whose time slice has expired (on the order of tens of milliseconds) so another thread gets a turn.
+
+The mechanism is the same either way. The kernel saves the running thread's CPU state — the general registers, the instruction pointer (where it was in the code), and the stack pointer — into that thread's kernel structure. This runs in kernel mode. The scheduler then picks the next ready thread, loads its saved state back into the registers, and the core resumes it exactly where it had stopped.
+
+The **direct** cost of that save-and-restore is small: on the order of 1 to 2 microseconds, roughly 5,000 to 10,000 CPU cycles, including the kernel crossing.
+
+The **indirect** cost is the one that hurts. The outgoing thread had filled the CPU caches (L1/L2/L3), the TLB (the virtual-to-physical address map), and the branch predictor with its own data. The incoming thread evicts much of that as it runs. When the first thread comes back, its data is no longer cached, so it stalls waiting on memory — an L3 miss costs about 50 to 100 ns, a TLB miss hundreds of cycles. Across a real working set this indirect cost can reach **tens to hundreds of microseconds**, dwarfing the direct cost.
+
+This is the real reason more threads do not mean more throughput. Once the number of runnable threads passes the number of cores, the cores spend a growing share of their time switching and refilling caches instead of doing work.
 
 ## The Thread Pool
 
-Most work items are short. A request handler, a `Task.Run` callback, an async continuation each run for a few microseconds to milliseconds. Creating a fresh thread for each one, then throwing it away, would spend more time on thread management than on the work.
+Most work items are short. A request handler, a `Task.Run` callback, or an async continuation each run for microseconds to a few milliseconds. Creating a fresh thread for each one and destroying it after would spend more time managing threads than doing the work, and would pay the creation and context-switch costs above for nothing.
 
-The **thread pool** fixes this by reuse. The runtime keeps a set of long-lived worker threads. You hand it a work item, it runs that item on a free worker, and when the item finishes the worker goes back to the pool to take the next one. The threads are created once and reused for the life of the process.
+The **thread pool** solves this with reuse. The runtime keeps a set of long-lived worker threads. You hand it a work item, it runs that item on a free worker, and when the item finishes the worker goes back to the pool for the next one. The threads are created once and live for the process.
 
-You rarely talk to the pool directly. You use it through higher-level APIs that queue onto it:
+You rarely talk to the pool directly. You use it through APIs that queue onto it:
 
 ```csharp
-Task.Run(() => Work());                       // queues Work onto the pool
-ThreadPool.QueueUserWorkItem(_ => Work());     // the low-level version
+Task.Run(() => Work());                        // queues Work onto the pool
+ThreadPool.QueueUserWorkItem(_ => Work());      // the low-level version
 // async continuations queue here too, when there is no SynchronizationContext
 ```
 
-The trade-off: because you do not own the thread, you must not treat it as yours. You must not block it for a long time, and you must not stash state on it and expect that state later. Both of those are covered in the pitfalls.
+The trade-off: you do not own the thread. So you must not block it for long, and you must not store state on it and expect that state to still be there later. Both are in the pitfalls.
 
 ## Work Queues and Work-Stealing
 
-The pool needs somewhere to hold work items that are waiting for a free thread. A single shared queue would work, but every thread would contend on one lock to take the next item. Under load that lock becomes the bottleneck.
+The pool needs somewhere to hold work items waiting for a free thread. A single shared queue would work, but every worker would contend on one lock to take the next item, and under load that lock becomes the bottleneck.
 
-So the pool uses two levels of queue:
+So the pool keeps two kinds of queue: one **global queue**, and a **local queue per worker thread**. Work submitted from outside the pool (your top-level `Task.Run`) goes on the global queue. Work a pool thread creates itself (a `Task` started from inside another pool task) goes on that worker's own local queue.
 
-- A **global queue** for work submitted from outside the pool (your top-level `Task.Run`).
-- A **local queue per worker thread** for work a pool thread itself creates (a `Task` started from inside another pool task).
+When a worker looks for its next item, it checks in a **fixed order**:
 
-A worker takes from its own local queue first, with no shared lock, which is fast and keeps related work on the same warm cache. It takes from the local queue **LIFO** (newest first), because the newest task is the one whose data is most likely still in cache.
+1. **Its own local queue, newest-first (LIFO).** No shared lock, and the newest task's data is the most likely to still be warm in cache.
+2. **If the local queue is empty, the global queue, oldest-first (FIFO).** This is where externally submitted work lives.
+3. **Only if the global queue is also empty does it steal** from another worker's local queue, taking from the far (oldest) end (FIFO) to avoid fighting the owner, which takes from the near (newest) end.
 
-When a worker's local queue is empty, it does not sit idle. It **steals** a work item from another worker's local queue, taking from the far end (FIFO), so it grabs the oldest item and avoids fighting the owner over the newest one. This is **work-stealing**, and it keeps all cores busy without a single central lock.
+Work-stealing is the **last** step, not the step right after the local queue. A worker reaches into another's queue only when both its own local queue and the global queue are empty. Getting this order wrong — jumping straight from an empty local queue to stealing — is a common misconception.
 
 ```mermaid
 flowchart TD
-    Ext[External work: Task.Run] --> GQ[Global queue]
-    subgraph Pool
-      W1[Worker 1 + local queue]
-      W2[Worker 2 + local queue]
-    end
-    GQ --> W1
-    GQ --> W2
-    W1 -. steals from .-> W2
-    W2 -. steals from .-> W1
+    W[Worker needs next item] --> L{Own local queue?}
+    L -- yes, LIFO --> R[Run it]
+    L -- empty --> G{Global queue?}
+    G -- yes, FIFO --> R
+    G -- empty --> S{Steal from another local?}
+    S -- yes, FIFO --> R
+    S -- nothing --> I[Idle / wait]
 ```
 
 ## Thread Injection and Hill Climbing
 
-How many worker threads should the pool have? Too few and work waits while cores sit idle. Too many and the machine drowns in context switches. The pool tunes this number itself, with two separate mechanisms.
+How many worker threads should the pool have? Too few and work waits while cores sit idle. Too many and the machine drowns in context switches. The pool tunes the number itself.
 
-The pool starts with a small number of threads, on the order of the CPU count. That floor is `ThreadPool.GetMinThreads` and you can raise it.
+The pool actually keeps **two kinds of thread**: **worker threads** for queued work, and **I/O completion threads** for async I/O completions. `ThreadPool.GetMinThreads` / `SetMinThreads` and their `Max` counterparts control both, each with a `(workerThreads, completionPortThreads)` pair. (The `completionPortThreads` name is Windows I/O-completion-port heritage, but the API stays on every platform; the async-I/O engine underneath just differs off Windows.) The pool starts near a floor on the order of the CPU count, and grows and shrinks the worker count from there with two separate mechanisms:
 
-- **Starvation-avoidance injection.** If work is queued but the queue is not draining, the pool assumes its threads are stuck and adds one more. It does this slowly, at most about one new thread every 500 ms. This is a safety valve, not a fast-response mechanism.
-- **Hill climbing.** In parallel, the pool watches its own throughput — how many work items complete per second. It nudges the thread count up or down and keeps the change if throughput improved, like climbing toward the peak of a hill. This finds a good steady-state count for the current load without a human tuning it.
+- **Starvation-avoidance injection.** If work is queued but the queue is not draining, the pool assumes its threads are stuck and adds one more. It does this slowly, at most about one new thread every 500 ms. It is a safety valve, not a fast response.
+- **Hill climbing.** In parallel, the pool measures its own throughput — completed work items per second. It nudges the thread count up or down and keeps the change if throughput improved, climbing toward the peak. This finds a good steady-state count for the current load with no human tuning.
 
-The 500 ms figure matters in practice. It is why a burst of blocking work causes a latency spike: the pool cannot conjure threads instantly, it can only add them about twice a second.
+The 500 ms figure matters in practice. It is why a burst of blocking work causes a latency spike: the pool cannot conjure threads instantly, only about two per second. Modern .NET (since .NET 6) detects some blocking `Task` calls and ramps the worker count up faster than this, so real starvation episodes can be briefer than the 500 ms math implies. Do not rely on it — the cure is still to stop blocking pool threads.
 
 ## Where Async Continuations Run
 
-This is the link back to [[Async and Await|async]]. When an `await` suspends on I/O, no thread waits. The OS signals completion, and the runtime queues the continuation — the rest of your method — as a work item onto the thread pool. A free worker picks it up and runs `MoveNext` again. (In a UI or legacy-ASP.NET app the continuation instead posts back to the captured `SynchronizationContext`; see [[Async and Await]].)
+This is the link back to [[Async and Await|async]]. When an `await` suspends on I/O, no thread waits. The OS signals completion, and the runtime queues the continuation — the rest of your method — as a work item onto the thread pool. A free worker picks it up and runs `MoveNext` again. (In a UI or legacy-ASP.NET app the continuation instead posts back to the captured `SynchronizationContext`, unless the code used `ConfigureAwait(false)` to opt out and stay on the pool; see [[Async and Await]].)
 
-So the pool is the engine under async. "Async frees the thread" means the thread returns to this pool and runs other queued work. "Thread-pool starvation" means every pool worker is blocked, so those queued continuations have nothing to run them, and the whole system stalls. The two topics are the same machine seen from two sides.
+So the pool is the engine under async. "Async frees the thread" means the thread returns to this pool and runs other queued work. "Thread-pool starvation" means every pool worker is blocked, so the queued continuations have nothing to run them and the whole system stalls. The two topics are the same machine seen from two sides.
 
 ## Pitfalls & Trade-offs
 
 **1. Blocking a pool thread starves the pool.** The pool is sized for short work. Block its threads and it runs dry.
 
 ```csharp
-// Runs on a pool thread. Blocking calls here hold a scarce worker hostage.
+// Runs on a pool thread. Blocking here holds a scarce worker hostage.
 Task.Run(() =>
 {
     var data = FetchAsync().Result;   // blocks this pool thread until the I/O completes
@@ -105,9 +139,9 @@ Task.Run(() =>
 });
 ```
 
-Every worker doing this is one fewer worker for real work. Because the pool only adds threads about twice a second, a burst of blocking calls stalls everything queued behind them. Fix: never block on async inside pool work — `await` instead, so the thread is freed while the I/O runs.
+Every worker doing this is one fewer worker for real work. Because the pool adds threads only about twice a second, a burst of blocking calls stalls everything queued behind them. Fix: never block on async inside pool work — `await` instead, so the thread is freed while the I/O runs.
 
-**2. Long or blocking work does not belong on the pool.** Even without async, a task that runs for minutes, or that blocks on a file or a lock, ties up a pool thread the whole time. For genuinely long-running work, ask for a dedicated thread instead of borrowing a pool one:
+**2. Long or blocking work does not belong on the pool.** Even without async, a task that runs for minutes, or blocks on a file or a lock, ties up a pool thread the whole time. For genuinely long-running work, ask for a dedicated thread instead of borrowing a pool one:
 
 ```csharp
 // A dedicated thread, created outside the pool, for long-lived work:
@@ -124,7 +158,7 @@ foreach (var item in items)
     new Thread(() => Process(item)).Start();   // 10 000 items -> 10 000 OS threads
 ```
 
-At scale this reserves gigabytes of stacks and drowns the CPU in context switches. Use `Task.Run(() => Process(item))` so the pool runs them on a bounded set of reused threads.
+At scale this reserves gigabytes of stacks and drowns the cores in context switches. Use `Task.Run(() => Process(item))` so the pool runs them on a bounded set of reused threads.
 
 **4. The pool ramps up slowly, so bursts spike latency.** A service that is idle, then suddenly gets 200 concurrent CPU-bound tasks, has only its floor of threads at first. The rest queue while the pool adds threads at roughly one per 500 ms. If your load is genuinely this bursty, raise the floor:
 
@@ -132,9 +166,9 @@ At scale this reserves gigabytes of stacks and drowns the CPU in context switche
 ThreadPool.SetMinThreads(workerThreads: 100, completionPortThreads: 100);
 ```
 
-The cost: a high floor means more threads kept alive and more context switching at low load, so raise it only with evidence, not by default.
+The cost: a high floor keeps more threads alive and adds context switching at low load, so raise it only with evidence, not by default.
 
-**5. Pool threads run concurrently, so shared state races.** Many work items run on many threads at once. Any mutable state they share is a [[Race Conditions|race]] waiting to happen, and needs a [[Synchronization Primitives|lock or other primitive]].
+**5. Pool threads run concurrently, so shared state races.** Many work items run on many threads at once. Any mutable state they share is a [[Race Conditions|race]] waiting to happen and needs a [[Synchronization Primitives|lock or other primitive]].
 
 ```csharp
 int total = 0;
@@ -179,18 +213,21 @@ public async Task<IActionResult> GetReport()
 }
 ```
 
-Now a handful of pool threads serve all 500 requests, because each thread is only busy for the microseconds of actual CPU work, not the 20 ms of waiting. `ThreadPool.SetMinThreads` is sometimes used as a stopgap to survive bursts while the real blocking call is hunted down, but it treats the symptom. The cure is to stop blocking pool threads.
+Now a handful of pool threads serve all 500 requests, because each thread is busy only for the microseconds of actual CPU work, not the 20 ms of waiting. `ThreadPool.SetMinThreads` is sometimes raised as a stopgap to survive bursts while the real blocking call is hunted down, but it treats the symptom. The cure is to stop blocking pool threads.
 
 ## Questions
 
-> [!question]- Why is creating a thread per request a bad idea at scale?
-> A thread is an OS resource, not a cheap object. Each reserves about 1 MB of stack and costs a system call to create. Thousands of them reserve gigabytes and force so many context switches that the cores spend their time switching instead of working. Throughput drops as you add threads past a point. The thread pool exists so you reuse a bounded set of threads instead of creating one per job.
+> [!question]- Is a managed `Thread` the same as an OS thread? What does the CLR add?
+> In normal use a managed thread maps one-to-one to a real OS thread, so it is not cheaper — starting one creates an OS thread that the OS schedules. The CLR wraps it so it can take part in runtime services: the GC must be able to suspend every managed thread at a safe point and walk its stack for roots, so the runtime tracks them all; each has a CLR-assigned `ManagedThreadId` (not the OS id) and carries the flowing `ExecutionContext`; and each is foreground or background, a CLR concept that decides whether it keeps the process alive. The mapping is not guaranteed one-to-one — a host could use fibers — so a managed thread is best seen as a logical thread the runtime owns.
 
-> [!question]- What does the thread pool actually save you compared to `new Thread()`?
-> The create-and-destroy cost. Pool threads are created once and reused for the life of the process, so a short work item pays no thread-creation cost. It also bounds the number of threads, so you do not blow past the point where context switching dominates. You give up ownership of the thread in exchange, so you must not block it or store per-thread state.
+> [!question]- What actually happens during a context switch, and where does the real cost come from?
+> The kernel saves the running thread's registers, instruction pointer, and stack pointer into its thread structure (in kernel mode), the scheduler picks the next ready thread, and its saved state is loaded back so the core resumes it where it stopped. The direct save/restore is cheap, about 1–2 microseconds or 5,000–10,000 cycles. The real cost is indirect: the new thread evicts the old thread's caches, TLB, and branch-predictor state, so when the old thread resumes it stalls on memory. For memory-heavy work that indirect cost can reach tens to hundreds of microseconds, which is why adding threads past the core count lowers throughput.
 
-> [!question]- What are the two levels of queue in the pool, and why two?
-> A global queue for work submitted from outside the pool, and a local queue per worker for work a pool thread creates itself. Two levels avoid a single shared lock: a worker takes from its own local queue with no contention (LIFO, for cache warmth), and only reaches for the shared/other queues when its own is empty. Idle workers steal from other locals (FIFO) to stay busy. This keeps all cores working without one central bottleneck.
+> [!question]- A pool worker's local queue is empty. Where does it look next?
+> The global queue, not another worker's queue. The order is: own local queue newest-first (LIFO), then the global queue oldest-first (FIFO), and only if the global queue is also empty does it steal from another worker's local queue (FIFO, from the far end). Work-stealing is the last resort, after the global queue — jumping from an empty local queue straight to stealing is the common misconception.
+
+> [!question]- Why is `new Thread()` per request a bad idea at scale?
+> A thread is an OS resource, not a cheap object. Each reserves about 1 MB of stack and costs a system call to create. Thousands of them reserve gigabytes and force so many context switches that the cores spend their time switching and refilling caches instead of working. Throughput drops as you add threads past the core count. The pool exists so you reuse a bounded set of threads instead of creating one per job.
 
 > [!question]- The pool has "hill climbing" and "starvation-avoidance injection." What is the difference?
 > Starvation-avoidance injection is a safety valve: if work is queued but not draining, the pool adds at most about one thread every 500 ms, assuming its threads are stuck. Hill climbing is an optimiser: it measures completed-work throughput, nudges the thread count up or down, and keeps changes that improve throughput, converging on a good steady-state count. One reacts to blockage slowly; the other tunes for performance continuously.
@@ -204,13 +241,15 @@ Now a handful of pool threads serve all 500 requests, because each thread is onl
 ## Related
 
 - [[Async and Await]]. Async continuations and I/O completions run on this pool; starvation is the pool running dry.
-- [[Concurrency vs Parallelism]]. The pool gives you parallelism across cores; async gives you concurrency without threads.
+- [[Concurrency vs Parallelism]]. The pool gives parallelism across cores; async gives concurrency without threads.
 - [[Synchronization Primitives]]. `lock`, `SemaphoreSlim`, `Interlocked` for the shared state pool threads touch.
 - [[Race Conditions]] and [[Deadlocks]]. The hazards of many pool threads running at once.
 
 ## References
 
-- [Managed threading (.NET)](https://learn.microsoft.com/en-us/dotnet/standard/threading/). Threads, the scheduler, and the `Thread` type.
-- [The managed thread pool (.NET)](https://learn.microsoft.com/en-us/dotnet/standard/threading/the-managed-thread-pool). Queuing work, min/max threads, and pool behaviour.
-- [Debug thread pool starvation (.NET)](https://learn.microsoft.com/en-us/dotnet/core/diagnostics/debug-threadpool-starvation). The starvation symptom, the ~500 ms injection, and diagnosis.
-- [The CLR thread pool thread injection algorithm](https://mattwarren.org/2017/04/13/The-CLR-Thread-Pool-Thread-Injection-Algorithm/). Hill climbing and injection in depth.
+- [Managed and unmanaged threading in Windows (.NET)](https://learn.microsoft.com/en-us/dotnet/standard/threading/managed-and-unmanaged-threading-in-windows). The managed-to-OS-thread relationship and `ManagedThreadId`.
+- [Foreground and background threads (.NET)](https://learn.microsoft.com/en-us/dotnet/standard/threading/foreground-and-background-threads). Which threads keep the process alive.
+- [Thread suspension, GC, and safe points (.NET)](https://learn.microsoft.com/en-us/dotnet/standard/threading/). Why the runtime must be able to suspend managed threads for collection.
+- [The managed thread pool (.NET)](https://learn.microsoft.com/en-us/dotnet/standard/threading/the-managed-thread-pool). Queuing work, worker vs completion-port threads, min/max.
+- [Debug thread pool starvation (.NET)](https://learn.microsoft.com/en-us/dotnet/core/diagnostics/debug-threadpool-starvation). The starvation symptom and the ~500 ms injection.
+- [.NET ThreadPool starvation, and how queuing makes it worse (Criteo)](https://medium.com/criteo-engineering/net-threadpool-starvation-and-how-queuing-makes-it-worse-512c8d570527). Local/global queues and the work-stealing order.
