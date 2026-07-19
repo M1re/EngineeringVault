@@ -13,7 +13,45 @@ not just able to recognise the term.
 fully and don't hand-wave "you already know this"; skip only the trivial 101. **Simple words, deep
 content:** layer it — the plain gist first, then under the hood. Complex wording is not smartness.
 
-Follow the structure in `Vault/Templates/Concept Note.md` and the rules in `CLAUDE.md`.
+Follow the structure in `Vault/Templates/Concept Note.md` and the rules in `CLAUDE.md`. The
+**reference note** for both structure and writing calibre is `Vault/Programming/Concurrency/Async and Await.md`
+([[Async/Await]]) — match it.
+
+## Structure
+
+The note has **no** generic `## How it works` header. After the `> [!summary]`, the body is a run of
+**topical sections with strict, official noun-phrase headers** — `## State Machine`, not
+"## The state machine: what the compiler actually generates". Order them so each builds on the last.
+Then the fixed tail: `## Pitfalls & Trade-offs`, `## In Production`, `## Questions`, `## Related`,
+`## References` (Title Case).
+
+- **Pitfalls & Trade-offs** is a **numbered** list, most common / most dangerous first. Each item
+  carries a short code snippet or concrete scenario that shows *why* it is wrong, or the narrow case
+  where it is acceptable — never a bare assertion. Frame trade-offs as trade-offs: "X buys A at the
+  cost of B".
+- **In Production** shows **code** (typically the bad version and the fix side by side) plus a real
+  number or symptom, not prose alone.
+
+## Writing standard (the bar, calibrated on the reference note)
+
+Deep by default, but the enemy is padding, not length. Write so a mid-level engineer *understands*,
+not just recognises.
+
+- **Why before how.** Open each section with the problem, or the concrete question it answers, then
+  the mechanism. Introduce a term only once the reader feels why it is needed. Never definition-first
+  — "A `SynchronizationContext` decides which thread runs the rest of your method after an `await`"
+  lands; "A `SynchronizationContext` represents a place to run code" does not.
+- **Ground unfamiliar supporting concepts.** If a section leans on something the reader may not know
+  (e.g. the UI thread), explain that thing from scratch — what it is and why its rule exists — before
+  you build on it.
+- **Strictly technical, but slow.** Explain in small steps. No metaphors, no analogy-as-crutch, no
+  water, no restating the summary.
+- **Concrete phrasings.** Name the object of the action: "block a thread", not "block"; "frees its
+  thread back to the pool", not "frees it".
+- **Short sentences, simple punctuation.** One idea per sentence. Prefer a period over a semicolon, a
+  mid-sentence colon, or a stacked-clause em-dash.
+- **Code where it explains better than prose** — not only in Pitfalls and In Production, but inside a
+  tricky mechanism section too (a generated-code sketch, a two-line before/after).
 
 ## The depth test
 
@@ -82,7 +120,10 @@ You wrote it, so you're the worst judge of it — never commit a note that hasn'
 
 ## Anti-patterns to avoid
 
-- A "How it works" section that only restates the summary.
-- A "Trade-offs" section that lists benefits only, with no costs.
+- A generic `## How it works` umbrella header, or a mechanism section that only restates the summary.
+- Definition-first openings that name a term before the reader feels why it is needed.
+- A "Trade-offs" section that lists benefits only, with no costs; pitfalls stated without a code
+  snippet or scenario showing why.
 - Generic self-test questions ("What is X?") instead of design-level ones.
-- Walls of prose where a code block, table, or numbered list would be clearer.
+- Metaphors, padding, stacked-clause sentences, or walls of prose where a code block, a before/after,
+  or a numbered list would be clearer.

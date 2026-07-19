@@ -42,6 +42,18 @@ How this stays healthy (so it never bloats and drags down quality):
 
 <!-- Dated history. Newest first. Not required reading; kept for provenance. -->
 
+### 2026-07-19
+
+- Calibrated the note-writing standard on the Async/Await note (the new **reference note**). Promoted
+  all of it into structure (the `note-writer` skill + `Concept Note.md` template + `/expand` +
+  `verification.md`), so it is not repeated here. In short: notes are deep-by-default and
+  interview-grade; no generic `## How it works` header — the body is topical sections with strict,
+  official noun-phrase headers; explain **why before how** and never definition-first; ground an
+  unfamiliar supporting concept from scratch before using it; strictly technical but slow, no
+  metaphors and no padding; concrete phrasings (name the object of the action); short sentences and
+  simple punctuation; `Pitfalls & Trade-offs` is numbered with a code snippet/scenario per item;
+  `In Production` carries real before/after code.
+
 ### 2026-07-09
 
 - Bias to full automation, path-agnostic, no personal/machine-specific data: prefer committing a
