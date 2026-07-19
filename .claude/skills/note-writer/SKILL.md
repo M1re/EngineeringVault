@@ -55,6 +55,11 @@ not just recognises.
   "is responsible for", "participates in", "leverages", "a wrapper around it") and mid-sentence
   hedges ("in normal use", "generally", "effectively"). If a sentence could describe ten different
   systems, it is too abstract — name the specific thing that happens.
+- **Dry, not colourful.** No metaphors or "flavour" labels for a mechanism ("thin skin", "standing
+  crew", "context-switch tax", "starvation valve"), no editorial asides ("here is the bind", "the
+  cost is sneaky"), and no comparisons to a language or tech the note is not about ("the same thread
+  a C program would get" in a .NET note). Every sentence carries one concrete step of the
+  explanation. If a sentence only restates the last one or decorates it, cut it.
 - **Short sentences, simple punctuation.** One idea per sentence. Prefer a period over a semicolon, a
   mid-sentence colon, or a stacked-clause em-dash.
 - **Code where it explains better than prose** — not only in Pitfalls and In Production, but inside a

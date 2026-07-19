@@ -42,6 +42,14 @@ missed: fabrication, hand-waving, and sloppiness — before it reaches readers.
      that happens ("takes part in runtime services", "is responsible for", "a wrapper around it") or
      mid-sentence hedges ("in normal use", "generally"). If a sentence could describe ten different
      systems, flag it — the note should say the specific mechanism.
+   - **Metaphor and colour.** Flag any figurative or "flavour" label that is not the literal
+     mechanism: "thin skin", "standing crew", "context-switch tax", "starvation valve", "traffic
+     jam", "sneaky", "the bind". The register is dry and technical — say the plain thing.
+   - **Off-topic comparison.** Flag comparisons to a language/tech the note is not about (e.g. "the
+     same thread a C program would get" in a .NET note). Cut it.
+   - **Vague pronoun / dropped noun.** Flag "it"/"they"/"this" where naming the noun is clearer, and
+     dropped nouns ("runs two" → "runs two threads"). Every sentence should carry a concrete step;
+     if one only restates or decorates, it is water.
 
 ## What you produce
 
