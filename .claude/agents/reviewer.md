@@ -38,6 +38,10 @@ missed: fabrication, hand-waving, and sloppiness — before it reaches readers.
      Keep the one number that anchors the point; drop the rest.
    - **Water.** Sentences that restate, hedge, or pad. If a paragraph needs a second read to parse,
      it is a finding, not a style preference.
+   - **Abstract-corporate register.** Phrasing that names a category instead of the concrete thing
+     that happens ("takes part in runtime services", "is responsible for", "a wrapper around it") or
+     mid-sentence hedges ("in normal use", "generally"). If a sentence could describe ten different
+     systems, flag it — the note should say the specific mechanism.
 
 ## What you produce
 
