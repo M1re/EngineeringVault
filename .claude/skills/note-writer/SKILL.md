@@ -5,17 +5,30 @@ description: Use when creating or editing technical concept notes in this Engine
 
 # Note Writer
 
-You are writing durable reference notes for a **public** staff-engineer knowledge base.
-The bar is: a reader finishes the note actually *understanding* the concept and its trade-offs,
-not just able to recognise the term.
+You are writing durable reference notes for a **public** staff-engineer knowledge base. The bar: a
+reader finishes the note actually *understanding* the concept and its trade-offs, not just able to
+recognise the term.
 
-**Audience:** a solid **mid-level** engineer levelling up toward staff — so explain the mechanism
-fully and don't hand-wave "you already know this"; skip only the trivial 101. **Simple words, deep
-content:** layer it — the plain gist first, then under the hood. Complex wording is not smartness.
+**Audience:** a solid **mid-level** engineer levelling up toward staff. Explain the mechanism fully;
+skip only the trivial 101. Simple words, deep content — the plain gist first, then under the hood.
+Complex wording is not smartness.
 
-Follow the structure in `Vault/Templates/Concept Note.md` and the rules in `CLAUDE.md`. The
-**reference note** for both structure and writing calibre is `Vault/Programming/Concurrency/Async and Await.md`
-([[Async/Await]]) — match it.
+**Reference notes** — match their depth, format, and register:
+- `Vault/Programming/Concurrency/Async and Await.md` ([[Async/Await]]) — depth and structure.
+- `Vault/Programming/Concurrency/Threads and the Thread Pool.md` ([[Threads and the Thread Pool]]) —
+  the dry, concrete register.
+
+Also follow the template in `Vault/Templates/Concept Note.md` and the rules in `CLAUDE.md`.
+
+## Workflow
+
+1. **Research first.** Verify the mechanism against primary sources and build a depth map. Never draft
+   mechanism detail from memory. (Details in [Method](#method).)
+2. **Draft** to the Structure and Writing standard below.
+3. **Review.** Run the `reviewer` subagent — it runs three passes (accuracy, completeness & ordering,
+   readability) against [`references/verification.md`](references/verification.md). Apply its must-fixes.
+4. **Publish**, then let the author read the finished note and calibrate. Iterate on the live note —
+   there is no depth-outline step; the author reviews the finished draft.
 
 ## Structure
 
@@ -32,38 +45,39 @@ Then the fixed tail: `## Pitfalls & Trade-offs`, `## In Production`, `## Questio
 - **In Production** shows **code** (typically the bad version and the fix side by side) plus a real
   number or symptom, not prose alone.
 
-## Writing standard (the bar, calibrated on the reference note)
+## Writing standard
 
-Deep by default, but the enemy is padding, not length. Write so a mid-level engineer *understands*,
-not just recognises.
+Deep by default; the enemy is padding, not length. Write so a mid-level engineer *understands*, not
+just recognises. Four rules do most of the work.
 
-- **Why before how.** Open each section with the problem, or the concrete question it answers, then
-  the mechanism. Introduce a term only once the reader feels why it is needed. Never definition-first
-  — "A `SynchronizationContext` decides which thread runs the rest of your method after an `await`"
-  lands; "A `SynchronizationContext` represents a place to run code" does not.
-- **Ground unfamiliar supporting concepts.** If a section leans on something the reader may not know
-  (e.g. the UI thread), explain that thing from scratch — what it is and why its rule exists — before
-  you build on it.
-- **Strictly technical, but slow.** Explain in small steps. No metaphors, no analogy-as-crutch, no
-  water, no restating the summary.
-- **Concrete phrasings.** Name the object of the action: "block a thread", not "block"; "frees its
-  thread back to the pool", not "frees it".
-- **Whiteboard register, not corporate abstraction — this is the most common way notes read as
-  "заумно".** Explain by *what actually happens*, with concrete verbs and nouns: "the GC freezes
-  every thread and reads its stack to see which objects are still used", not "the thread takes part
-  in runtime services the OS knows nothing about". Ban abstract-category filler ("takes part in",
-  "is responsible for", "participates in", "leverages", "a wrapper around it") and mid-sentence
-  hedges ("in normal use", "generally", "effectively"). If a sentence could describe ten different
-  systems, it is too abstract — name the specific thing that happens.
-- **Dry, not colourful.** No metaphors or "flavour" labels for a mechanism ("thin skin", "standing
-  crew", "context-switch tax", "starvation valve"), no editorial asides ("here is the bind", "the
-  cost is sneaky"), and no comparisons to a language or tech the note is not about ("the same thread
-  a C program would get" in a .NET note). Every sentence carries one concrete step of the
-  explanation. If a sentence only restates the last one or decorates it, cut it.
-- **Short sentences, simple punctuation.** One idea per sentence. Prefer a period over a semicolon, a
-  mid-sentence colon, or a stacked-clause em-dash.
-- **Code where it explains better than prose** — not only in Pitfalls and In Production, but inside a
-  tricky mechanism section too (a generated-code sketch, a two-line before/after).
+1. **Why before how.** Open each section with the problem, or the concrete question it answers, then
+   the mechanism. Introduce a term only once the reader feels why it is needed — never definition-
+   first. ("A `SynchronizationContext` decides which thread runs the rest of your method after an
+   `await`" lands; "represents a place to run code" does not.) If a section leans on a concept the
+   reader may not know (the UI thread, the CPU cache), explain that concept from scratch before
+   building on it.
+
+2. **Dry and concrete — say what actually happens.** This is the rule notes break most, and breaking
+   it is what makes a note read as "заумно". Describe the literal mechanism with concrete verbs and
+   nouns: "the GC freezes every thread and reads its stack for live objects", not "the thread takes
+   part in runtime services". Cut, every time:
+   - **Metaphors and flavour labels** ("thin skin", "standing crew", "context-switch tax",
+     "starvation valve") and editorial asides ("here is the bind", "the cost is sneaky").
+   - **Abstract-category filler** ("takes part in", "is responsible for", "a wrapper around it") and
+     mid-sentence hedges ("in normal use", "generally", "effectively"). If a sentence could describe
+     ten different systems, name the specific thing instead.
+   - **Off-topic comparisons** to a language or tech the note is not about ("the thread a C program
+     would get" in a .NET note).
+   - **Vague pronouns and dropped nouns.** Write "the thread" / "the worker thread", not "it"; "runs
+     two threads", not "runs two".
+
+3. **One step per sentence.** Every sentence carries one concrete step of the explanation. Cut any
+   sentence that only restates the previous one, decorates it, or just points forward ("the next
+   section covers it"). Keep sentences short; prefer a period over a semicolon, a mid-sentence colon,
+   or a stacked em-dash.
+
+4. **Code where it explains better than prose.** Not only in Pitfalls and In Production, but inside a
+   tricky mechanism section too — a generated-code sketch, a two-line before/after.
 
 ## The depth test
 
@@ -122,10 +136,10 @@ You wrote it, so you're the worst judge of it — never commit a note that hasn'
 
 ## Style
 
-- Write for a mid-level engineer levelling up: explain the mechanism fully; skip only trivial 101.
 - **Diagrams:** prefer **Mermaid** code blocks for flows, sequences, and architecture — they render
   in both Obsidian and the site and diff in git; use Excalidraw only for freeform sketches.
-- **Questions** are collapsible self-test callouts: `> [!question]- <q>` with the answer folded inside.
+- **Questions** are collapsible self-test callouts: `> [!question]- <q>` with the answer folded inside;
+  ask design/review-level questions, not "what is X".
 - Use callouts to signal importance: `> [!summary]`, `> [!tip]`, `> [!warning]`.
 - Neutral, technical, timeless voice. No "recently", no dates in prose, no first person.
 - New notes start `status: creation` and `publish: false`; set `status: done` when every section is
@@ -135,13 +149,3 @@ You wrote it, so you're the worst judge of it — never commit a note that hasn'
 
 - No personal names, employers, colleagues, internal project names, private URLs, or secrets.
 - No unverified claims presented as fact.
-
-## Anti-patterns to avoid
-
-- A generic `## How it works` umbrella header, or a mechanism section that only restates the summary.
-- Definition-first openings that name a term before the reader feels why it is needed.
-- A "Trade-offs" section that lists benefits only, with no costs; pitfalls stated without a code
-  snippet or scenario showing why.
-- Generic self-test questions ("What is X?") instead of design-level ones.
-- Metaphors, padding, stacked-clause sentences, or walls of prose where a code block, a before/after,
-  or a numbered list would be clearer.

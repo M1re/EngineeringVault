@@ -28,28 +28,22 @@ missed: fabrication, hand-waving, and sloppiness — before it reaches readers.
      that names a concept without explaining how it actually works is a gap.
    - **Reads-as-invented.** Flag anything that sounds plausible but you cannot confirm — subtly wrong
      detail is worse than an obvious gap, because it erodes trust. If you cannot verify it, say so.
-5. **Readability pass — depth must not become jargon or water.** Depth belongs in the mechanism and
-   the *why*, not in piling on technical terms and micro-figures. Read each section as a mid-level
-   engineer seeing it for the first time and flag:
-   - **Ungrounded jargon.** A term or acronym used without being explained (e.g. "L1/L2/L3 cache",
-     "TLB", "IOCP") where the point does not need it, or needs it explained first. Either ground it
-     in a plain sentence or cut it.
-   - **Number-dumping.** Strings of precise figures that do not change the reader's understanding.
-     Keep the one number that anchors the point; drop the rest.
-   - **Water.** Sentences that restate, hedge, or pad. If a paragraph needs a second read to parse,
-     it is a finding, not a style preference.
-   - **Abstract-corporate register.** Phrasing that names a category instead of the concrete thing
-     that happens ("takes part in runtime services", "is responsible for", "a wrapper around it") or
-     mid-sentence hedges ("in normal use", "generally"). If a sentence could describe ten different
-     systems, flag it — the note should say the specific mechanism.
-   - **Metaphor and colour.** Flag any figurative or "flavour" label that is not the literal
-     mechanism: "thin skin", "standing crew", "context-switch tax", "starvation valve", "traffic
-     jam", "sneaky", "the bind". The register is dry and technical — say the plain thing.
-   - **Off-topic comparison.** Flag comparisons to a language/tech the note is not about (e.g. "the
-     same thread a C program would get" in a .NET note). Cut it.
-   - **Vague pronoun / dropped noun.** Flag "it"/"they"/"this" where naming the noun is clearer, and
-     dropped nouns ("runs two" → "runs two threads"). Every sentence should carry a concrete step;
-     if one only restates or decorates, it is water.
+5. **Readability pass — depth must not become jargon, water, or "flavour".** Depth belongs in the
+   mechanism and the *why*. Read each section as a mid-level engineer seeing it for the first time,
+   and flag three things (these mirror the Writing standard in the `note-writer` skill):
+   - **Grounding & precision.** Ungrounded jargon — a term or acronym leaned on without a plain
+     explanation ("L1/L2/L3 cache", "TLB", "IOCP") — must be grounded in a sentence or cut. And
+     number-dumping — strings of precise figures that do not change understanding; keep the one
+     anchoring number, drop the rest.
+   - **Dry register.** Flag anything that is not the literal mechanism: metaphors and flavour labels
+     ("thin skin", "standing crew", "context-switch tax", "starvation valve", "sneaky"); abstract-
+     category filler ("takes part in", "is responsible for", "a wrapper around it") and mid-sentence
+     hedges ("in normal use", "generally"); and off-topic comparisons ("the thread a C program would
+     get" in a .NET note). If a sentence could describe ten different systems, it is too abstract.
+   - **One concrete step per sentence.** Flag vague pronouns and dropped nouns ("it" where "the
+     thread" is clearer; "runs two" → "runs two threads"), and any sentence that only restates the
+     previous one, decorates it, or points forward ("the next section covers it"). If a paragraph
+     needs a second read to parse, that is a finding, not a style preference.
 
 ## What you produce
 
