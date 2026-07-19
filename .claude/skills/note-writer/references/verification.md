@@ -64,10 +64,11 @@ Depth & honesty
 
 Form
 - [ ] Every code fence declares a language; snippets are correct and minimal.
-- [ ] Reads simply despite depth. Every term/acronym is grounded in a plain sentence before it is
-      leaned on (no ungrounded "L1/L2/L3", "TLB", "IOCP"); no number-dumping (keep the one anchoring
-      figure, cut the rest); no water. Depth lives in the mechanism and the *why*, not in piled-on
-      terms. A mid-level engineer could follow each paragraph on first read.
+- [ ] Reads dry and concrete on first read (see the `note-writer` Writing standard). Terms/acronyms
+      grounded before use (no ungrounded "L1/L2/L3", "TLB"); no number-dumping. No metaphors or
+      flavour labels, abstract-category filler, mid-sentence hedges, or off-topic comparisons — state
+      the literal mechanism. Concrete nouns, not vague pronouns ("the thread", not "it"); every
+      sentence carries one concrete step, none only restating, decorating, or forward-pointing.
 - [ ] Required sections present and in order (see `Vault/Templates/Concept Note.md`).
 
 Repo hygiene
