@@ -45,6 +45,15 @@ Accuracy
 - [ ] No invented signatures, enum values, or config keys.
 - [ ] Version-specific claims name the version and match the source.
 
+Completeness & depth (the whole mechanism, not just each sentence)
+- [ ] Multi-step mechanisms and lookup / precedence / fallback **orders** are verified **as a whole**
+      against a primary source (docs or runtime/reference source), not step-by-step in isolation. An
+      individually-true step can still be misplaced or have a step omitted between it and the next.
+- [ ] No important mechanism, nuance, number, or edge case a **staff engineer** would expect is
+      omitted or hand-waved. Naming a concept without explaining how it actually works is a gap.
+- [ ] Nothing reads as plausible-but-unconfirmed. Subtly wrong detail erodes trust more than an
+      admitted gap — if you cannot confirm it, verify it or cut it.
+
 Depth & honesty
 - [ ] Topical mechanism sections (no `## How it works` umbrella) explain the **mechanism**
       (what/when/who/on-failure) why-before-how, not a restated summary or a definition-first opening.
