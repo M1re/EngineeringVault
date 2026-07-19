@@ -64,7 +64,10 @@ Depth & honesty
 
 Form
 - [ ] Every code fence declares a language; snippets are correct and minimal.
-- [ ] Reads simply despite depth — no jargon used to sound smart; a mid-level engineer could follow.
+- [ ] Reads simply despite depth. Every term/acronym is grounded in a plain sentence before it is
+      leaned on (no ungrounded "L1/L2/L3", "TLB", "IOCP"); no number-dumping (keep the one anchoring
+      figure, cut the rest); no water. Depth lives in the mechanism and the *why*, not in piled-on
+      terms. A mid-level engineer could follow each paragraph on first read.
 - [ ] Required sections present and in order (see `Vault/Templates/Concept Note.md`).
 
 Repo hygiene
