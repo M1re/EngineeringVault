@@ -2,8 +2,8 @@
 publish: true
 title: Threads and the Thread Pool
 created: 2026-07-09
-modified: 2026-07-19T14:45:00.000+03:00
-published: 2026-07-19T14:45:00.000+03:00
+modified: 2026-07-19T15:30:00.000+03:00
+published: 2026-07-19T15:30:00.000+03:00
 tags:
   - threads
   - thread-pool
@@ -232,7 +232,7 @@ Now a handful of pool threads serve all 500 requests, because each thread is bus
 ## Questions
 
 > [!question]- Is a managed `Thread` the same as an OS thread? What does the CLR add?
-> In normal use a managed thread maps one-to-one to a real OS thread, so it is not cheaper — starting one creates an OS thread that the OS schedules. The CLR wraps it so it can take part in runtime services: the GC must be able to suspend every managed thread at a safe point and walk its stack for roots, so the runtime tracks them all; each has a CLR-assigned `ManagedThreadId` (not the OS id) and carries the flowing `ExecutionContext`; and each is foreground or background, a CLR concept that decides whether it keeps the process alive. The mapping is not guaranteed one-to-one — a host could use fibers — so a managed thread is best seen as a logical thread the runtime owns.
+> No, it is not something lighter. `new Thread(...)` makes .NET ask the OS for a real OS thread, and the OS schedules it, so it costs what an OS thread costs. .NET keeps it in its own `Thread` class to do three concrete jobs: the GC has to freeze every thread and read its stack to find live objects, and it can only do that with threads it created and can stop at a safe point; each thread gets a `ManagedThreadId`, its own number and not the OS id; and each is foreground or background, which decides whether it keeps the program alive.
 
 > [!question]- What actually happens during a context switch, and where does the real cost come from?
 > The kernel saves the running thread's registers, instruction pointer, and stack pointer into its thread structure (in kernel mode), the scheduler picks the next ready thread, and its saved state is loaded back so the core resumes it where it stopped. The direct save/restore is cheap, a couple of microseconds at most. The real cost is indirect: the switched-in thread overwrites the CPU cache with its own data, so when the first thread resumes, its data is gone from the cache and it stalls fetching it from RAM again. For memory-heavy work that refilling costs far more than the switch itself, which is why adding threads past the hardware-thread count lowers throughput.
@@ -250,7 +250,7 @@ Now a handful of pool threads serve all 500 requests, because each thread is bus
 > It holds a pool thread for the entire wait instead of the microseconds of real work. Under load every request does the same, so all pool threads end up blocked. New requests, and the async continuations that would complete the blocked ones, have no thread to run on. The pool adds threads only about twice a second, far slower than requests arrive, so the queue grows without bound and latency explodes. This is thread-pool starvation.
 
 > [!question]- You store a value in `[ThreadStatic]` before an `await` and read it after. Safe?
-> No. The continuation after the `await` can resume on a different pool thread, so the `[ThreadStatic]` value set on the first thread is not visible on the second. Thread-local state does not follow the logical flow of async code. Use `AsyncLocal<T>`, which flows across `await` with the `ExecutionContext`.
+> No. The continuation after the `await` can resume on a different pool thread, so the `[ThreadStatic]` value set on the first thread is not visible on the second. Thread-local state does not follow the logical flow of async code. Use `AsyncLocal<T>` instead — it is built to follow the async call across `await`, not to stick to one thread.
 
 ## Related
 
