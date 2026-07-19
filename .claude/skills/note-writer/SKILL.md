@@ -66,11 +66,17 @@ definition wouldn't?"* If not, it isn't done. Every note must answer three quest
 
 ## Method
 
-1. **Establish accuracy first.** Rely on well-established knowledge; for anything version-specific,
-   niche, or that you're unsure about, verify against primary sources (RFCs, official docs, papers,
-   the canonical book) rather than guessing. When you genuinely can't verify, write a
-   `> [!warning] Unverified` callout instead of inventing detail. Never fabricate numbers or APIs.
-   Follow the full protocol in [`references/verification.md`](references/verification.md).
+1. **Research first — never draft the mechanism from memory.** Before writing, research the topic
+   against primary sources (official docs, the RFC/spec, the **runtime or reference source**, the
+   canonical book). Build an internal **depth map**: the sections; each mechanism stated *fully and
+   in the correct order* — verify orderings, precedence, and fallback sequences *as a whole* against
+   the source, because an individually-true step can still be misplaced or have a step omitted before
+   the next one; the nuances, numbers, and edge cases a **staff engineer** would know; and the real
+   pitfalls. Draft only from that map. Memory is for structure and intuition, not for mechanism
+   detail — surface-level or subtly-wrong text (which reads as "invented") is exactly what a real
+   research pass prevents. When you genuinely can't verify a point, write a `> [!warning] Unverified`
+   callout or omit it. Never fabricate numbers or APIs.
+   Full protocol: [`references/verification.md`](references/verification.md).
 2. **Lead with the one-sentence summary**, then widen: why it matters → mechanics → trade-offs.
 3. **Be concrete.** Prefer a small code snippet, a numbered sequence, or a real number over prose.
    Every code block declares its language.
