@@ -53,6 +53,26 @@ How this stays healthy (so it never bloats and drags down quality):
   metaphors and no padding; concrete phrasings (name the object of the action); short sentences and
   simple punctuation; `Pitfalls & Trade-offs` is numbered with a code snippet/scenario per item;
   `In Production` carries real before/after code.
+- **Process (from the Threads note calibration), also promoted into structure:**
+  - **Research-first (skill `Method` step 1).** Never draft the mechanism from memory. Research
+    against primary sources (docs, the RFC/spec, the runtime/reference source) and verify orderings
+    and precedence/fallback sequences *as a whole*, not step by step — an individually-true step can
+    be misplaced or have a step omitted before the next (this is how the work-stealing order was
+    wrong: it is local LIFO → global FIFO → steal FIFO, steal last, not "empty local → steal").
+  - **Reviewer + `verification.md` now run three passes, not just accuracy:** completeness/depth
+    (missing staff-level mechanisms/nuances, misordered or omitted steps → must-fix), reads-as-
+    invented, and **readability** (ungrounded jargon like L1/L2/L3/TLB, number-dumping, water).
+  - **Whiteboard register (the recurring "заумно" failure).** Say what actually happens with concrete
+    verbs and nouns ("the GC freezes every thread and reads its stack"), not abstract categories
+    ("takes part in runtime services", "a wrapper around it", "is responsible for"). Ban mid-sentence
+    hedges ("in normal use", "generally") and never drop the noun ("runs two threads", not "runs
+    two"). If a sentence could describe ten different systems, it is too abstract.
+  - Workflow that produced the reference note: **research → draft to the standard → `reviewer`
+    subagent (accuracy + completeness + readability) → apply must-fixes → publish**. Author reviews
+    the finished draft (no depth-outline step); iterate on the live note.
+- The **Threads and the Thread Pool** note itself was deleted at the author's request after it kept
+  reading as watery/over-clever despite many passes. The *process and these remarks are kept*; the
+  article is not. Rewrite it fresh later, from research, in the whiteboard register above.
 
 ### 2026-07-09
 
