@@ -2,8 +2,8 @@
 publish: true
 title: Threads and the Thread Pool
 created: 2026-07-09
-modified: 2026-07-19T13:15:00.000+03:00
-published: 2026-07-19T13:15:00.000+03:00
+modified: 2026-07-19T14:00:00.000+03:00
+published: 2026-07-19T14:00:00.000+03:00
 tags:
   - threads
   - thread-pool
@@ -22,6 +22,18 @@ Your code has to run on something. That something is a thread.
 A thread is a single sequence of instructions that a CPU core executes one after another. To run it, the operating system gives it three things: a **stack** (its own memory for local variables and call frames), a set of **registers** (including the instruction pointer, which marks the next instruction to run), and an entry in the OS **scheduler**.
 
 A machine has only a few cores but far more threads than cores. The scheduler shares the cores between them by running one thread for a short slice of time, then swapping in another. That swap is a context switch, and it has its own section below because its cost drives almost everything else here.
+
+## Cores, Hardware Threads, and OS Threads
+
+Three different things all get called "threads", and mixing them up causes real confusion. Say your CPU is "6 cores, 12 threads", but the debugger shows 26 threads in your process. Both numbers are right, because they count different things.
+
+- **Cores** are the physical execution units. Six of them.
+- **Hardware threads** are how many threads the CPU can run *at the very same instant*. Each core here runs two, a feature called hyper-threading (SMT), so the chip can run 12 threads at the same instant. (The two threads sharing a core also share its execution units, so 12 is not double the work of 6.) This is your ceiling on real parallelism. Nothing runs a thirteenth thread at that instant.
+- **OS threads** are the threads that *exist* and get scheduled. There can be far more of them than hardware threads. At any instant at most 12 are actually running; the rest are **blocked** (waiting on I/O, a lock, or `Sleep`) or **ready** and waiting their turn. The OS rotates them across the 12 hardware threads by time-slicing.
+
+So 26 OS threads on a 12-hardware-thread machine is normal. Most of them are asleep almost all the time, and you did not create most of them — the runtime did: several thread-pool workers (some idle), I/O completion threads, the GC threads, the finalizer thread, a timer thread, plus threads the debugger and your libraries start.
+
+The rule: **hardware threads are how many run at the same instant; OS threads are how many exist and get juggled.** The rest of this note says "thread" to mean an OS thread — the kind you create and the kind the scheduler juggles.
 
 ## Managed Threads vs OS Threads
 
@@ -64,11 +76,11 @@ A switch happens for one of two reasons:
 
 The mechanism is the same either way. The kernel saves the running thread's CPU state — the general registers, the instruction pointer (where it was in the code), and the stack pointer — into that thread's kernel structure. This runs in kernel mode. The scheduler then picks the next ready thread, loads its saved state back into the registers, and the core resumes it exactly where it had stopped.
 
-The **direct** cost of that save-and-restore is small: on the order of 1 to 2 microseconds, roughly 5,000 to 10,000 CPU cycles, including the kernel crossing.
+The **direct** cost of that save-and-restore is small: a couple of microseconds at most.
 
-The **indirect** cost is the one that hurts. The outgoing thread had filled the CPU caches (L1/L2/L3), the TLB (the virtual-to-physical address map), and the branch predictor with its own data. The incoming thread evicts much of that as it runs. When the first thread comes back, its data is no longer cached, so it stalls waiting on memory — an L3 miss costs about 50 to 100 ns, a TLB miss hundreds of cycles. Across a real working set this indirect cost can reach **tens to hundreds of microseconds**, dwarfing the direct cost.
+The **indirect** cost is the one that hurts, and it comes down to one idea. A CPU keeps a small, very fast on-chip memory called the **cache**, where it holds the data it is actively using so it does not have to reach out to slow main memory (RAM) every time. While a thread runs, it fills the cache with its own data. When the OS switches in another thread, that thread overwrites the cache with *its* data. So when the first thread comes back, its data is gone from the cache, and it has to fetch from RAM again, which is much slower. It stalls while waiting. For memory-heavy work this refilling can cost far more than the switch itself.
 
-This is the real reason more threads do not mean more throughput. Once the number of runnable threads passes the number of cores, the cores spend a growing share of their time switching and refilling caches instead of doing work.
+This is the real reason more threads do not mean more throughput. Once the number of running threads passes the number of hardware threads, the cores spend a growing share of their time switching and refilling caches instead of doing work.
 
 ## The Thread Pool
 
@@ -115,7 +127,7 @@ flowchart TD
 
 How many worker threads should the pool have? Too few and work waits while cores sit idle. Too many and the machine drowns in context switches. The pool tunes the number itself.
 
-The pool actually keeps **two kinds of thread**: **worker threads** for queued work, and **I/O completion threads** for async I/O completions. `ThreadPool.GetMinThreads` / `SetMinThreads` and their `Max` counterparts control both, each with a `(workerThreads, completionPortThreads)` pair. (The `completionPortThreads` name is Windows I/O-completion-port heritage, but the API stays on every platform; the async-I/O engine underneath just differs off Windows.) The pool starts near a floor on the order of the CPU count, and grows and shrinks the worker count from there with two separate mechanisms:
+The pool actually keeps **two kinds of thread**: **worker threads** for queued work, and **I/O completion threads** for async I/O completions. `ThreadPool.GetMinThreads` / `SetMinThreads` and their `Max` counterparts control both, each with a `(workerThreads, completionPortThreads)` pair. (The `completionPortThreads` name is Windows heritage; the API exists on every platform, even though the async-I/O engine differs off Windows.) The pool starts near a floor on the order of the CPU count, and grows and shrinks the worker count from there with two separate mechanisms:
 
 - **Starvation-avoidance injection.** If work is queued but the queue is not draining, the pool assumes its threads are stuck and adds one more. It does this slowly, at most about one new thread every 500 ms. It is a safety valve, not a fast response.
 - **Hill climbing.** In parallel, the pool measures its own throughput — completed work items per second. It nudges the thread count up or down and keeps the change if throughput improved, climbing toward the peak. This finds a good steady-state count for the current load with no human tuning.
@@ -223,7 +235,7 @@ Now a handful of pool threads serve all 500 requests, because each thread is bus
 > In normal use a managed thread maps one-to-one to a real OS thread, so it is not cheaper — starting one creates an OS thread that the OS schedules. The CLR wraps it so it can take part in runtime services: the GC must be able to suspend every managed thread at a safe point and walk its stack for roots, so the runtime tracks them all; each has a CLR-assigned `ManagedThreadId` (not the OS id) and carries the flowing `ExecutionContext`; and each is foreground or background, a CLR concept that decides whether it keeps the process alive. The mapping is not guaranteed one-to-one — a host could use fibers — so a managed thread is best seen as a logical thread the runtime owns.
 
 > [!question]- What actually happens during a context switch, and where does the real cost come from?
-> The kernel saves the running thread's registers, instruction pointer, and stack pointer into its thread structure (in kernel mode), the scheduler picks the next ready thread, and its saved state is loaded back so the core resumes it where it stopped. The direct save/restore is cheap, about 1–2 microseconds or 5,000–10,000 cycles. The real cost is indirect: the new thread evicts the old thread's caches, TLB, and branch-predictor state, so when the old thread resumes it stalls on memory. For memory-heavy work that indirect cost can reach tens to hundreds of microseconds, which is why adding threads past the core count lowers throughput.
+> The kernel saves the running thread's registers, instruction pointer, and stack pointer into its thread structure (in kernel mode), the scheduler picks the next ready thread, and its saved state is loaded back so the core resumes it where it stopped. The direct save/restore is cheap, a couple of microseconds at most. The real cost is indirect: the switched-in thread overwrites the CPU cache with its own data, so when the first thread resumes, its data is gone from the cache and it stalls fetching it from RAM again. For memory-heavy work that refilling costs far more than the switch itself, which is why adding threads past the hardware-thread count lowers throughput.
 
 > [!question]- A pool worker's local queue is empty. Where does it look next?
 > The global queue, not another worker's queue. The order is: own local queue newest-first (LIFO), then the global queue oldest-first (FIFO), and only if the global queue is also empty does it steal from another worker's local queue (FIFO, from the far end). Work-stealing is the last resort, after the global queue — jumping from an empty local queue straight to stealing is the common misconception.

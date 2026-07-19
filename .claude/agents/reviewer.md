@@ -28,6 +28,16 @@ missed: fabrication, hand-waving, and sloppiness — before it reaches readers.
      that names a concept without explaining how it actually works is a gap.
    - **Reads-as-invented.** Flag anything that sounds plausible but you cannot confirm — subtly wrong
      detail is worse than an obvious gap, because it erodes trust. If you cannot verify it, say so.
+5. **Readability pass — depth must not become jargon or water.** Depth belongs in the mechanism and
+   the *why*, not in piling on technical terms and micro-figures. Read each section as a mid-level
+   engineer seeing it for the first time and flag:
+   - **Ungrounded jargon.** A term or acronym used without being explained (e.g. "L1/L2/L3 cache",
+     "TLB", "IOCP") where the point does not need it, or needs it explained first. Either ground it
+     in a plain sentence or cut it.
+   - **Number-dumping.** Strings of precise figures that do not change the reader's understanding.
+     Keep the one number that anchors the point; drop the rest.
+   - **Water.** Sentences that restate, hedge, or pad. If a paragraph needs a second read to parse,
+     it is a finding, not a style preference.
 
 ## What you produce
 
