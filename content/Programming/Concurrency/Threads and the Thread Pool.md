@@ -2,8 +2,8 @@
 publish: true
 title: Threads and the Thread Pool
 created: 2026-07-09
-modified: 2026-07-19T17:00:00.000+03:00
-published: 2026-07-19T17:00:00.000+03:00
+modified: 2026-07-19T17:45:00.000+03:00
+published: 2026-07-19T17:45:00.000+03:00
 tags:
   - threads
   - thread-pool
@@ -33,9 +33,9 @@ So 40 OS threads on an 8-core machine is normal. Most of the threads are idle, a
 
 ## Managed Threads
 
-`new Thread(worker).Start()` makes .NET ask the OS to create a real OS thread, and the OS schedules that thread. A managed thread is a real OS thread, not a cheaper or lighter kind. Creating one costs what creating an OS thread costs.
+When you create a thread with `new Thread(...)`, .NET does not build a thread of its own. .NET asks the operating system for an ordinary OS thread, and the OS runs and schedules that thread. So a managed thread is an OS thread. Creating a managed thread costs the same as creating any OS thread: 1 MB of stack and a system call. The word "managed" does not make the thread cheaper or lighter.
 
-.NET wraps the OS thread in a `Thread` object because the runtime has to control the thread, and the runtime can only control a thread it created. Three things need that control:
+The `Thread` object you get back is a wrapper around that OS thread. .NET keeps this wrapper because the runtime has to control the thread, and the runtime can only control a thread it created. Three things need that control:
 
 - **Garbage collection.** The GC moves live objects in memory to pack them together, then updates every reference to point at each object's new address. The GC cannot do this while a thread is reading or writing those objects. So the GC pauses every thread first. The GC can pause a thread only at a **safe point** — a point in the code where the runtime knows which registers and stack slots hold object references. The runtime tracks every managed thread so it can pause each thread at a safe point and scan its stack.
 - **Identity.** Each managed thread has a `ManagedThreadId`, a number the runtime assigns. This number is not the OS thread's id.
