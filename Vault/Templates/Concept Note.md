@@ -8,24 +8,36 @@ created: {{date:YYYY-MM-DD}}
 ---
 
 > [!summary]
-> <!-- The gist in 1–3 plain sentences a mid-level engineer gets immediately — plus one line on why it matters in real systems. -->
+> <!-- The gist in 1–3 plain sentences a mid-level engineer gets immediately, plus one line on why
+>      it matters in real systems. Plain words. Keep the internals for the body. -->
 
-## How it works
+<!-- MECHANISM SECTIONS — the body of the note.
+     Do NOT use a generic "## How it works" header. Break the mechanism into topical sections with
+     strict, official noun-phrase headers (e.g. "## State Machine", "## Awaiter Pattern"), ordered
+     so each one builds on the last. For every section:
+       - Explain from WHY to HOW: the problem or question first, then the mechanism. Introduce a
+         term only once the reader feels why it is needed — never definition-first.
+       - If the section leans on an unfamiliar supporting concept, explain that concept from scratch
+         before you use it.
+       - Strictly technical, but slow. No metaphors, no padding, no restating the summary.
+       - Concrete phrasings: name the object of the action ("block a thread", not "block").
+       - Short sentences, simple punctuation.
+       - Use a code snippet or a Mermaid diagram wherever it explains better than prose. -->
 
-<!-- The mechanism, under the hood: what happens, when, who does it, what happens on failure.
-     Go deep, but keep sentences simple. Use ### subsections for the moving parts.
-     Add a Mermaid diagram where a picture beats prose (```mermaid … ``` — renders in both
-     Obsidian and the site). -->
+## <First Mechanism>
 
-## Pitfalls & trade-offs
+## <Second Mechanism>
 
-<!-- Real production failure modes and costs. Frame trade-offs as trade-offs:
-     "X buys you A at the cost of B" — not a feature list. -->
+## Pitfalls & Trade-offs
 
-## In production
+<!-- A numbered list (1, 2, 3 …), most common / most dangerous first. EACH pitfall carries a short
+     code snippet or concrete scenario that shows WHY it is wrong, or the narrow case where it is
+     acceptable. Frame trade-offs as trade-offs: "X buys A at the cost of B", not a feature list. -->
 
-<!-- A concrete, real production situation — not an abstract toy. What it looks like at scale /
-     under load / when it goes wrong, with a real number or a small, correct code snippet. -->
+## In Production
+
+<!-- A concrete, real production situation — not an abstract toy. Show CODE (for example the bad
+     version and the fix side by side) plus a real number or symptom. -->
 
 ## Questions
 

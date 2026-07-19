@@ -46,9 +46,11 @@ Accuracy
 - [ ] Version-specific claims name the version and match the source.
 
 Depth & honesty
-- [ ] "How it works" explains the **mechanism** (what/when/who/on-failure), not a restated summary.
-- [ ] "Pitfalls & trade-offs" states real **costs and failure modes**, not benefits only.
-- [ ] "In production" gives a concrete real-world example, not an abstract toy.
+- [ ] Topical mechanism sections (no `## How it works` umbrella) explain the **mechanism**
+      (what/when/who/on-failure) why-before-how, not a restated summary or a definition-first opening.
+- [ ] "Pitfalls & Trade-offs" is numbered and states real **costs and failure modes** with a code
+      snippet or scenario per item, not benefits only.
+- [ ] "In Production" gives a concrete real-world example with code, not an abstract toy.
 - [ ] "Questions" are design/review-level self-test callouts (`> [!question]-`), not "what is X".
 
 Form

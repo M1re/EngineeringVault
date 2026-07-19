@@ -6,9 +6,12 @@ argument-hint: <path or title of the note to expand>
 Expand and deepen this note: **$ARGUMENTS**
 
 1. Read the note. If only a title was given, find the matching file under `Vault/`.
-2. Raise it to the staff-engineer bar defined in `CLAUDE.md`:
-   - Strengthen **How it works** with concrete mechanics, a diagram-in-text or code snippet if useful.
-   - Make **Trade-offs & pitfalls** the strongest section: real failure modes, costs, limits.
+2. Raise it to the standard in the **`note-writer`** skill (calibrated on `Vault/Programming/Concurrency/Async and Await.md`):
+   - Strengthen the **mechanism sections** (topical, official noun-phrase headers — no `## How it
+     works` umbrella): explain why-before-how, ground unfamiliar supporting concepts, add a
+     generated-code sketch or Mermaid diagram where it explains better than prose.
+   - Make **Pitfalls & Trade-offs** a numbered list where each item has a code snippet or scenario
+     showing why it is wrong; give **In Production** real code (bad version and fix) plus a number.
    - Ensure the self-test questions are substantive (design-review / staff-interview level).
 3. Add or fix `## Related` wikilinks to other notes in the vault.
 4. Verify technical accuracy. Flag anything uncertain with a `> [!warning] Unverified` callout
