@@ -26,6 +26,8 @@ jobs:
           node-version: 22
       - name: Install dependencies
         run: npm ci
+      - name: Regenerate folder dashboards
+        run: node scripts/regen-dashboards.mjs
       - name: Build Quartz
         run: npx quartz build
       - name: Upload artifact
