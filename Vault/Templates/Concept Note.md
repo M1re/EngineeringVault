@@ -2,7 +2,7 @@
 ---
 title: "{{title}}"
 tags: []
-status: creation
+status: new
 publish: false
 created: {{date:YYYY-MM-DD}}
 ---

@@ -23,7 +23,13 @@ return function FolderDashboard() {
     Array.isArray(v) ? (v.length ? String(v[0]).trim() : "") : (v == null ? "" : String(v).trim());
   const hasTag = (p, t) => (p.$tags ?? []).some((x) => String(x).replace(/^#/, "") === t);
   const isMeta = (p) => hasTag(p, "MetricsIgnore");
-  const isDone = (p) => firstString(p.value("status")).toLowerCase() === "done";
+  // Three-state status. Legacy "creation"/"created" and anything unknown fall back to "new".
+  const statusOf = (p) => {
+    const s = firstString(p.value("status")).toLowerCase();
+    if (s === "done") return "done";
+    if (s === "in-progress" || s === "in progress" || s === "wip") return "in-progress";
+    return "new";
+  };
   const hexToRgbTriple = (v) => {
     let h = firstString(v).replace(/^#/, "");
     if (h.length === 3) h = h.split("").map((c) => c + c).join("");
@@ -49,21 +55,30 @@ return function FolderDashboard() {
   const all = dc.useQuery("@page");
   const under = all.filter((p) => prefix && p.$path.startsWith(prefix) && p.$path !== cur?.$path && !isMeta(p));
 
+  const r2 = (n) => Math.round(n * 100) / 100;
   const progress = (base) => {
-    let total = 0, done = 0;
+    let total = 0, done = 0, wip = 0;
     for (const p of under) {
       if (!p.$path.startsWith(base + "/") || hasTag(p, "FolderNote")) continue;
       total++;
-      if (isDone(p)) done++;
+      const st = statusOf(p);
+      if (st === "done") done++;
+      else if (st === "in-progress") wip++;
     }
-    return { total, done, pct: total ? Math.round((done / total) * 100) : 0 };
+    const neu = total - done - wip;
+    return {
+      total, done, wip, neu,
+      pct: total ? Math.round((done / total) * 100) : 0,
+      donePct: total ? r2((done / total) * 100) : 0,
+      wipPct: total ? r2((wip / total) * 100) : 0,
+    };
   };
 
   const childFolders = [];
   const directNotes = [];
   for (const p of under) {
     const parts = p.$path.slice(prefix.length).split("/");
-    if (hasTag(p, "FolderNote") && parts.length === 2 && /^index\.md$/i.test(parts[1])) {
+    if (hasTag(p, "FolderNote") && parts.length === 2 && /^index.md$/i.test(parts[1])) {
       childFolders.push(p);
     } else if (!hasTag(p, "FolderNote") && parts.length === 1) {
       directNotes.push(p);
@@ -85,20 +100,34 @@ return function FolderDashboard() {
 
   const notes = [...directNotes].sort((a, b) => String(a.$name || "").localeCompare(String(b.$name || "")));
 
-  let oTotal = 0, oDone = 0;
+  let oTotal = 0, oDone = 0, oWip = 0;
   for (const p of under) {
     if (hasTag(p, "FolderNote")) continue;
     oTotal++;
-    if (isDone(p)) oDone++;
+    const st = statusOf(p);
+    if (st === "done") oDone++;
+    else if (st === "in-progress") oWip++;
   }
+  const oNeu = oTotal - oDone - oWip;
   const oPct = oTotal ? Math.round((oDone / oTotal) * 100) : 0;
+  const oDonePct = oTotal ? r2((oDone / oTotal) * 100) : 0;
+  const oWipPct = oTotal ? r2((oWip / oTotal) * 100) : 0;
+
+  const PILL = { done: ["done", "Done"], "in-progress": ["wip", "In progress"], "new": ["new", "New"] };
 
   const CSS = `
 .fd { margin: 0.5rem 0 1rem; }
 .fd-total { margin-bottom: 1rem; }
 .fd-cap { display: flex; justify-content: space-between; font-size: 0.76rem; color: var(--text-muted, #9ca3af); margin-bottom: 6px; }
-.fd-bar { height: 8px; background: rgba(128, 128, 128, 0.22); border-radius: 999px; overflow: hidden; }
-.fd-fill { height: 100%; background: rgb(var(--fd-rgb, 63,182,168)); border-radius: 999px; }
+.fd-bar { height: 8px; background: rgba(128, 128, 128, 0.22); border-radius: 999px; overflow: hidden; display: flex; }
+.fd-fill { height: 100%; background: rgb(var(--fd-rgb, 63,182,168)); }
+.fd-fill-wip { height: 100%; background: rgba(var(--fd-rgb, 63,182,168), 0.4); }
+.fd-legend { display: flex; flex-wrap: wrap; gap: 0.9rem; margin-top: 6px; font-size: 0.72rem; color: var(--text-muted, #9ca3af); }
+.fd-lg { display: inline-flex; align-items: center; gap: 0.4em; }
+.fd-lg::before { content: ""; width: 8px; height: 8px; border-radius: 999px; background: var(--dot, currentColor); }
+.fd-lg.done { --dot: rgb(63, 182, 168); }
+.fd-lg.wip { --dot: rgba(63, 182, 168, 0.45); }
+.fd-lg.new { --dot: rgba(128, 128, 128, 0.5); }
 .fd-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 0.75rem; }
 .fd-card { position: relative; border: 1px solid rgba(128, 128, 128, 0.22) !important; border-radius: 8px; padding: 0.8rem 0.9rem; background: transparent !important; transition: border-color 120ms, background-color 120ms; }
 .fd-card:hover { border-color: rgba(var(--fd-rgb), 0.55) !important; background: rgba(var(--fd-rgb), 0.08) !important; }
@@ -108,6 +137,7 @@ return function FolderDashboard() {
 .fd-name { font-weight: 600; font-size: 0.92rem; color: rgb(var(--fd-rgb)); }
 .fd-card-cap { display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-muted, #9ca3af); margin: 0.55rem 0 0.3rem; }
 .fd-card .fd-fill { background: rgb(var(--fd-rgb)); }
+.fd-card .fd-fill-wip { background: rgba(var(--fd-rgb), 0.4); }
 .fd-link { position: absolute; inset: 0; }
 .fd-link a { position: absolute; inset: 0; font-size: 0; background: none !important; }
 .fd-list { list-style: none; margin: 1rem 0 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
@@ -115,7 +145,8 @@ return function FolderDashboard() {
 .fd-item:hover { background: rgba(128, 128, 128, 0.08); }
 .fd-pill { font-size: 0.68rem; padding: 0.12em 0.6em; border-radius: 999px; white-space: nowrap; }
 .fd-pill.done { background: rgba(63, 182, 168, 0.18); color: #3fb6a8; }
-.fd-pill.wip { background: rgba(128, 128, 128, 0.15); color: var(--text-muted, #9ca3af); }
+.fd-pill.wip { background: rgba(63, 182, 168, 0.10); color: #7fd0c6; }
+.fd-pill.new { background: rgba(128, 128, 128, 0.15); color: var(--text-muted, #9ca3af); }
 .fd-empty { opacity: 0.6; font-size: 0.9rem; }
 `;
 
@@ -125,7 +156,15 @@ return function FolderDashboard() {
       {oTotal > 0 ? (
         <div class="fd-total" style={{ "--fd-rgb": "63, 182, 168" }}>
           <div class="fd-cap"><span>{oDone}/{oTotal} done</span><span>{oPct}%</span></div>
-          <div class="fd-bar"><div class="fd-fill" style={{ width: `${oPct}%` }} /></div>
+          <div class="fd-bar">
+            <div class="fd-fill" style={{ width: `${oDonePct}%` }} />
+            <div class="fd-fill-wip" style={{ width: `${oWipPct}%` }} />
+          </div>
+          <div class="fd-legend">
+            <span class="fd-lg done">{oDone} done</span>
+            <span class="fd-lg wip">{oWip} in progress</span>
+            <span class="fd-lg new">{oNeu} new</span>
+          </div>
         </div>
       ) : null}
       {cards.length ? (
@@ -137,7 +176,10 @@ return function FolderDashboard() {
                 <span class="fd-name">{c.title}</span>
               </div>
               <div class="fd-card-cap"><span>{c.done}/{c.total} done</span><span>{c.pct}%</span></div>
-              <div class="fd-bar"><div class="fd-fill" style={{ width: `${c.pct}%` }} /></div>
+              <div class="fd-bar">
+                <div class="fd-fill" style={{ width: `${c.donePct}%` }} />
+                <div class="fd-fill-wip" style={{ width: `${c.wipPct}%` }} />
+              </div>
               <span class="fd-link"><dc.Link link={c.fn.$link} /></span>
             </div>
           ))}
@@ -145,16 +187,20 @@ return function FolderDashboard() {
       ) : null}
       {notes.length ? (
         <ul class="fd-list">
-          {notes.map((p) => (
-            <li class="fd-item">
-              <dc.Link link={p.$link} />
-              <span class={`fd-pill ${isDone(p) ? "done" : "wip"}`}>{isDone(p) ? "Done" : "In progress"}</span>
-            </li>
-          ))}
+          {notes.map((p) => {
+            const [cls, label] = PILL[statusOf(p)];
+            return (
+              <li class="fd-item">
+                <dc.Link link={p.$link} />
+                <span class={`fd-pill ${cls}`}>{label}</span>
+              </li>
+            );
+          })}
         </ul>
       ) : null}
       {!cards.length && !notes.length ? <div class="fd-empty">Empty — add notes or sub-topics here.</div> : null}
     </div>
   );
 }
+
 ```

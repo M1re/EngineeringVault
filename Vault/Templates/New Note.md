@@ -71,7 +71,7 @@ const today = tp.date.now("YYYY-MM-DD");
 const body = `---
 title: "${title}"
 tags:${tagsYaml}
-status: creation
+status: new
 publish: false
 created: ${today}
 ---

@@ -142,8 +142,9 @@ You wrote it, so you're the worst judge of it — never commit a note that hasn'
   ask design/review-level questions, not "what is X".
 - Use callouts to signal importance: `> [!summary]`, `> [!tip]`, `> [!warning]`.
 - Neutral, technical, timeless voice. No "recently", no dates in prose, no first person.
-- New notes start `status: creation` and `publish: false`; set `status: done` when every section is
-  complete (and it passed the reviewer), then `publish: true` when ready for the site.
+- Status has three states: `new` (a stub, nothing written), `in-progress` (actively being written),
+  `done` (written and validated). A new stub starts `new` / `publish: false`; set `in-progress` while
+  drafting, then `done` once every section is complete and it passed the reviewer, then `publish: true`.
 
 ## Hard constraints (public repo)
 

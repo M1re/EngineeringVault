@@ -11,6 +11,12 @@
 // It reads note frontmatter from content/ (the published set) and rewrites only the
 // dashboard block in each index.md, matching the current Vault dashboard format.
 //
+// Status model (three states, tracked in the progress bar):
+//   done        -> written and validated for reading (fills the bar, solid accent)
+//   in-progress -> actively being written           (lighter accent segment)
+//   new         -> nothing written yet, a stub       (empty track)
+// Legacy tokens `creation` / `created` are treated as `new`.
+//
 // Run from the repo root: node scripts/regen-dashboards.mjs
 
 import { readFileSync, writeFileSync, readdirSync, statSync } from "node:fs";
@@ -79,7 +85,14 @@ const pages = files.map((abs) => {
 const hasTag = (p, t) => p.tags.some((x) => String(x).replace(/^#/, "") === t);
 const isFolderNote = (p) => hasTag(p, "FolderNote");
 const isMeta = (p) => hasTag(p, "MetricsIgnore");
-const isDone = (p) => p.status.trim().toLowerCase() === "done";
+// Three-state status. Legacy `creation`/`created` and anything unknown fall back to "new".
+const statusOf = (p) => {
+  const s = p.status.trim().toLowerCase();
+  if (s === "done") return "done";
+  if (s === "in-progress" || s === "in progress" || s === "wip") return "in-progress";
+  return "new";
+};
+const isDone = (p) => statusOf(p) === "done";
 const displayOf = (p) => p.title || p.name;
 
 function hexToRgbTriple(v) {
@@ -109,13 +122,29 @@ const iconFor = (name) => wrapSvg(ICONS[name] || ICONS.folder);
 const link = (href, text) =>
   `<a class="internal-link" href="${href}" data-tooltip-position="top" aria-label="${text}">${text}</a>`;
 
-// ---- FolderDashboard CSS (from the vault component) ----------------------------
+// segmented bar (done solid + in-progress lighter; the rest of the track reads as "new")
+const barHtml = (donePct, wipPct) =>
+  `<div class="fd-bar"><div class="fd-fill" style="width: ${donePct}%;"></div>`
+  + `<div class="fd-fill-wip" style="width: ${wipPct}%;"></div></div>`;
+const legendHtml = (done, wip, neu) =>
+  `<div class="fd-legend"><span class="fd-lg done">${done} done</span>`
+  + `<span class="fd-lg wip">${wip} in progress</span>`
+  + `<span class="fd-lg new">${neu} new</span></div>`;
+
+// ---- FolderDashboard CSS (must match Vault/**/index.md FolderDashboard) ---------
 const FD_CSS = `
 .fd { margin: 0.5rem 0 1rem; }
 .fd-total { margin-bottom: 1rem; }
 .fd-cap { display: flex; justify-content: space-between; font-size: 0.76rem; color: var(--text-muted, #9ca3af); margin-bottom: 6px; }
-.fd-bar { height: 8px; background: rgba(128, 128, 128, 0.22); border-radius: 999px; overflow: hidden; }
-.fd-fill { height: 100%; background: rgb(var(--fd-rgb, 63,182,168)); border-radius: 999px; }
+.fd-bar { height: 8px; background: rgba(128, 128, 128, 0.22); border-radius: 999px; overflow: hidden; display: flex; }
+.fd-fill { height: 100%; background: rgb(var(--fd-rgb, 63,182,168)); }
+.fd-fill-wip { height: 100%; background: rgba(var(--fd-rgb, 63,182,168), 0.4); }
+.fd-legend { display: flex; flex-wrap: wrap; gap: 0.9rem; margin-top: 6px; font-size: 0.72rem; color: var(--text-muted, #9ca3af); }
+.fd-lg { display: inline-flex; align-items: center; gap: 0.4em; }
+.fd-lg::before { content: ""; width: 8px; height: 8px; border-radius: 999px; background: var(--dot, currentColor); }
+.fd-lg.done { --dot: rgb(63, 182, 168); }
+.fd-lg.wip { --dot: rgba(63, 182, 168, 0.45); }
+.fd-lg.new { --dot: rgba(128, 128, 128, 0.5); }
 .fd-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 0.75rem; }
 .fd-card { position: relative; border: 1px solid rgba(128, 128, 128, 0.22) !important; border-radius: 8px; padding: 0.8rem 0.9rem; background: transparent !important; transition: border-color 120ms, background-color 120ms; }
 .fd-card:hover { border-color: rgba(var(--fd-rgb), 0.55) !important; background: rgba(var(--fd-rgb), 0.08) !important; }
@@ -125,6 +154,7 @@ const FD_CSS = `
 .fd-name { font-weight: 600; font-size: 0.92rem; color: rgb(var(--fd-rgb)); }
 .fd-card-cap { display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-muted, #9ca3af); margin: 0.55rem 0 0.3rem; }
 .fd-card .fd-fill { background: rgb(var(--fd-rgb)); }
+.fd-card .fd-fill-wip { background: rgba(var(--fd-rgb), 0.4); }
 .fd-link { position: absolute; inset: 0; }
 .fd-link a { position: absolute; inset: 0; font-size: 0; background: none !important; }
 .fd-list { list-style: none; margin: 1rem 0 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
@@ -132,19 +162,32 @@ const FD_CSS = `
 .fd-item:hover { background: rgba(128, 128, 128, 0.08); }
 .fd-pill { font-size: 0.68rem; padding: 0.12em 0.6em; border-radius: 999px; white-space: nowrap; }
 .fd-pill.done { background: rgba(63, 182, 168, 0.18); color: #3fb6a8; }
-.fd-pill.wip { background: rgba(128, 128, 128, 0.15); color: var(--text-muted, #9ca3af); }
+.fd-pill.wip { background: rgba(63, 182, 168, 0.10); color: #7fd0c6; }
+.fd-pill.new { background: rgba(128, 128, 128, 0.15); color: var(--text-muted, #9ca3af); }
 .fd-empty { opacity: 0.6; font-size: 0.9rem; }
 `;
 
 // recursive progress under a folder path (excluding folder-notes)
 function progressUnder(base) {
-  let total = 0, done = 0;
+  let total = 0, done = 0, wip = 0;
   for (const p of pages) {
     if (!p.path.startsWith(base + "/") || isFolderNote(p) || isMeta(p)) continue;
-    total++; if (isDone(p)) done++;
+    total++;
+    const st = statusOf(p);
+    if (st === "done") done++;
+    else if (st === "in-progress") wip++;
   }
-  return { total, done, pct: total ? Math.round((done / total) * 100) : 0 };
+  const neu = total - done - wip;
+  const r2 = (n) => Math.round(n * 100) / 100;
+  return {
+    total, done, wip, neu,
+    pct: total ? Math.round((done / total) * 100) : 0,
+    donePct: total ? r2((done / total) * 100) : 0,
+    wipPct: total ? r2((wip / total) * 100) : 0,
+  };
 }
+
+const PILL = { done: ["done", "Done"], "in-progress": ["wip", "In progress"], new: ["new", "New"] };
 
 function renderFolderDashboard(self) {
   const dir = self.path.split("/").slice(0, -1).join("/");
@@ -171,15 +214,27 @@ function renderFolderDashboard(self) {
 
   const notes = [...directNotes].sort((a, b) => String(a.name).localeCompare(String(b.name)));
 
-  let oTotal = 0, oDone = 0;
-  for (const p of under) { if (isFolderNote(p)) continue; oTotal++; if (isDone(p)) oDone++; }
+  let oTotal = 0, oDone = 0, oWip = 0;
+  for (const p of under) {
+    if (isFolderNote(p)) continue;
+    oTotal++;
+    const st = statusOf(p);
+    if (st === "done") oDone++;
+    else if (st === "in-progress") oWip++;
+  }
+  const oNeu = oTotal - oDone - oWip;
   const oPct = oTotal ? Math.round((oDone / oTotal) * 100) : 0;
+  const r2 = (n) => Math.round(n * 100) / 100;
+  const oDonePct = oTotal ? r2((oDone / oTotal) * 100) : 0;
+  const oWipPct = oTotal ? r2((oWip / oTotal) * 100) : 0;
 
   let html = `<div class="fd"><style>${FD_CSS}</style>`;
   if (oTotal > 0) {
     html += `<div class="fd-total" style="--fd-rgb: 63, 182, 168;">`
       + `<div class="fd-cap"><span>${oDone}/${oTotal} done</span><span>${oPct}%</span></div>`
-      + `<div class="fd-bar"><div class="fd-fill" style="width: ${oPct}%;"></div></div></div>`;
+      + barHtml(oDonePct, oWipPct)
+      + legendHtml(oDone, oWip, oNeu)
+      + `</div>`;
   }
   if (cards.length) {
     html += `<div class="fd-grid">`;
@@ -187,7 +242,7 @@ function renderFolderDashboard(self) {
       html += `<div class="fd-card" style="--fd-rgb: ${c.rgb};">`
         + `<div class="fd-card-head"><span class="fd-icon">${c.iconSvg}</span><span class="fd-name">${c.title}</span></div>`
         + `<div class="fd-card-cap"><span>${c.done}/${c.total} done</span><span>${c.pct}%</span></div>`
-        + `<div class="fd-bar"><div class="fd-fill" style="width: ${c.pct}%;"></div></div>`
+        + barHtml(c.donePct, c.wipPct)
         + `<span class="fd-link">${link(c.href, "index")}</span></div>`;
     }
     html += `</div>`;
@@ -195,9 +250,9 @@ function renderFolderDashboard(self) {
   if (notes.length) {
     html += `<ul class="fd-list">`;
     for (const p of notes) {
-      const done = isDone(p);
+      const [cls, label] = PILL[statusOf(p)];
       html += `<li class="fd-item">${link(p.path, displayOf(p))}`
-        + `<span class="fd-pill ${done ? "done" : "wip"}">${done ? "Done" : "In progress"}</span></li>`;
+        + `<span class="fd-pill ${cls}">${label}</span></li>`;
     }
     html += `</ul>`;
   }
@@ -223,8 +278,15 @@ const TOPIC_CSS = `
 .dc-topic-spacer { flex: 1 0 auto; min-height: 0.55em; }
 .dc-topic-foot { display: flex; flex-direction: column; gap: 4px; }
 .dc-topic-cap { font-size: 0.72rem; display: flex; justify-content: space-between; align-items: baseline; color: var(--text-muted, var(--gray, #9ca3af)); }
-.dc-topic-bar { width: 100%; height: 6px; border-radius: 4px; margin-top: 0.15rem; overflow: hidden; background: rgba(128, 128, 128, 0.22); }
-.dc-topic-fill { height: 100%; border-radius: 4px; background: rgb(var(--topic-rgb)); transition: width 200ms ease; }
+.dc-topic-bar { width: 100%; height: 6px; border-radius: 4px; margin-top: 0.15rem; overflow: hidden; background: rgba(128, 128, 128, 0.22); display: flex; }
+.dc-topic-fill { height: 100%; background: rgb(var(--topic-rgb)); transition: width 200ms ease; }
+.dc-topic-fill-wip { height: 100%; background: rgba(var(--topic-rgb), 0.4); transition: width 200ms ease; }
+.dc-topic-legend { display: flex; flex-wrap: wrap; gap: 0.9rem; margin-top: 6px; font-size: 0.72rem; color: var(--text-muted, var(--gray, #9ca3af)); }
+.dc-topic-lg { display: inline-flex; align-items: center; gap: 0.4em; }
+.dc-topic-lg::before { content: ""; width: 8px; height: 8px; border-radius: 999px; background: var(--dot, currentColor); }
+.dc-topic-lg.done { --dot: rgb(63, 182, 168); }
+.dc-topic-lg.wip { --dot: rgba(63, 182, 168, 0.45); }
+.dc-topic-lg.new { --dot: rgba(128, 128, 128, 0.5); }
 .dc-topic-link { position: absolute; inset: 0; z-index: 1; }
 .dc-topic-link a { position: absolute; inset: 0; font-size: 0; background: none !important; }
 .dc-topic-total { margin-top: 0.75rem; padding: 0.75em; border-radius: var(--radius-m, 8px); border: 1px solid rgba(var(--topic-rgb), 0.4); background: rgba(var(--topic-rgb), 0.08); }
@@ -256,9 +318,13 @@ function renderHomeDashboard() {
     };
   });
 
-  let oDone = 0, oTotal = 0;
-  for (const c of cards) { oDone += c.done; oTotal += c.total; }
+  let oDone = 0, oWip = 0, oTotal = 0;
+  for (const c of cards) { oDone += c.done; oWip += c.wip; oTotal += c.total; }
+  const oNeu = oTotal - oDone - oWip;
   const oPct = oTotal ? Math.round((oDone / oTotal) * 100) : 0;
+  const r2 = (n) => Math.round(n * 100) / 100;
+  const oDonePct = oTotal ? r2((oDone / oTotal) * 100) : 0;
+  const oWipPct = oTotal ? r2((oWip / oTotal) * 100) : 0;
 
   let html = `<div style="margin-top: 1.5rem;"><style>${TOPIC_CSS}</style><div class="dc-topic-grid">`;
   for (const c of cards) {
@@ -266,24 +332,41 @@ function renderHomeDashboard() {
       + `<div class="dc-topic-title"><span class="dc-topic-icon">${c.iconSvg}</span><span class="dc-topic-name">${c.title}</span></div>`
       + `<div class="dc-topic-body"><p class="dc-topic-desc">${c.desc}</p><div class="dc-topic-spacer"></div>`
       + `<div class="dc-topic-foot"><div class="dc-topic-cap"><span>${c.done}/${c.total} done</span><span>${c.pct}%</span></div>`
-      + `<div class="dc-topic-bar"><div class="dc-topic-fill" style="width: ${c.pct}%;"></div></div></div></div>`
+      + `<div class="dc-topic-bar"><div class="dc-topic-fill" style="width: ${c.donePct}%;"></div>`
+      + `<div class="dc-topic-fill-wip" style="width: ${c.wipPct}%;"></div></div></div></div>`
       + `<span class="dc-topic-link">${link(c.href, "index")}</span></div>`;
   }
   html += `</div><div class="dc-topic-total" style="--topic-rgb: 63, 182, 168;"><div class="dc-topic-foot">`
     + `<div class="dc-topic-cap"><span style="opacity: 0.75;">${oDone}/${oTotal} done</span><span>${oPct}%</span></div>`
-    + `<div class="dc-topic-bar" style="height: 0.7em;"><div class="dc-topic-fill" style="width: ${oPct}%;"></div></div>`
+    + `<div class="dc-topic-bar" style="height: 0.7em;"><div class="dc-topic-fill" style="width: ${oDonePct}%;"></div>`
+    + `<div class="dc-topic-fill-wip" style="width: ${oWipPct}%;"></div></div>`
+    + `<div class="dc-topic-legend"><span class="dc-topic-lg done">${oDone} done</span>`
+    + `<span class="dc-topic-lg wip">${oWip} in progress</span>`
+    + `<span class="dc-topic-lg new">${oNeu} new</span></div>`
     + `</div></div></div>`;
   return html;
 }
 
 // ---- rewrite one index.md's dashboard block ------------------------------------
+// The dashboard is a balanced <div>...</div>. Scan from the start marker counting
+// <div>/</div> to find its matching close (CSS selectors and inline SVGs never
+// contain the literal "<div"/"</div>", so the count stays correct).
 function replaceBlock(text, startMarker, html) {
   const start = text.indexOf(startMarker);
   if (start === -1) return null;
-  const endMark = "</style></div>";
-  const end = text.indexOf(endMark, start);
+  const re = /<\/?div\b[^>]*>/g;
+  re.lastIndex = start;
+  let m, depth = 0, end = -1;
+  while ((m = re.exec(text))) {
+    if (m[0].startsWith("</")) {
+      depth--;
+      if (depth === 0) { end = m.index + m[0].length; break; }
+    } else {
+      depth++;
+    }
+  }
   if (end === -1) return null;
-  return text.slice(0, start) + html + text.slice(end + endMark.length);
+  return text.slice(0, start) + html + text.slice(end);
 }
 
 let changed = 0;

@@ -49,17 +49,34 @@ return function TopicDashboard() {
     .map((fn) => ({ fn, folder: fn.$path.split("/")[0] }))
     .sort((a, b) => orderIdx(a.folder) - orderIdx(b.folder) || a.folder.localeCompare(b.folder));
 
-  // Simple model: a note counts as done when its `status` is "done"; progress = done / total.
+  // Three-state status: done (written and validated), in-progress (being written),
+  // new (nothing written yet). Legacy "creation"/"created" count as new. The progress
+  // bar tracks and shows all three; `pct` is the share that is done.
+  const statusOf = (p) => {
+    const s = firstString(p.value("status")).toLowerCase();
+    if (s === "done") return "done";
+    if (s === "in-progress" || s === "in progress" || s === "wip") return "in-progress";
+    return "new";
+  };
+  const r2 = (n) => Math.round(n * 100) / 100;
   const statsFor = (folder) => {
     const prefix = `${folder}/`;
-    let total = 0, done = 0;
+    let total = 0, done = 0, wip = 0;
     for (const p of pages) {
       if (!p.$path.startsWith(prefix)) continue;
       if (hasTag(p, "FolderNote") || hasTag(p, "MetricsIgnore")) continue;
       total += 1;
-      if (firstString(p.value("status")).toLowerCase() === "done") done += 1;
+      const st = statusOf(p);
+      if (st === "done") done += 1;
+      else if (st === "in-progress") wip += 1;
     }
-    return { total, done, pct: total > 0 ? Math.round((done / total) * 100) : 0 };
+    const neu = total - done - wip;
+    return {
+      total, done, wip, neu,
+      pct: total > 0 ? Math.round((done / total) * 100) : 0,
+      donePct: total > 0 ? r2((done / total) * 100) : 0,
+      wipPct: total > 0 ? r2((wip / total) * 100) : 0,
+    };
   };
 
   const cards = sections
@@ -78,9 +95,12 @@ return function TopicDashboard() {
       spanNarrow: index === 0 ? 12 : 6,
     }));
 
-  let oDone = 0, oTotal = 0;
-  for (const c of cards) { oDone += c.done; oTotal += c.total; }
+  let oDone = 0, oWip = 0, oTotal = 0;
+  for (const c of cards) { oDone += c.done; oWip += c.wip; oTotal += c.total; }
+  const oNeu = oTotal - oDone - oWip;
   const oPct = oTotal > 0 ? Math.round((oDone / oTotal) * 100) : 0;
+  const oDonePct = oTotal > 0 ? r2((oDone / oTotal) * 100) : 0;
+  const oWipPct = oTotal > 0 ? r2((oWip / oTotal) * 100) : 0;
 
   const spanRules = (cls) =>
     Array.from({ length: 12 }, (_, i) => `.dc-topic-card.${cls}-${i + 1} { grid-column: span ${i + 1}; }`).join(" ");
@@ -98,8 +118,15 @@ return function TopicDashboard() {
 .dc-topic-spacer { flex: 1 0 auto; min-height: 0.55em; }
 .dc-topic-foot { display: flex; flex-direction: column; gap: 4px; }
 .dc-topic-cap { font-size: 0.72rem; display: flex; justify-content: space-between; align-items: baseline; color: var(--text-muted, var(--gray, #9ca3af)); }
-.dc-topic-bar { width: 100%; height: 6px; border-radius: 4px; margin-top: 0.15rem; overflow: hidden; background: rgba(128, 128, 128, 0.22); }
-.dc-topic-fill { height: 100%; border-radius: 4px; background: rgb(var(--topic-rgb)); transition: width 200ms ease; }
+.dc-topic-bar { width: 100%; height: 6px; border-radius: 4px; margin-top: 0.15rem; overflow: hidden; background: rgba(128, 128, 128, 0.22); display: flex; }
+.dc-topic-fill { height: 100%; background: rgb(var(--topic-rgb)); transition: width 200ms ease; }
+.dc-topic-fill-wip { height: 100%; background: rgba(var(--topic-rgb), 0.4); transition: width 200ms ease; }
+.dc-topic-legend { display: flex; flex-wrap: wrap; gap: 0.9rem; margin-top: 6px; font-size: 0.72rem; color: var(--text-muted, var(--gray, #9ca3af)); }
+.dc-topic-lg { display: inline-flex; align-items: center; gap: 0.4em; }
+.dc-topic-lg::before { content: ""; width: 8px; height: 8px; border-radius: 999px; background: var(--dot, currentColor); }
+.dc-topic-lg.done { --dot: rgb(63, 182, 168); }
+.dc-topic-lg.wip { --dot: rgba(63, 182, 168, 0.45); }
+.dc-topic-lg.new { --dot: rgba(128, 128, 128, 0.5); }
 .dc-topic-link { position: absolute; inset: 0; z-index: 1; }
 .dc-topic-link a { position: absolute; inset: 0; font-size: 0; background: none !important; }
 .dc-topic-total { margin-top: 0.75rem; padding: 0.75em; border-radius: var(--radius-m, 8px); border: 1px solid rgba(var(--topic-rgb), 0.4); background: rgba(var(--topic-rgb), 0.08); }
@@ -124,7 +151,7 @@ ${spanRules("dsk")}
               <div class="dc-topic-spacer" />
               <div class="dc-topic-foot">
                 <div class="dc-topic-cap"><span>{c.done}/{c.total} done</span><span>{c.pct}%</span></div>
-                <div class="dc-topic-bar"><div class="dc-topic-fill" style={{ width: `${c.pct}%` }} /></div>
+                <div class="dc-topic-bar"><div class="dc-topic-fill" style={{ width: `${c.donePct}%` }} /><div class="dc-topic-fill-wip" style={{ width: `${c.wipPct}%` }} /></div>
               </div>
             </div>
             {c.fn ? <span class="dc-topic-link"><dc.Link link={c.fn.$link} /></span> : null}
@@ -134,7 +161,15 @@ ${spanRules("dsk")}
       <div class="dc-topic-total" style={{ "--topic-rgb": OVERALL_RGB }}>
         <div class="dc-topic-foot">
           <div class="dc-topic-cap"><span style={{ opacity: 0.75 }}>{oDone}/{oTotal} done</span><span>{oPct}%</span></div>
-          <div class="dc-topic-bar" style={{ height: "0.7em" }}><div class="dc-topic-fill" style={{ width: `${oPct}%` }} /></div>
+          <div class="dc-topic-bar" style={{ height: "0.7em" }}>
+            <div class="dc-topic-fill" style={{ width: `${oDonePct}%` }} />
+            <div class="dc-topic-fill-wip" style={{ width: `${oWipPct}%` }} />
+          </div>
+          <div class="dc-topic-legend">
+            <span class="dc-topic-lg done">{oDone} done</span>
+            <span class="dc-topic-lg wip">{oWip} in progress</span>
+            <span class="dc-topic-lg new">{oNeu} new</span>
+          </div>
         </div>
       </div>
     </div>
