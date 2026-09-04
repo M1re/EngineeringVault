@@ -27,9 +27,9 @@ How this stays healthy (so it never bloats and drags down quality):
   subagent → apply its must-fixes → commit. Never commit an un-reviewed note.
 - Don't add AI-attribution / "made or maintained with Claude Code"-style credit lines — not to note
   content, and not to git commits (no `Co-Authored-By` trailer).
-- Keep UI honest and minimal: don't show static elements that look like live data (e.g. a legend
-  implying statuses that don't exist), and match the existing theme's accent colours rather than
-  inventing new ones.
+- Keep UI honest and minimal: show only states/data that really exist, and match the existing
+  theme's accent colours rather than inventing new ones. (Progress now tracks three real statuses —
+  `new`, `in-progress`, `done` — so its segmented bar + legend are honest.)
 - Anything we build (dashboards, UI, dynamic elements, layout) must render the **same in Obsidian
   and on the deployed site**. Use tech that works in both — Datacore precompiled by Quartz Syncer,
   or plain Markdown/HTML — and never ship a feature that only works in one of the two.
@@ -41,6 +41,18 @@ How this stays healthy (so it never bloats and drags down quality):
 ## Archive (log)
 
 <!-- Dated history. Newest first. Not required reading; kept for provenance. -->
+
+### 2026-09-04
+
+- **Supersedes the 2026-07-08 "done/total only, no legend/segments" decision.** The progress model is
+  now **three real statuses** — `new` (nothing written), `in-progress` (being written), `done` (written
+  and validated). The bar is segmented (done solid + in-progress lighter accent; the rest reads as new)
+  with a legend showing all three counts; % stays the `done` share. This is honest because all three
+  states now exist. Migrated legacy `creation`/`created` → `new`. Kept in sync across the regen script
+  (`scripts/regen-dashboards.mjs`), the home `TopicDashboard`, all folder `FolderDashboard` blocks, and
+  the Folder Note template so Obsidian and the site render identically.
+- Fixed `regen-dashboards.mjs`: its old end-marker (`</style></div>`) never matched the compiled HTML,
+  so the CI regen step was a silent no-op. It now finds the dashboard block by balanced `<div>` matching.
 
 ### 2026-07-19
 

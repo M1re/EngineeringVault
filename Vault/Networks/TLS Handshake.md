@@ -1,7 +1,7 @@
 ---
 title: TLS Handshake
 tags: []
-status: creation
+status: new
 publish: false
 created: 2026-07-08
 ---
