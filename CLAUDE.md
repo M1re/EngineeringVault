@@ -94,15 +94,17 @@ Keep CLAUDE.md small; domain detail lives in skills/subagents that load only whe
 
 ## Publishing (Quartz Syncer)
 
-- The author publishes via the **Quartz Syncer** Publication Center in Obsidian: it precompiles
-  Datacore/Dataview to static HTML and pushes the compiled `content/` to `main`, which GitHub
-  Actions builds and deploys to Pages. Never edit `content/` by hand — Syncer owns it.
+- **Commit = publish.** Quartz Syncer runs in *local mode* (no token): the pre-commit hook
+  (`.githooks/pre-commit` → `scripts/sync-quartz.mjs`) exports the vault through the Obsidian CLI,
+  precompiling Datacore to static HTML, and stages `content/` into the same commit; pushing `main`
+  makes GitHub Actions build and deploy Pages. Never edit `content/` by hand — Syncer owns it.
+  New machine: `npm run setup` (see `docs/machine-setup.md`). Shared Syncer settings live in
+  `scripts/quartz-syncer.defaults.json`; its `data.json` is per-machine and gitignored.
 - Only notes with `publish: true` reach the site; everything else stays private in `Vault/`.
 - `status` has three states — `new` (nothing written), `in-progress` (being written), `done` (written
   and validated); the bar shows all three (% = `done` share). Mobile publishes run `scripts/regen-dashboards.mjs`.
-- Keep Syncer **"Include all properties"** ON (so `banner`/`color`/`status`/`icon` survive), and
-  publish **manually** from the Publication Center (the old auto-publish watcher was removed — it raced
-  with manual edits and wedged Syncer).
+- Syncer's **"Include all properties"** stays ON (`includeAllFrontmatter` in the defaults) so
+  `banner`/`color`/`status`/`icon` survive. No background auto-publish: export happens only on commit.
 - **Anything we build must render the same in Obsidian AND on the deployed site** — use tech that
   works in both (Datacore + Quartz Syncer, or plain Markdown/HTML). See `.claude/feedback.md`.
 
@@ -110,7 +112,7 @@ Keep CLAUDE.md small; domain detail lives in skills/subagents that load only whe
 
 Notion-inspired theme mirrored in both surfaces: `quartz.config.ts` + Quartz components (site);
 `.obsidian/snippets/notion.css` + the **Banners** plugin (Obsidian). Folder-notes carry a `banner`
-cover; set it with **Set Cover** and run `node scripts/sync-banners.mjs` before publishing. See `docs/covers.md`.
+cover; set it with **Set Cover**; the commit hook mirrors cover files into `content/` (`scripts/sync-banners.mjs`). See `docs/covers.md`.
 
 ## Automation available in this repo
 

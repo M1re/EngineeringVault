@@ -42,6 +42,15 @@ How this stays healthy (so it never bloats and drags down quality):
 
 <!-- Dated history. Newest first. Not required reading; kept for provenance. -->
 
+### 2026-11-09
+
+- Author works on **Windows** now and wants the local workflow to match a public reference vault
+  (`grafanaKibana/devbook.zip`): one setup command, Quartz Syncer in local mode, and **commit =
+  publish** via a pre-commit export hook. Implemented cross-platform in Node (`npm run setup`,
+  `scripts/sync-quartz.mjs`, `.githooks/pre-commit`) instead of the reference's Bash/.NET, which is
+  macOS-only. Removed the disabled auto-publish watcher (issue #1). Covered by the existing
+  full-automation rule; no new active rule.
+
 ### 2026-09-04
 
 - **Supersedes the 2026-07-08 "done/total only, no legend/segments" decision.** The progress model is

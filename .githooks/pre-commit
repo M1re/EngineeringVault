@@ -1,0 +1,6 @@
+#!/bin/sh
+# Export the vault with Quartz Syncer and stage content/ before every commit that touches Vault/.
+# Works from the terminal and from Obsidian Git; on Windows Git runs this through its bundled sh.
+# Details and escape hatches: scripts/sync-quartz.mjs
+ROOT="$(git rev-parse --show-toplevel)" || exit 1
+exec node "$ROOT/scripts/sync-quartz.mjs" --hook

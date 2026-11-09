@@ -19,6 +19,10 @@ Vault/.obsidian/workspace-mobile.json
 Vault/.obsidian/cache
 Vault/.trash/
 
+# Quartz Syncer: per-machine state (local export path, cache, UI). Shared export
+# defaults live in scripts/quartz-syncer.defaults.json and are applied by setup.
+Vault/.obsidian/plugins/quartz-syncer/data.json
+
 # Claude Code: personal/local settings never go to the public repo
 .claude/settings.local.json
 

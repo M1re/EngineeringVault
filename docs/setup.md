@@ -63,23 +63,26 @@ Claude auto-loads `CLAUDE.md`, the `note-writer` skill, and the binding feedback
 
 ## 5. Publishing
 
-Notes go live through **Quartz Syncer**, not a git commit:
+**Commit = publish.** Quartz Syncer runs in local mode and writes `content/` into this checkout:
 
 1. Set `publish: true` (and `status: done` when complete).
-2. Open the **Publication Center** (ribbon icon or Command palette → *Quartz Syncer: Open
-   Publication Center*).
-3. Click **Publish**. Syncer compiles the published notes (precompiling Datacore to static HTML),
-   pushes the result to `content/` on `main`, and GitHub Actions rebuilds the site.
+2. Commit (Obsidian Git or `git commit`). The pre-commit hook exports the vault through the
+   Obsidian CLI — Syncer precompiles Datacore to static HTML — and stages `content/` into the
+   same commit. Stage every change under `Vault/` first, or the hook refuses.
+3. Push to `main`; GitHub Actions rebuilds the site.
+
+One-time setup on a machine: `npm run setup` — see [machine-setup.md](machine-setup.md).
+Export without committing: `npm run export`. The Publication Center still works and writes to the
+same local `content/`.
 
 Live site: https://m1re.github.io/EngineeringVault/
 
 > [!tip] Covers / banners
-> To keep the `banner` field (and `color`/`status`/`icon`) in published notes, turn **ON**
-> Quartz Syncer → **"Include all properties"**. See [covers.md](covers.md) for the full
-> cover / GIF workflow.
+> "Include all properties" is part of the shared Syncer defaults, so `banner`/`color`/`status`/`icon`
+> survive; the hook also mirrors cover files. See [covers.md](covers.md).
 
-Publishing is manual on purpose: an earlier auto-publish watcher raced with manual edits and
-wedged Syncer, so it was removed ([issue #1](https://github.com/M1re/EngineeringVault/issues/1)).
+There is no background auto-publish: an earlier watcher raced with manual edits and wedged Syncer,
+so it was removed ([issue #1](https://github.com/M1re/EngineeringVault/issues/1)).
 
 > [!note] One rule above all
 > Anything we build must look the same in Obsidian **and** on the deployed site. Prefer Datacore
