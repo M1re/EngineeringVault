@@ -68,10 +68,17 @@ Export without committing: `npm run export`. Commit once without exporting:
 `git commit --no-verify`. Log: `.git/quartz-sync.log`. If Obsidian's CLI is not on `PATH`, set
 `OBSIDIAN_BIN` to its full path.
 
-> [!warning] Unverified on Windows
-> The hook was tested against a stand-in CLI, not a real Obsidian on Windows. If the first commit
-> fails, the message names the step; send it over and fix it there. Until then `--no-verify` +
-> the Publication Center (which now also writes to the local `content/`) still work.
+> [!note] Obsidian may be minimized
+> Syncer compiles Datacore by rendering it, and Chromium pauses rendering in a minimized or covered
+> window. The export therefore turns Obsidian's background throttling off while it runs and back on
+> afterwards (via `obsidian eval`). If it logs that it could not, keep the Obsidian window visible
+> during the commit, or `publish`/`status` will wait until the deadline.
+
+> [!tip] First export on a fresh clone
+> Syncer dates pages from the files' timestamps, so the first export after a clone rewrites the
+> `created`/`modified`/`published` lines of every published page. This is expected and happens once.
+> Before committing it, check `git diff content/` for body changes: a page published from another
+> machine without committing its note would be rolled back to the older note in `Vault/`.
 
 ## 6. Claude Code
 

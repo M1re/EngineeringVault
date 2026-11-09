@@ -2,9 +2,9 @@
 publish: true
 title: Cloud
 description: Cloud-native design, serverless, and providers.
-created: 2026-07-09T21:15:52.697+03:00
-modified: 2026-07-11T19:42:38.825+03:00
-published: 2026-07-11T19:42:38.825+03:00
+created: 2026-11-09T11:45:57.506Z
+modified: 2026-11-09T11:45:57.506Z
+published: 2026-11-09T11:45:57.506Z
 tags:
   - FolderNote
 banner: attachments/banners/aurora.svg
@@ -19,7 +19,7 @@ Designing for someone else's computers — the economics, primitives, and failur
 
 ## Contents
 
-<div class="fd"><style>
+<div class="fd"><div class="fd-empty">Empty — add notes or sub-topics here.</div><style>
 .fd { margin: 0.5rem 0 1rem; }
 .fd-total { margin-bottom: 1rem; }
 .fd-cap { display: flex; justify-content: space-between; font-size: 0.76rem; color: var(--text-muted, #9ca3af); margin-bottom: 6px; }
@@ -52,4 +52,4 @@ Designing for someone else's computers — the economics, primitives, and failur
 .fd-pill.wip { background: rgba(63, 182, 168, 0.10); color: #7fd0c6; }
 .fd-pill.new { background: rgba(128, 128, 128, 0.15); color: var(--text-muted, #9ca3af); }
 .fd-empty { opacity: 0.6; font-size: 0.9rem; }
-</style><div class="fd-empty">Empty — add notes or sub-topics here.</div></div>
+</style></div>

@@ -2,8 +2,8 @@
 publish: true
 title: Async/Await
 created: 2026-07-11
-modified: 2026-07-18T17:00:00.000+03:00
-published: 2026-07-18T17:00:00.000+03:00
+modified: 2026-11-09T11:45:57.515Z
+published: 2026-11-09T11:45:57.515Z
 tags:
   - async
   - concurrency

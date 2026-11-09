@@ -1,9 +1,9 @@
 ---
 publish: true
 title: Concurrency & Parallelism
-created: 2026-07-09T21:15:52.712+03:00
-modified: 2026-07-11T19:42:38.828+03:00
-published: 2026-07-11T19:42:38.828+03:00
+created: 2026-11-09T11:45:57.516Z
+modified: 2026-11-09T11:45:57.516Z
+published: 2026-11-09T11:45:57.516Z
 tags:
   - FolderNote
 banner: attachments/banners/aurora.svg
@@ -15,7 +15,7 @@ color: "#0ea5e9"
 
 ## Contents
 
-<div class="fd"><style>
+<div class="fd"><div style="--fd-rgb: 63, 182, 168;" class="fd-total"><div class="fd-cap"><span>3/6 done</span><span>50%</span></div><div class="fd-bar"><div style="width: 50%;" class="fd-fill"></div><div style="width: 0%;" class="fd-fill-wip"></div></div><div class="fd-legend"><span class="fd-lg done">3 done</span><span class="fd-lg wip">0 in progress</span><span class="fd-lg new">3 new</span></div></div><ul class="fd-list"><li class="fd-item"><a class="internal-link" href="Programming/Concurrency/Async and Await.md" data-tooltip-position="top" aria-label="Async and Await">Async and Await</a><span class="fd-pill done">Done</span></li><li class="fd-item"><a class="internal-link" href="Programming/Concurrency/Concurrency vs Parallelism.md" data-tooltip-position="top" aria-label="Concurrency vs Parallelism">Concurrency vs Parallelism</a><span class="fd-pill done">Done</span></li><li class="fd-item"><a class="internal-link" href="Programming/Concurrency/Deadlocks.md" data-tooltip-position="top" aria-label="Deadlocks">Deadlocks</a><span class="fd-pill new">New</span></li><li class="fd-item"><a class="internal-link" href="Programming/Concurrency/Locks and Synchronization.md" data-tooltip-position="top" aria-label="Locks and Synchronization">Locks and Synchronization</a><span class="fd-pill new">New</span></li><li class="fd-item"><a class="internal-link" href="Programming/Concurrency/Race Conditions.md" data-tooltip-position="top" aria-label="Race Conditions">Race Conditions</a><span class="fd-pill new">New</span></li><li class="fd-item"><a class="internal-link" href="Programming/Concurrency/Threads and the Thread Pool.md" data-tooltip-position="top" aria-label="Threads and the Thread Pool">Threads and the Thread Pool</a><span class="fd-pill done">Done</span></li></ul><style>
 .fd { margin: 0.5rem 0 1rem; }
 .fd-total { margin-bottom: 1rem; }
 .fd-cap { display: flex; justify-content: space-between; font-size: 0.76rem; color: var(--text-muted, #9ca3af); margin-bottom: 6px; }
@@ -48,4 +48,4 @@ color: "#0ea5e9"
 .fd-pill.wip { background: rgba(63, 182, 168, 0.10); color: #7fd0c6; }
 .fd-pill.new { background: rgba(128, 128, 128, 0.15); color: var(--text-muted, #9ca3af); }
 .fd-empty { opacity: 0.6; font-size: 0.9rem; }
-</style><div class="fd-total" style="--fd-rgb: 63, 182, 168;"><div class="fd-cap"><span>3/6 done</span><span>50%</span></div><div class="fd-bar"><div class="fd-fill" style="width: 50%;"></div><div class="fd-fill-wip" style="width: 0%;"></div></div><div class="fd-legend"><span class="fd-lg done">3 done</span><span class="fd-lg wip">0 in progress</span><span class="fd-lg new">3 new</span></div></div><ul class="fd-list"><li class="fd-item"><a class="internal-link" href="Programming/Concurrency/Async and Await.md" data-tooltip-position="top" aria-label="Async/Await">Async/Await</a><span class="fd-pill done">Done</span></li><li class="fd-item"><a class="internal-link" href="Programming/Concurrency/Concurrency vs Parallelism.md" data-tooltip-position="top" aria-label="Concurrency vs Parallelism">Concurrency vs Parallelism</a><span class="fd-pill done">Done</span></li><li class="fd-item"><a class="internal-link" href="Programming/Concurrency/Deadlocks.md" data-tooltip-position="top" aria-label="Deadlocks">Deadlocks</a><span class="fd-pill new">New</span></li><li class="fd-item"><a class="internal-link" href="Programming/Concurrency/Locks and Synchronization.md" data-tooltip-position="top" aria-label="Locks and Synchronization">Locks and Synchronization</a><span class="fd-pill new">New</span></li><li class="fd-item"><a class="internal-link" href="Programming/Concurrency/Race Conditions.md" data-tooltip-position="top" aria-label="Race Conditions">Race Conditions</a><span class="fd-pill new">New</span></li><li class="fd-item"><a class="internal-link" href="Programming/Concurrency/Threads and the Thread Pool.md" data-tooltip-position="top" aria-label="Threads and the Thread Pool">Threads and the Thread Pool</a><span class="fd-pill done">Done</span></li></ul></div>
+</style></div>

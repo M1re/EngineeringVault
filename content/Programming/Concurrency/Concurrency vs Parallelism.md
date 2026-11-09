@@ -2,8 +2,8 @@
 publish: true
 title: Concurrency vs Parallelism
 created: 2026-07-11
-modified: 2026-07-11T12:28:40.978+03:00
-published: 2026-07-11T12:28:40.978+03:00
+modified: 2026-11-09T11:45:57.515Z
+published: 2026-11-09T11:45:57.515Z
 tags:
   - concurrency
   - parallelism
@@ -13,6 +13,8 @@ status: done
 
 > [!summary]
 > **Concurrency** is _dealing with_ many things at once — structuring a program so several tasks are in progress by taking turns (structure and coordination). **Parallelism** is _doing_ many things at once — executing on multiple cores at the same instant. They solve different problems with different tools, and confusing them is how you pick the wrong one and make things slower.
+
+## How it works
 
 The cleanest framing is Rob Pike's: _"Concurrency is about dealing with lots of things at once. Parallelism is about doing lots of things at once."_
 

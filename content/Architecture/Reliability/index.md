@@ -2,9 +2,9 @@
 publish: true
 title: Reliability
 description: Idempotency, retries, timeouts, and staying correct under failure.
-created: 2026-07-10T19:09:20.950+03:00
-modified: 2026-07-11T19:42:38.824+03:00
-published: 2026-07-11T19:42:38.824+03:00
+created: 2026-11-09T11:45:57.505Z
+modified: 2026-11-09T11:45:57.505Z
+published: 2026-11-09T11:45:57.505Z
 tags:
   - FolderNote
 banner: attachments/banners/aurora.svg
@@ -17,7 +17,7 @@ icon: building-2
 
 ## Contents
 
-<div class="fd"><style>
+<div class="fd"><div style="--fd-rgb: 63, 182, 168;" class="fd-total"><div class="fd-cap"><span>1/1 done</span><span>100%</span></div><div class="fd-bar"><div style="width: 100%;" class="fd-fill"></div><div style="width: 0%;" class="fd-fill-wip"></div></div><div class="fd-legend"><span class="fd-lg done">1 done</span><span class="fd-lg wip">0 in progress</span><span class="fd-lg new">0 new</span></div></div><ul class="fd-list"><li class="fd-item"><a class="internal-link" href="Architecture/Reliability/Idempotency.md" data-tooltip-position="top" aria-label="Idempotency">Idempotency</a><span class="fd-pill done">Done</span></li></ul><style>
 .fd { margin: 0.5rem 0 1rem; }
 .fd-total { margin-bottom: 1rem; }
 .fd-cap { display: flex; justify-content: space-between; font-size: 0.76rem; color: var(--text-muted, #9ca3af); margin-bottom: 6px; }
@@ -50,4 +50,4 @@ icon: building-2
 .fd-pill.wip { background: rgba(63, 182, 168, 0.10); color: #7fd0c6; }
 .fd-pill.new { background: rgba(128, 128, 128, 0.15); color: var(--text-muted, #9ca3af); }
 .fd-empty { opacity: 0.6; font-size: 0.9rem; }
-</style><div class="fd-total" style="--fd-rgb: 63, 182, 168;"><div class="fd-cap"><span>1/1 done</span><span>100%</span></div><div class="fd-bar"><div class="fd-fill" style="width: 100%;"></div><div class="fd-fill-wip" style="width: 0%;"></div></div><div class="fd-legend"><span class="fd-lg done">1 done</span><span class="fd-lg wip">0 in progress</span><span class="fd-lg new">0 new</span></div></div><ul class="fd-list"><li class="fd-item"><a class="internal-link" href="Architecture/Reliability/Idempotency.md" data-tooltip-position="top" aria-label="Idempotency">Idempotency</a><span class="fd-pill done">Done</span></li></ul></div>
+</style></div>

@@ -178,6 +178,17 @@ class Obsidian {
     // Commands answer either the payload itself or { success, data }.
     return data && typeof data === "object" && "data" in data && "success" in data ? data.data : data
   }
+  // Syncer compiles Datacore by rendering it, which waits on animation frames. Chromium stops those
+  // while the Obsidian window is minimized or covered, so publish/status hang until it is shown.
+  // Background throttling off keeps frames running; best-effort, restored when the export ends.
+  async setRenderInBackground(on) {
+    const code = `require('electron').remote.getCurrentWebContents().setBackgroundThrottling(${!on})`
+    try {
+      await runCli(this.bin, [`vault=${VAULT_NAME}`, "eval", `code=${code}`], Math.min(15000, this.remaining()))
+    } catch (e) {
+      if (on) log(`Could not keep Obsidian rendering in the background (${e.message}); keep its window visible.`)
+    }
+  }
 }
 
 // ---------- configure --------------------------------------------------------------------------
@@ -331,10 +342,12 @@ async function main() {
     throw new SyncError("QUARTZ_SYNC_TIMEOUT must be a positive number of seconds.")
   }
   const release = takeLock()
+  let cli = null
   try {
-    const cli = new Obsidian(Date.now() + timeoutSec * 1000)
+    cli = new Obsidian(Date.now() + timeoutSec * 1000)
     await configure(cli)
     if (configureOnly) return
+    await cli.setRenderInBackground(true)
     await exportVault(cli)
     if (hook) {
       if (dirtyVaultSource().length) {
@@ -345,6 +358,7 @@ async function main() {
       log("Generated output staged with the commit.")
     }
   } finally {
+    if (cli && !configureOnly) await cli.setRenderInBackground(false).catch(() => {})
     release()
   }
 }
