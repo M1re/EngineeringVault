@@ -34,8 +34,12 @@ git clone https://github.com/M1re/EngineeringVault.git
 cd EngineeringVault
 ```
 
-In Obsidian: **Open folder as vault** → `EngineeringVault\Vault`, enable community plugins,
-**Settings → General → Command line interface** → on. Reopen the terminal, keep Obsidian open:
+Then in Obsidian:
+
+1. Start screen → **Open folder as vault** → pick the `Vault` folder inside `EngineeringVault`.
+2. Prompt "Do you trust the author of this vault?" → **Trust author and enable plugins**.
+3. **Settings** (gear, bottom left) → **General** → **Command line interface** → turn on, accept the prompt.
+4. Leave Obsidian open, open a **new** terminal in `EngineeringVault` and run:
 
 ```powershell
 npm run setup
