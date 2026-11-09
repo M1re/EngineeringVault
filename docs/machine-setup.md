@@ -41,6 +41,10 @@ Keep Obsidian open for the next step.
 npm run setup
 ```
 
+> [!tip] "running scripts is disabled on this system"
+> Windows PowerShell blocks `npm.ps1` by default. Allow local scripts once for your user:
+> `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`, or call the shim directly: `npm.cmd run setup`.
+
 It installs the locked npm dependencies, enables the repo's Git hooks (`core.hooksPath .githooks`),
 and points Quartz Syncer at this checkout in **local mode** with the shared defaults from
 `scripts/quartz-syncer.defaults.json` ("Include all properties" included). No GitHub token is
