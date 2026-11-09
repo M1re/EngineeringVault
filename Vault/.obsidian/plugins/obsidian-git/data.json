@@ -1,0 +1,9 @@
+{
+  "autoSaveInterval": 10,
+  "autoBackupAfterFileChange": true,
+  "autoPullOnBoot": true,
+  "pullBeforePush": true,
+  "syncMethod": "rebase",
+  "autoCommitMessage": "vault backup: {{date}}",
+  "showErrorNotices": true
+}

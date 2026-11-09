@@ -64,6 +64,12 @@ Syncer's own `data.json` is per-machine (it holds the absolute checkout path) an
    - mirrors covers (`scripts/sync-banners.mjs`) and stages `content/` into the same commit.
 3. Push to `main` → GitHub Actions builds and deploys the site.
 
+**Automatic by default.** Obsidian Git's shared settings (`Vault/.obsidian/plugins/obsidian-git/data.json`)
+pull on startup and, 10 minutes after your last edit, commit everything, pull (rebase) and push to
+the current branch, so steps 2–3 happen on their own while Obsidian is open. The commit still runs
+the export hook; if the hook blocks it, Obsidian shows the error. Run **Obsidian Git: Commit-and-sync**
+to publish right away. Needs a Git identity on the machine (`git config --global user.name/user.email`).
+
 Export without committing: `npm run export`. Commit once without exporting:
 `git commit --no-verify`. Log: `.git/quartz-sync.log`. If Obsidian's CLI is not on `PATH`, set
 `OBSIDIAN_BIN` to its full path.
