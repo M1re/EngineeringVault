@@ -1,5 +1,6 @@
 ---
 title: "const vs readonly"
+summary: "Both set a value once: a const is fixed at compile time and copied into every place that reads it, a readonly field is set once at runtime."
 tags:
   - constants
   - immutability

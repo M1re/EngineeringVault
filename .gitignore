@@ -32,3 +32,7 @@ Vault/.obsidian/plugins/quartz-syncer/data.json
 .claude/state/
 .omc/
 .claude/CLAUDE.md
+
+# Quartz v5: community plugins are installed here from quartz.lock.json
+.quartz/
+quartz/cli/tui/dist/

@@ -1,5 +1,6 @@
 ---
 title: "Concurrency vs Parallelism"
+summary: "Concurrency is dealing with many things at once by taking turns; parallelism is doing many things at once on multiple cores."
 tags:
   - concurrency
   - parallelism

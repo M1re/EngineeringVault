@@ -9,6 +9,7 @@ import styles from "../../styles/custom.scss"
 import popoverStyle from "../../components/styles/popover.scss"
 import { BuildCtx } from "../../util/ctx"
 import { QuartzComponent } from "../../components/types"
+import { componentRegistry } from "../../components/registry"
 import {
   googleFontHref,
   googleFontSubsetHref,
@@ -27,11 +28,16 @@ type ComponentResources = {
 
 function getComponentResources(ctx: BuildCtx): ComponentResources {
   const allComponents: Set<QuartzComponent> = new Set()
+
   for (const emitter of ctx.cfg.plugins.emitters) {
     const components = emitter.getQuartzComponents?.(ctx) ?? []
     for (const component of components) {
       allComponents.add(component)
     }
+  }
+
+  for (const component of componentRegistry.getAllComponents()) {
+    allComponents.add(component)
   }
 
   const componentResources = {
@@ -240,6 +246,16 @@ function addGlobalPageResources(ctx: BuildCtx, componentResources: ComponentReso
       vercelInsightsScript.src = "/_vercel/insights/script.js"
       vercelInsightsScript.defer = true
       document.head.appendChild(vercelInsightsScript)
+    `)
+  } else if (cfg.analytics?.provider === "rybbit") {
+    componentResources.afterDOMLoaded.push(`
+      const rybbitScript = document.createElement("script");
+      rybbitScript.src = "${cfg.analytics.host ?? "https://app.rybbit.io"}/api/script.js";
+      rybbitScript.setAttribute("data-site-id", "${cfg.analytics.siteId}");
+      rybbitScript.async = true;
+      rybbitScript.defer = true;
+
+      document.head.appendChild(rybbitScript);
     `)
   }
 

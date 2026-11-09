@@ -1,5 +1,6 @@
 ---
 title: "Threads and the Thread Pool"
+summary: "A thread is what the OS schedules onto a CPU core; because threads are expensive, .NET runs work on a pool of long-lived threads."
 tags:
   - threads
   - thread-pool

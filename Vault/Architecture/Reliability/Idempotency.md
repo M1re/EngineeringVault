@@ -1,5 +1,6 @@
 ---
 title: Idempotency
+summary: "An operation is idempotent if performing it many times has the same effect as performing it once, which is what makes retries safe."
 tags:
   - reliability
   - api-design

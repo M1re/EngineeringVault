@@ -1,5 +1,6 @@
 ---
 title: "Value vs Reference Types"
+summary: "The difference is copy semantics, not storage: assigning a value type copies the value, assigning a reference type copies only the reference."
 tags:
   - value-types
   - reference-types

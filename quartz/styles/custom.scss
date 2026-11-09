@@ -38,3 +38,9 @@ article {
   }
 }
 
+
+// Folder-notes carry their own Datacore dashboard (`.fd`), so hide Quartz's automatic
+// "N items under this folder" listing there to avoid showing the children twice.
+.popover-hint:has(.fd) > .page-listing {
+  display: none;
+}

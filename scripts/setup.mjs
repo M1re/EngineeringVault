@@ -2,7 +2,7 @@
 // One-command setup for a fresh clone (Windows, macOS, Linux):  npm run setup
 //
 // 1. checks Node and that this is the repository root;
-// 2. installs the locked npm dependencies (npm ci);
+// 2. installs the locked npm dependencies (npm ci) and the pinned Quartz plugins;
 // 3. enables this checkout's Git hooks (.githooks/pre-commit exports the vault on commit);
 // 4. points Quartz Syncer at this checkout in local mode and applies the shared defaults
 //    (needs Obsidian running with Vault/ open and its command line interface enabled).
@@ -25,7 +25,7 @@ function fail(message) {
 
 function run(cmd, args, label) {
   // npm is a .cmd shim on Windows, which only starts through the shell.
-  const r = spawnSync(cmd, args, { cwd: ROOT, stdio: "inherit", shell: IS_WINDOWS && cmd === "npm" })
+  const r = spawnSync(cmd, args, { cwd: ROOT, stdio: "inherit", shell: IS_WINDOWS && (cmd === "npm" || cmd === "npx") })
   if (r.status !== 0) fail(`${label} failed. Fix the error above and run npm run setup again.`)
 }
 
@@ -45,6 +45,9 @@ if (!sameRoot) fail("This script must sit in the root of its own Git checkout; r
 // 2. dependencies
 say("Installing locked npm dependencies (npm ci)...")
 run("npm", ["ci"], "npm ci")
+
+say("Installing Quartz plugins pinned in quartz.lock.json...")
+run("npx", ["quartz", "plugin", "restore"], "quartz plugin restore")
 
 // 3. git hooks
 say("Enabling this checkout's Git hooks (.githooks)...")

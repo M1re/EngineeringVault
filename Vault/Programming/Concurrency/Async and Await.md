@@ -1,5 +1,6 @@
 ---
 title: "Async/Await"
+summary: "async/await lets a thread start a slow operation and do other work instead of waiting; the method pauses at await and resumes when the result is ready."
 tags:
   - async
   - concurrency
