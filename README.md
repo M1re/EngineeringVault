@@ -29,6 +29,7 @@ quartz/      static-site generator (Quartz v4)
 winget install OpenJS.NodeJS.LTS
 winget install Git.Git
 winget install Obsidian.Obsidian
+# reopen the terminal so git/node are on PATH
 git clone https://github.com/M1re/EngineeringVault.git
 cd EngineeringVault
 ```
