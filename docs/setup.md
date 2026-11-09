@@ -78,13 +78,8 @@ Live site: https://m1re.github.io/EngineeringVault/
 > Quartz Syncer → **"Include all properties"**. See [covers.md](covers.md) for the full
 > cover / GIF workflow.
 
-### Auto-publish (currently disabled)
-
-There is a watcher (`scripts/watch-publish.mjs`) that used to publish automatically on every
-`publish: true` change. It's **disabled** — it raced with manual edits and wedged Syncer. The
-kill-switch is the file `scripts/.autopublish-disabled`; while it exists the watcher exits on
-launch. Publishing is manual (the Publication Center above, or the CLI). Tracked in
-[issue #1](https://github.com/M1re/EngineeringVault/issues/1); **re-enable by deleting that file**.
+Publishing is manual on purpose: an earlier auto-publish watcher raced with manual edits and
+wedged Syncer, so it was removed ([issue #1](https://github.com/M1re/EngineeringVault/issues/1)).
 
 > [!note] One rule above all
 > Anything we build must look the same in Obsidian **and** on the deployed site. Prefer Datacore

@@ -101,7 +101,8 @@ Keep CLAUDE.md small; domain detail lives in skills/subagents that load only whe
 - `status` has three states — `new` (nothing written), `in-progress` (being written), `done` (written
   and validated); the bar shows all three (% = `done` share). Mobile publishes run `scripts/regen-dashboards.mjs`.
 - Keep Syncer **"Include all properties"** ON (so `banner`/`color`/`status`/`icon` survive), and
-  publish **manually** — the auto-publish watcher is disabled (`scripts/.autopublish-disabled`, issue #1).
+  publish **manually** from the Publication Center (the old auto-publish watcher was removed — it raced
+  with manual edits and wedged Syncer).
 - **Anything we build must render the same in Obsidian AND on the deployed site** — use tech that
   works in both (Datacore + Quartz Syncer, or plain Markdown/HTML). See `.claude/feedback.md`.
 
