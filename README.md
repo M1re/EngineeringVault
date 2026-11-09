@@ -23,19 +23,38 @@ scripts/     setup, the commit-time export, dashboard/cover helpers
 quartz/      static-site generator (Quartz v4)
 ```
 
-## Local development
+## Setup on a new machine
 
-Requires Node.js ≥ 22, Git, and Obsidian ≥ 1.13. Open the **`Vault/`** folder as a vault in
-Obsidian, enable its command line interface, then:
+1. Install Node ≥ 22, Git and Obsidian ≥ 1.13 (Windows: `winget install OpenJS.NodeJS.LTS Git.Git Obsidian.Obsidian`)
+   and clone the repo. Set a Git identity if the machine has none.
+2. In Obsidian: **Open folder as vault** → `Vault/` (not the repo root), enable community plugins,
+   then **Settings → General → Command line interface** → on. Reopen the terminal.
+3. With Obsidian open, from the repo root:
 
-```bash
-npm run setup               # once: deps, git hooks, Quartz Syncer in local mode
-npx quartz build --serve    # preview at http://localhost:8080
-```
+   ```bash
+   npm run setup
+   ```
 
-Publishing is a commit: the pre-commit hook exports the vault into `content/`, and a push to
-`main` deploys the site. See [`docs/setup.md`](docs/setup.md)
-for the workflow and [`docs/machine-setup.md`](docs/machine-setup.md) for setting up a new machine.
+   It installs dependencies, enables `.githooks/`, and points Quartz Syncer (local mode, no token)
+   at this checkout with the shared defaults from `scripts/quartz-syncer.defaults.json`. Safe to rerun.
+   On Windows, if PowerShell says *running scripts is disabled*, use `npm.cmd run setup` or
+   `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`.
+
+Preview the site locally: `npx quartz build --serve` → http://localhost:8080.
+
+## Publishing: commit = publish
+
+- Obsidian Git pulls on startup and, 10 minutes after the last edit, commits, pulls (rebase) and
+  pushes. **Obsidian Git: Commit-and-sync** does it right away.
+- The pre-commit hook (`scripts/sync-quartz.mjs`) runs on commits that touch `Vault/`: it exports
+  notes with `publish: true` through Syncer into `content/` and adds it to the same commit. It
+  blocks if `Vault/` has unstaged changes, a note fails, or a Datacore block stays uncompiled.
+- A push to `main` makes GitHub Actions build and deploy the site.
+- Obsidian must be running (minimized is fine). Export without committing: `npm run export`;
+  skip once: `git commit --no-verify`; log: `.git/quartz-sync.log`.
+- The repo is public: `publish: false` keeps a note off the site, not off GitHub.
+
+More on authoring: [`docs/setup.md`](docs/setup.md).
 
 ## License
 
