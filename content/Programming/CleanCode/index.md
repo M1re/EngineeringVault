@@ -1,9 +1,9 @@
 ---
 publish: true
 title: Clean Code
-created: 2026-07-09T21:15:52.709+03:00
-modified: 2026-07-11T19:42:38.827+03:00
-published: 2026-07-11T19:42:38.827+03:00
+created: 2026-11-09T11:45:57.514Z
+modified: 2026-11-09T11:45:57.514Z
+published: 2026-11-09T11:45:57.514Z
 tags:
   - FolderNote
 banner: attachments/banners/aurora.svg
@@ -15,7 +15,7 @@ color: "#f59e0b"
 
 ## Contents
 
-<div class="fd"><style>
+<div class="fd"><div style="--fd-rgb: 63, 182, 168;" class="fd-total"><div class="fd-cap"><span>0/3 done</span><span>0%</span></div><div class="fd-bar"><div style="width: 0%;" class="fd-fill"></div><div style="width: 0%;" class="fd-fill-wip"></div></div><div class="fd-legend"><span class="fd-lg done">0 done</span><span class="fd-lg wip">0 in progress</span><span class="fd-lg new">3 new</span></div></div><ul class="fd-list"><li class="fd-item"><a class="internal-link" href="Programming/CleanCode/Code Smells.md" data-tooltip-position="top" aria-label="Code Smells">Code Smells</a><span class="fd-pill new">New</span></li><li class="fd-item"><a class="internal-link" href="Programming/CleanCode/Naming.md" data-tooltip-position="top" aria-label="Naming">Naming</a><span class="fd-pill new">New</span></li><li class="fd-item"><a class="internal-link" href="Programming/CleanCode/Refactoring.md" data-tooltip-position="top" aria-label="Refactoring">Refactoring</a><span class="fd-pill new">New</span></li></ul><style>
 .fd { margin: 0.5rem 0 1rem; }
 .fd-total { margin-bottom: 1rem; }
 .fd-cap { display: flex; justify-content: space-between; font-size: 0.76rem; color: var(--text-muted, #9ca3af); margin-bottom: 6px; }
@@ -48,4 +48,4 @@ color: "#f59e0b"
 .fd-pill.wip { background: rgba(63, 182, 168, 0.10); color: #7fd0c6; }
 .fd-pill.new { background: rgba(128, 128, 128, 0.15); color: var(--text-muted, #9ca3af); }
 .fd-empty { opacity: 0.6; font-size: 0.9rem; }
-</style><div class="fd-total" style="--fd-rgb: 63, 182, 168;"><div class="fd-cap"><span>0/3 done</span><span>0%</span></div><div class="fd-bar"><div class="fd-fill" style="width: 0%;"></div><div class="fd-fill-wip" style="width: 0%;"></div></div><div class="fd-legend"><span class="fd-lg done">0 done</span><span class="fd-lg wip">0 in progress</span><span class="fd-lg new">3 new</span></div></div><ul class="fd-list"><li class="fd-item"><a class="internal-link" href="Programming/CleanCode/Code Smells.md" data-tooltip-position="top" aria-label="Code Smells">Code Smells</a><span class="fd-pill new">New</span></li><li class="fd-item"><a class="internal-link" href="Programming/CleanCode/Naming.md" data-tooltip-position="top" aria-label="Naming">Naming</a><span class="fd-pill new">New</span></li><li class="fd-item"><a class="internal-link" href="Programming/CleanCode/Refactoring.md" data-tooltip-position="top" aria-label="Refactoring">Refactoring</a><span class="fd-pill new">New</span></li></ul></div>
+</style></div>

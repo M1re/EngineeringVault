@@ -2,8 +2,8 @@
 publish: true
 title: const vs readonly
 created: 2026-07-19
-modified: 2026-07-19T18:30:00.000+03:00
-published: 2026-07-19T18:30:00.000+03:00
+modified: 2026-11-09T11:45:57.511Z
+published: 2026-11-09T11:45:57.511Z
 tags:
   - constants
   - immutability
@@ -12,7 +12,7 @@ status: done
 ---
 
 > [!summary]
-> `const` and `readonly` both mark a value that is set once, but they differ in *when*. A `const` is set at **compile time**: the compiler copies its literal value into every place that reads it, including code in other assemblies. A `readonly` field is set at **runtime**, once, in its declaration or a constructor. This is why changing a public `const` in a library has no effect on a consumer until the consumer is recompiled, while a `readonly` value changes without a recompile.
+> `const` and `readonly` both mark a value that is set once, but they differ in _when_. A `const` is set at **compile time**: the compiler copies its literal value into every place that reads it, including code in other assemblies. A `readonly` field is set at **runtime**, once, in its declaration or a constructor. This is why changing a public `const` in a library has no effect on a consumer until the consumer is recompiled, while a `readonly` value changes without a recompile.
 
 ## const
 

@@ -2,8 +2,8 @@
 publish: true
 title: Value vs Reference Types
 created: 2026-07-09
-modified: 2026-07-20T13:15:00.000+03:00
-published: 2026-07-20T13:15:00.000+03:00
+modified: 2026-11-09T11:45:57.520Z
+published: 2026-11-09T11:45:57.520Z
 tags:
   - value-types
   - reference-types
@@ -69,7 +69,7 @@ Boxing turns a cheap value into a heap allocation, which matters on a hot path. 
 
 ## Pitfalls & Trade-offs
 
-**1. Modifying a value type through a copy changes nothing.** A property or a collection indexer returns a *copy* of a value type, so modifying that result modifies the copy, not the original.
+**1. Modifying a value type through a copy changes nothing.** A property or a collection indexer returns a _copy_ of a value type, so modifying that result modifies the copy, not the original.
 
 ```csharp
 struct Point { public int X; public void Shift(int dx) => X += dx; }
@@ -144,7 +144,7 @@ A `readonly struct` would have turned this silent bug into a compile error, whic
 > Not as a rule. A value type lives where it is declared. A local value type usually lives on the stack, but a value type that is a field of a class lives on the heap inside that object, and a value type in an array lives on the heap inside the array. A reference type's object is always on the heap. Reason about copy semantics, not about the stack.
 
 > [!question]- You put a mutable `struct` in a `List<T>` and call a method that changes it, but nothing changes. Why?
-> The list indexer and `foreach` return a *copy* of the value-type element, so the method runs on the copy and leaves the list element untouched. To change the element, replace the whole value (`list[i] = newValue`) or make the type a `class`. Keeping structs immutable (`readonly struct`) turns this silent bug into a compile error.
+> The list indexer and `foreach` return a _copy_ of the value-type element, so the method runs on the copy and leaves the list element untouched. To change the element, replace the whole value (`list[i] = newValue`) or make the type a `class`. Keeping structs immutable (`readonly struct`) turns this silent bug into a compile error.
 
 > [!question]- A profiler shows unexpected heap allocations on a hot path built from value types. What causes them, and how do you remove them?
 > Boxing. A value type is boxed — wrapped in a new heap object — whenever it is used as `object` or a non-generic interface: assigned to an `object` variable, passed to an `object` parameter, or compared through a non-generic interface. Each box is a heap allocation and adds GC pressure. Remove it by keeping the value in generic APIs (`List<int>`, `IComparable<T>`), which never box, and by avoiding `object`-typed parameters and default `struct` `Equals` on the hot path.

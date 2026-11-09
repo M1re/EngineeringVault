@@ -2,8 +2,8 @@
 publish: true
 title: Reflection
 created: 2026-07-09
-modified: 2026-07-11T12:28:40.972+03:00
-published: 2026-07-11T12:28:40.972+03:00
+modified: 2026-11-09T11:45:57.517Z
+published: 2026-11-09T11:45:57.517Z
 tags: []
 status: new
 ---

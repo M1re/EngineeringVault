@@ -2,8 +2,8 @@
 publish: true
 title: Threads and the Thread Pool
 created: 2026-07-09
-modified: 2026-07-19T17:45:00.000+03:00
-published: 2026-07-19T17:45:00.000+03:00
+modified: 2026-11-09T11:45:57.516Z
+published: 2026-11-09T11:45:57.516Z
 tags:
   - threads
   - thread-pool

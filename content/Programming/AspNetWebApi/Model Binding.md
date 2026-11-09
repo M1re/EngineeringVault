@@ -2,8 +2,8 @@
 publish: true
 title: Model Binding
 created: 2026-07-09
-modified: 2026-07-11T12:28:40.965+03:00
-published: 2026-07-11T12:28:40.965+03:00
+modified: 2026-11-09T11:45:57.510Z
+published: 2026-11-09T11:45:57.510Z
 tags: []
 status: new
 ---
