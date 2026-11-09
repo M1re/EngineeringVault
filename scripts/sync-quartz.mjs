@@ -132,7 +132,7 @@ function runCli(bin, args, timeoutMs) {
     child.on("close", (code) => {
       clearTimeout(timer)
       if (code !== 0) {
-        reject(new SyncError(`Obsidian CLI exited ${code}: ${args.join(" ")}\n${(err || out).trim()}`))
+        reject(new SyncError(`Obsidian CLI (${bin}) exited ${code}: ${args.join(" ")}\n${(err + out).trim() || "(no output: is Obsidian running with this vault open and Quartz Syncer enabled?)"}`))
       } else resolve(out)
     })
   })
