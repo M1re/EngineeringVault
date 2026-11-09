@@ -38,7 +38,8 @@ How this stays healthy (so it never bloats and drags down quality):
   machine/user-specific data — derive them — so future installs and machine moves are trivial.
 - Don't multiply docs: fold short how-tos (setup, workflow) into an existing file — machine setup
   lives as a concise README section, not its own note. How-tos are minimal: every command spelled
-  out in a code block (incl. obvious ones like `git clone`), almost no prose.
+  out in a code block (incl. obvious ones like `git clone`), almost no prose. GUI steps: one
+  plain sentence naming the setting — no click-by-click hand-holding.
 - Keep this ledger lean: record proactively, merge duplicates, promote mature rules into structure.
 
 ## Archive (log)
