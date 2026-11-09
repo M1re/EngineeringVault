@@ -5,6 +5,7 @@ color: "#0ea5e9"
 tags:
   - FolderNote
 publish: true
+banner_y: 0.5
 ---
 
 > [!abstract] Scope

@@ -2,12 +2,13 @@
 publish: true
 title: Concurrency & Parallelism
 created: 2026-11-09T11:45:57.516Z
-modified: 2026-11-09T11:45:57.516Z
-published: 2026-11-09T11:45:57.516Z
+modified: 2026-11-09T15:50:44.033Z
+published: 2026-11-09T15:50:44.033Z
 tags:
   - FolderNote
 banner: attachments/banners/aurora.svg
 color: "#0ea5e9"
+banner_y: 0.5
 ---
 
 > [!abstract] Scope

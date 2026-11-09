@@ -3,14 +3,14 @@ publish: true
 title: Programming
 description: Languages, paradigms, and runtime internals.
 created: 2026-11-09T11:45:57.522Z
-modified: 2026-11-09T11:45:57.522Z
-published: 2026-11-09T11:45:57.522Z
+modified: 2026-11-09T15:50:36.952Z
+published: 2026-11-09T15:50:36.952Z
 tags:
   - FolderNote
 banner: attachments/banners/aurora.svg
 icon: code-2
 color: "#6366f1"
-banner_y: 0.5
+banner_y: 1
 ---
 
 Languages, paradigms, and the craft of writing code that survives contact with production.
