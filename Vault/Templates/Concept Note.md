@@ -1,6 +1,7 @@
 <%* if ((tp.file.content || "").trim()) { new Notice("Internal skeleton — use the New Note command instead."); return; } -%>
 ---
 title: "{{title}}"
+summary: ""
 tags: []
 status: new
 publish: false
@@ -43,7 +44,7 @@ created: {{date:YYYY-MM-DD}}
 
 <!-- Self-test: the question is visible, the answer is folded (`-`). The reader answers in their
      head, then expands to check. 2–5 design/review-level questions, not "what is X". -->
-> [!question]- <a design- or review-level question>
+> [!qard]- <a design- or review-level question>
 > <the answer — concrete and correct>
 
 ## Related

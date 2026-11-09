@@ -26,6 +26,8 @@ jobs:
           node-version: 22
       - name: Install dependencies
         run: npm ci
+      - name: Install Quartz plugins (pinned in quartz.lock.json)
+        run: npx quartz plugin restore
       - name: Regenerate folder dashboards
         run: node scripts/regen-dashboards.mjs
       - name: Build Quartz

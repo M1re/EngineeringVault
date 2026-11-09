@@ -1,43 +1,26 @@
-# Engineering Vault — Improvement Roadmap
+# Engineering Vault — Roadmap
 
-Ideas for improving the vault, ordered by priority. Every item must render the **same in Obsidian
-and on the deployed site** (see `.claude/feedback.md`).
+Every item must render the **same in Obsidian and on the deployed site**. Ideas borrowed from other
+vaults are rebuilt here, not copied.
 
-## P1 — foundational / highest impact
+## Next
 
-1. **Align the note-creation workflow with the current model.** Update the note template,
-   `/new-note`, the `note-writer` skill, `CLAUDE.md`, and the repo guide from the old `draft` field
-   to `status` / `publish` + `Vault/` + Quartz Syncer. *Why:* adding a note is currently
-   inconsistent and the docs are stale. This underpins everything else.
-2. **Logical section order** (Programming → DevOps) instead of alphabetical — a custom Explorer
-   `sortFn` (no folder renames) or numbered folders. *Why:* reads like a curriculum; matches the
-   reference. Low effort.
-3. **Per-section dashboards.** Each section folder-note gets a small `datacorejsx` block listing
-   its notes with status pills and subtopic progress. *Why:* every section landing becomes a live
-   index, consistent with the home page. Works in both.
+1. **Question bank page** — one page that collects every `> [!qard]-` card by section, in Obsidian
+   (Datacore) and on the site (our own Quartz component/transformer). Qard already drives spaced
+   repetition in Obsidian; this adds the browsable overview.
+2. **Algorithm traces** — an interactive step-by-step trace for Computer Science notes (array state per
+   step), authored once as a fenced block and rendered in both surfaces.
+3. **Complexity charts** — a fenced block that plots O(1)…O(n!) curves for a note's operations.
+4. **"Recently updated" on the home page** — the last N edited notes (Datacore).
+5. **Status badge on every note** — a coloured `status` pill at the top of each note.
+6. **"To write" page** — a table of `new` notes across sections, as a visible backlog.
+7. **Graph + meta polish** — tune the graph, favicon, OG image, site description.
 
-## P2 — high-value dynamic / UX
+## Done
 
-4. **"Recently updated" block on the home page** — a Datacore list of the last N edited notes.
-   *Why:* shows the garden is alive; easy re-entry point.
-5. **Status badge on every note** — a coloured `status` pill at the top (Obsidian: pretty-properties;
-   site: via Syncer frontmatter / inline Datacore). *Why:* at-a-glance state. Verify it renders in both.
-6. **Subtopic nesting convention** — define how topics nest (a folder + folder-note per subtopic,
-   like `Programming/Concurrency/...`), with a command/template to scaffold them. *Why:* makes the
-   Explorer tree rich and scalable.
-7. **Roadmap / "to write" page** — a Datacore table of planned or `not-started` topics across
-   sections. *Why:* turns gaps into a visible backlog.
-
-## P3 — polish / cosmetic
-
-8. **Questions bank page** — aggregate every "Questions to test yourself" section into one
-   Datacore-driven review page. *Why:* a spaced-repetition study surface.
-9. ~~**Site theme pass**~~ — ✅ **Done.** Notion-inspired palette + Inter in both surfaces
-   (`quartz.config.ts` / `notion.css`), plus cover images/GIFs on folder-notes (Banner component +
-   Banners plugin + Set Cover command). See [covers.md](covers.md).
-10. **Graph + search + meta polish** — tune the graph (local/depth), add a tags page, set a custom
-    favicon, OG image, and site description. *Why:* discoverability and shareable link previews.
-
-## Tracked in GitHub issues
-
-- [#2](https://github.com/M1re/EngineeringVault/issues/2) — auto-mirror cover images into `content/`.
+- `status` / `publish` model (`new` / `in-progress` / `done`) with the segmented progress bar.
+- Curriculum order in the Explorer; Section → sub-topic → note nesting with folder-note dashboards.
+- Notion theme + covers in both surfaces ([covers.md](covers.md)); covers mirrored by the commit hook.
+- Commit = publish: Syncer local mode + pre-commit export; one-command `npm run setup`.
+- Quartz v5; plugins updated; Omnisearch, Attachment Management, Advanced Rename/Delete, Qard.
+- `summary` frontmatter → site description; `npm run validate` in CI; reviewer gate with receipts.

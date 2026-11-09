@@ -1,13 +1,17 @@
 [
-  "obsidian-git",
-  "obsidian-excalidraw-plugin",
-  "table-editor-obsidian",
-  "obsidian-linter",
-  "dataview",
-  "templater-obsidian",
+  "advanced-rename-and-delete-handler",
+  "attachment-management",
   "datacore",
-  "quartz-syncer",
+  "dataview",
   "folder-notes",
   "homepage",
-  "obsidian-banners"
+  "obsidian-banners",
+  "obsidian-excalidraw-plugin",
+  "obsidian-git",
+  "obsidian-linter",
+  "omnisearch",
+  "qard",
+  "quartz-syncer",
+  "table-editor-obsidian",
+  "templater-obsidian"
 ]

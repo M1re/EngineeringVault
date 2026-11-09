@@ -1,5 +1,6 @@
 ---
 title: "Threads and the Thread Pool"
+summary: "A thread is what the OS schedules onto a CPU core; because threads are expensive, .NET runs work on a pool of long-lived threads."
 tags:
   - threads
   - thread-pool
@@ -11,7 +12,7 @@ created: 2026-07-09
 ---
 
 > [!summary]
-> A **thread** is what the OS schedules onto a CPU core to run code. A thread is expensive: it holds about 1 MB of stack, it takes a system call to create, and it costs CPU time every time the scheduler moves it on or off a core. Because a thread is expensive, .NET does not create one per job. It keeps a **thread pool**: a fixed set of threads that stay alive and run jobs as they arrive. `Task.Run`, every `await` continuation, and timer and I/O callbacks all run on the pool. The pool's behaviour explains both a service's throughput and its thread-pool starvation.
+> A **thread** is what the OS schedules onto a CPU core to run code. A thread is expensive: it holds about 1 MB of stack, it takes a system call to create, and it costs CPU time every time the scheduler moves it on or off a core. Because a thread is expensive, .NET does not create one per job. It keeps a **thread pool**: a set of long-lived worker threads that the pool grows and shrinks with load and that run jobs as they arrive. `Task.Run`, every `await` continuation, and timer and I/O callbacks all run on the pool. The pool's behaviour explains both a service's throughput and its thread-pool starvation.
 
 ## The Thread
 
@@ -67,7 +68,7 @@ This is the real limit on threads. Once the number of runnable threads is greate
 
 A server runs a very large number of tiny jobs: parse a request, run a query callback, resume an `await`. Each job lasts microseconds. Creating a new thread for each job and destroying the thread afterward would cost more than the job itself.
 
-The **thread pool** avoids that cost. .NET keeps a fixed set of worker threads alive. When you give the pool a job, the pool runs the job on a free worker thread. When the job finishes, that worker thread returns to the pool for the next job. No thread is created or destroyed per job.
+The **thread pool** avoids that cost. .NET keeps a set of worker threads alive. When you give the pool a job, the pool runs the job on a free worker thread. When the job finishes, that worker thread returns to the pool for the next job. No thread is created or destroyed per job.
 
 You do not use the pool directly. You use the APIs built on top of it:
 
@@ -148,7 +149,7 @@ foreach (var row in millionRows)
     new Thread(() => Index(row)).Start();   // one million OS threads
 ```
 
-This reserves gigabytes of stacks and causes constant context switches. `Task.Run(() => Index(row))` runs the same work on the pool's fixed set of worker threads.
+This reserves gigabytes of stacks and causes constant context switches. `Task.Run(() => Index(row))` runs the same work on the pool's worker threads.
 
 **4. The pool adds threads slowly, so a burst raises latency.** After the service is idle, only the floor of worker threads exists. If 300 CPU-bound jobs arrive at once, most of the jobs wait while the pool adds one worker thread about every 500 ms. If the load is this bursty, raise the floor:
 
@@ -156,7 +157,7 @@ This reserves gigabytes of stacks and causes constant context switches. `Task.Ru
 ThreadPool.SetMinThreads(workerThreads: 200, completionPortThreads: 200);
 ```
 
-The cost: those worker threads stay alive and add context-switch cost when the load is low. Raise the floor when a profile shows you need it, not by default.
+The cost: the pool can now create up to 200 threads with no delay, and under CPU-bound load more runnable threads than cores adds context-switch cost. Raise the floor when a profile shows you need it, not by default.
 
 **5. Worker threads run at the same time, so shared state races.** Many jobs run on many worker threads at once. Any mutable state the jobs share is a [[Race Conditions|race condition]] and needs a [[Synchronization Primitives|lock]] or `Interlocked`.
 
@@ -204,22 +205,22 @@ Now each worker thread is busy only for the microseconds around the call, not th
 
 ## Questions
 
-> [!question]- A machine has 8 cores but the process shows 40 threads. How?
+> [!qard]- A machine has 8 cores but the process shows 40 threads. How?
 > "8 cores, 16 threads" describes the hardware: 8 physical cores, and each core runs two hardware threads at once through SMT, so 16 threads run at the same instant. 16 is the ceiling. The 40 are OS threads, and their number is not limited to 16. At any instant a few threads run, and the other threads are blocked (waiting on I/O, a lock, or `Sleep`) or ready and waiting for a free core. The scheduler switches them across the 16 hardware threads. Most of the 40 threads are idle, and the runtime created many of them: the GC, the finalizer thread, timers, and the pool.
 
-> [!question]- Is a managed thread cheaper than an OS thread? What does .NET add?
+> [!qard]- Is a managed thread cheaper than an OS thread? What does .NET add?
 > No. `new Thread()` asks the OS to create a real OS thread, so a managed thread costs the same. .NET tracks the thread because the runtime has to control it. The GC moves objects and updates references, so it must pause each thread at a safe point and scan the thread's stack, which it can do only for a thread it created. Each thread has a `ManagedThreadId` that is not the OS thread's id. And each thread is foreground or background, which decides whether the thread keeps the program running.
 
-> [!question]- Where is the real cost of a context switch?
+> [!qard]- Where is the real cost of a context switch?
 > Not the save and load of the registers, which costs a microsecond or two. The larger cost is the cache. The incoming thread replaces the outgoing thread's data in the cache, so when the outgoing thread runs again it waits while its data is read from RAM. For code that touches a lot of memory, this cost is much larger than the switch, and it is why running more threads than the hardware-thread count lowers throughput.
 
-> [!question]- A worker thread's local queue is empty. Where does it look next?
+> [!qard]- A worker thread's local queue is empty. Where does it look next?
 > The global queue, not another worker thread's queue. The order is: the worker thread's own local queue (newest first, LIFO), then the global queue (oldest first, FIFO), then another worker thread's local queue (oldest first, FIFO). Work-stealing is the last step and happens only when the global queue is also empty. Assuming a worker thread steals as soon as its own queue is empty is the common mistake.
 
-> [!question]- Why does one blocking `.Result` on a hot path take down a service under load?
+> [!qard]- Why does one blocking `.Result` on a hot path take down a service under load?
 > The `.Result` call blocks one worker thread for the whole wait instead of the microseconds of real work. Under load, every request blocks a worker thread the same way. New requests, and the continuations that would free the blocked worker threads, have no worker thread to run on, and the pool adds worker threads only about twice a second. The queue of jobs grows without limit and latency rises sharply. This is thread-pool starvation.
 
-> [!question]- The pool has "starvation avoidance" and "hill climbing." What does each do?
+> [!qard]- The pool has "starvation avoidance" and "hill climbing." What does each do?
 > Starvation avoidance adds worker threads when jobs are queued but not draining: it adds about one worker thread every 500 ms, in case the worker threads are stuck. Hill climbing measures how many jobs finish per second and moves the worker-thread count toward the count that finishes the most jobs. Starvation avoidance reacts to blocked worker threads; hill climbing tunes for throughput. Both run at the same time.
 
 ## Related

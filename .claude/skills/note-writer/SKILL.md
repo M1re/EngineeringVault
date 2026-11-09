@@ -138,7 +138,7 @@ You wrote it, so you're the worst judge of it — never commit a note that hasn'
 
 - **Diagrams:** prefer **Mermaid** code blocks for flows, sequences, and architecture — they render
   in both Obsidian and the site and diff in git; use Excalidraw only for freeform sketches.
-- **Questions** are collapsible self-test callouts: `> [!question]- <q>` with the answer folded inside;
+- **Questions** are collapsible self-test callouts: `> [!qard]- <q>` with the answer folded inside (Qard reads these as flashcards for spaced repetition);
   ask design/review-level questions, not "what is X".
 - Use callouts to signal importance: `> [!summary]`, `> [!tip]`, `> [!warning]`.
 - Neutral, technical, timeless voice. No "recently", no dates in prose, no first person.
