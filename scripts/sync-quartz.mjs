@@ -83,7 +83,11 @@ const samePath = (a, b) => {
 // Find the CLI binary. Order: OBSIDIAN_BIN, PATH, the default install locations.
 export function findObsidian() {
   if (process.env.OBSIDIAN_BIN) return process.env.OBSIDIAN_BIN
-  const exts = IS_WINDOWS ? [".exe", ".com", ".cmd", ".bat", ""] : [""]
+  // Windows resolves a bare name in PATHEXT order, so .COM wins over .EXE. Obsidian relies on this:
+  // Obsidian.com is the console CLI, Obsidian.exe (same folder) is the GUI app and prints nothing.
+  const exts = IS_WINDOWS
+    ? (process.env.PATHEXT || ".COM;.EXE;.BAT;.CMD").split(";").filter(Boolean).map((e) => e.toLowerCase())
+    : [""]
   for (const dir of (process.env.PATH || "").split(path.delimiter)) {
     if (!dir) continue
     for (const ext of exts) {
