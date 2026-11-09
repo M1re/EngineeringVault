@@ -26,16 +26,7 @@ jobs:
           node-version: 22
       - name: Install dependencies
         run: npm ci
-      # Each Quartz plugin is a git clone + npm install + build (~13 min for all of them), so keep
-      # them between runs; the cache is rebuilt only when quartz.lock.json changes.
-      - name: Cache Quartz plugins
-        id: quartz-plugins
-        uses: actions/cache@v4
-        with:
-          path: .quartz/plugins
-          key: quartz-plugins-${{ runner.os }}-${{ hashFiles('quartz.lock.json') }}
       - name: Install Quartz plugins (pinned in quartz.lock.json)
-        if: steps.quartz-plugins.outputs.cache-hit != 'true'
         run: npx quartz plugin restore
       - name: Regenerate folder dashboards
         run: node scripts/regen-dashboards.mjs

@@ -92,8 +92,22 @@ plugins:
     options:
       renderEngine: katex
     order: 80
+  - source: github:quartz-community/citations
+    enabled: false
+    order: 85
+  - source: github:quartz-community/hard-line-breaks
+    enabled: false
+    order: 90
+  - source: github:quartz-community/ox-hugo
+    enabled: false
+    order: 91
+  - source: github:quartz-community/roam
+    enabled: false
+    order: 92
   - source: github:quartz-community/remove-draft
     enabled: true
+  - source: github:quartz-community/explicit-publish
+    enabled: false
   - source: github:quartz-community/alias-redirects
     enabled: true
   - source: github:quartz-community/content-index
@@ -105,6 +119,9 @@ plugins:
     enabled: true
   - source: github:quartz-community/og-image
     enabled: true
+  # Off: a project site on github.io must not get a CNAME file.
+  - source: github:quartz-community/cname
+    enabled: false
   - source: github:quartz-community/canvas-page
     enabled: true
   - source: github:quartz-community/content-page
@@ -129,6 +146,11 @@ plugins:
       group: toolbar
       groupOptions:
         grow: true
+  - source: github:quartz-community/backlinks
+    enabled: false
+    layout:
+      position: right
+      priority: 30
   - source: github:quartz-community/article-title
     enabled: true
     layout:
@@ -167,11 +189,21 @@ plugins:
       position: beforeBody
       priority: 5
       condition: not-index
+  - source: github:quartz-community/comments
+    enabled: false
+    options:
+      provider: giscus
+      options: {}
+    layout:
+      position: afterBody
+      priority: 10
   - source: github:quartz-community/footer
     enabled: true
     options:
       links:
         GitHub: https://github.com/M1re/EngineeringVault
+  - source: github:quartz-community/recent-notes
+    enabled: false
   - source: github:quartz-community/spacer
     enabled: true
     options: {}
@@ -213,7 +245,13 @@ plugins:
       position: body
       priority: 100
       display: all
-
+  # Off: keep the classic single-page navigation from v4.
+  - source: github:quartz-community/stacked-pages
+    enabled: false
+    layout:
+      position: afterBody
+      priority: 50
+      display: all
 layout:
   groups:
     toolbar:
