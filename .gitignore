@@ -26,3 +26,9 @@ Vault/.obsidian/plugins/quartz-syncer/data.json
 # Claude Code: personal/local settings never go to the public repo
 .claude/settings.local.json
 
+
+# Agent runtime state, per machine: the reviewer-gate receipts, oh-my-claudecode's state,
+# and the CLAUDE.md that `omc-setup --local` generates (the shared rules live in AGENTS.md)
+.claude/state/
+.omc/
+.claude/CLAUDE.md

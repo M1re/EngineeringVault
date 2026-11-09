@@ -1,5 +1,24 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "env": {
+    "CHISLE_COMPRESS_TOOLS": "Bash,WebSearch,Grep,Glob"
+  },
+  "extraKnownMarketplaces": {
+    "chisle": {
+      "source": { "source": "github", "repo": "JayPokale/Chisle" }
+    },
+    "omc": {
+      "source": { "source": "github", "repo": "Yeachan-Heo/oh-my-claudecode" }
+    },
+    "obsidian-skills": {
+      "source": { "source": "github", "repo": "kepano/obsidian-skills" }
+    }
+  },
+  "enabledPlugins": {
+    "chisle@chisle": true,
+    "oh-my-claudecode@omc": true,
+    "obsidian@obsidian-skills": true
+  },
   "hooks": {
     "PreToolUse": [
       {
@@ -19,6 +38,20 @@
           {
             "type": "command",
             "command": "node .claude/hooks/check-ledger-size.js"
+          },
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/track-note-edits.js\""
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/enforce-review.js\""
           }
         ]
       }

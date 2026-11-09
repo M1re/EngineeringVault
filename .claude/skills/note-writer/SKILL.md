@@ -18,7 +18,7 @@ Complex wording is not smartness.
 - `Vault/Programming/Concurrency/Threads and the Thread Pool.md` ([[Threads and the Thread Pool]]) —
   the dry, concrete register.
 
-Also follow the template in `Vault/Templates/Concept Note.md` and the rules in `CLAUDE.md`.
+Also follow the template in `Vault/Templates/Concept Note.md` and the rules in `AGENTS.md`.
 
 ## Workflow
 

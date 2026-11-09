@@ -58,7 +58,7 @@ Run `claude` from the repo root. Custom commands:
 | `/review-note DNS` | Checks privacy, format, and depth before publishing. |
 | `/link DNS` | Weaves a note into the graph with wikilinks. |
 
-Claude auto-loads `CLAUDE.md`, the `note-writer` skill, and the binding feedback ledger
+Claude auto-loads `CLAUDE.md` (which imports `AGENTS.md`), the `note-writer` skill, and the binding feedback ledger
 (`.claude/feedback.md`). A pre-write hook blocks accidental secrets/personal data.
 
 ## 5. Publishing

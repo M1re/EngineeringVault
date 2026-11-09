@@ -5,7 +5,7 @@ argument-hint: <what was wrong, or what you want done differently>
 
 The author is giving feedback: **$ARGUMENTS**
 
-(Note: recording feedback is normally automatic per `CLAUDE.md` — this command is just a manual
+(Note: recording feedback is normally automatic per `AGENTS.md` — this command is just a manual
 shortcut to force the same action.)
 
 Do this:
@@ -19,6 +19,6 @@ Do this:
    - Keep it short and imperative. No personal data (public repo — the secret-scan hook will
      block emails/keys anyway).
 3. If it's a significant cross-session behaviour rule, also save it to Claude's memory as a
-   `feedback` entry so it survives even before `CLAUDE.md` loads.
+   `feedback` entry so it survives even before `AGENTS.md` loads.
 4. Show me the exact rule(s) you added, then immediately apply the correction to whatever we
    were working on.

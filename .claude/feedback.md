@@ -12,7 +12,7 @@ How this stays healthy (so it never bloats and drags down quality):
 - When a rule matures, move it into structure (the `note-writer` skill, the note template, a hook,
   or the Linter plugin) and **delete it from here** — structure costs no attention and is more reliable.
 - A size tripwire hook (`.claude/hooks/check-ledger-size.js`) nudges you to run
-  `/consolidate-feedback` when this file or `CLAUDE.md` grows past its soft limit.
+  `/consolidate-feedback` when this file or `AGENTS.md` grows past its soft limit.
 
 ---
 
@@ -23,8 +23,6 @@ How this stays healthy (so it never bloats and drags down quality):
 - For the author's own explanations: simple language, still detailed and technically honest.
 - No AI slop: no filler, no hype, no restating the obvious, no padding to look thorough.
 - Never fabricate facts, APIs, numbers, or features. If unsure → `> [!warning] Unverified`, or omit.
-- Concept notes pass the **reviewer gate automatically before committing**: write → run the `reviewer`
-  subagent → apply its must-fixes → commit. Never commit an un-reviewed note.
 - Don't add AI-attribution / "made or maintained with Claude Code"-style credit lines — not to note
   content, and not to git commits (no `Co-Authored-By` trailer).
 - Keep UI honest and minimal: show only states/data that really exist, and match the existing
@@ -47,6 +45,12 @@ How this stays healthy (so it never bloats and drags down quality):
 <!-- Dated history. Newest first. Not required reading; kept for provenance. -->
 
 ### 2026-11-09
+
+- Author wants the agent setup to mirror the reference vault (`grafanaKibana/devbook.zip`) and to try
+  Chisle and oh-my-claudecode. Moved the rules into an agent-agnostic `AGENTS.md` (`CLAUDE.md` now
+  imports it), enabled Chisle, oh-my-claudecode and kepano/obsidian-skills as project plugins, and
+  **promoted the "reviewer gate before committing" active rule into structure**: a Stop hook blocks
+  finishing while an edited concept note lacks a hash-bound review receipt (`AGENTS.md` → Reviewer gate).
 
 - Machine setup must not be a separate doc: folded `docs/machine-setup.md` into a short README
   section ("don't multiply notes"). Then: "too much water, missing commands (no clone)" —
