@@ -7,7 +7,7 @@
 // 4. points Quartz Syncer at this checkout in local mode and applies the shared defaults
 //    (needs Obsidian running with Vault/ open and its command line interface enabled).
 //
-// It never exports, stages, commits or pushes. Running it again is safe.
+// Full steps: README.md -> "Setup on a new machine". It never exports, stages, commits or pushes. Running it again is safe.
 
 import { spawnSync } from "node:child_process"
 import { readFileSync } from "node:fs"

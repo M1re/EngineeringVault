@@ -36,6 +36,8 @@ How this stays healthy (so it never bloats and drags down quality):
 - Default to **full automation** and **path-agnostic, no-personal-data** solutions: prefer writing/
   committing a config file over asking for manual GUI clicks; never hardcode absolute paths or
   machine/user-specific data — derive them — so future installs and machine moves are trivial.
+- Don't multiply docs: fold short how-tos (setup, workflow) into an existing file — machine setup
+  lives as a concise README section, not its own note.
 - Keep this ledger lean: record proactively, merge duplicates, promote mature rules into structure.
 
 ## Archive (log)
@@ -43,6 +45,9 @@ How this stays healthy (so it never bloats and drags down quality):
 <!-- Dated history. Newest first. Not required reading; kept for provenance. -->
 
 ### 2026-11-09
+
+- Machine setup must not be a separate doc: folded `docs/machine-setup.md` into a short README
+  section ("don't multiply notes").
 
 - Author works on **Windows** now and wants the local workflow to match a public reference vault
   (`grafanaKibana/devbook.zip`): one setup command, Quartz Syncer in local mode, and **commit =

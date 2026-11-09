@@ -98,7 +98,7 @@ Keep CLAUDE.md small; domain detail lives in skills/subagents that load only whe
   (`.githooks/pre-commit` → `scripts/sync-quartz.mjs`) exports the vault through the Obsidian CLI,
   precompiling Datacore to static HTML, and stages `content/` into the same commit; pushing `main`
   makes GitHub Actions build and deploy Pages. Never edit `content/` by hand — Syncer owns it.
-  New machine: `npm run setup` (see `docs/machine-setup.md`). Shared Syncer settings live in
+  New machine: `npm run setup` (see the README). Shared Syncer settings live in
   `scripts/quartz-syncer.defaults.json`; its `data.json` is per-machine and gitignored.
 - Only notes with `publish: true` reach the site; everything else stays private in `Vault/`.
 - `status` has three states — `new` (nothing written), `in-progress` (being written), `done` (written

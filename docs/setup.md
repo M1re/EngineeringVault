@@ -71,7 +71,7 @@ Claude auto-loads `CLAUDE.md`, the `note-writer` skill, and the binding feedback
    same commit. Stage every change under `Vault/` first, or the hook refuses.
 3. Push to `main`; GitHub Actions rebuilds the site.
 
-One-time setup on a machine: `npm run setup` — see [machine-setup.md](machine-setup.md).
+One-time setup on a machine: `npm run setup` — see the [README](../README.md#setup-on-a-new-machine).
 Export without committing: `npm run export`. The Publication Center still works and writes to the
 same local `content/`.
 
