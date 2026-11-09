@@ -2,12 +2,13 @@
 publish: true
 title: Concurrency vs Parallelism
 created: 2026-07-11
-modified: 2026-11-09T11:45:57.515Z
-published: 2026-11-09T11:45:57.515Z
+modified: 2026-11-09T16:49:25.382Z
+published: 2026-11-09T16:49:25.382Z
 tags:
   - concurrency
   - parallelism
   - performance
+summary: Concurrency is structuring a program so many tasks are in progress at once, often by taking turns on one core; parallelism is executing many tasks at the same instant on multiple cores.
 status: done
 ---
 
@@ -39,7 +40,7 @@ Microsoft's own docs use a kitchen analogy that nails it: cooking breakfast is _
 
 In .NET the split maps to the work type:
 
-- **I/O-bound → concurrency** with `async`/`await`: one thread juggles many in-flight waits. See [[Async/Await]].
+- **I/O-bound → concurrency** with `async`/`await`: one thread juggles many in-flight waits. See [[Async and Await|Async/Await]].
 - **CPU-bound → parallelism**: `Parallel.For` / `Parallel.ForEach` or PLINQ spread one workload across cores. (`Task.Run` _offloads_ a single computation off the current thread — that's responsiveness; it's only parallelism if you launch several at once.)
 - Both sit on top of threads and the [[Threads and the Thread Pool|thread pool]].
 
@@ -56,18 +57,18 @@ A web server shows both at once. It needs high **concurrency** — thousands of 
 
 ## Questions
 
-> [!question]- On a single CPU core, can you have concurrency? Parallelism?
+> [!qard]- On a single CPU core, can you have concurrency? Parallelism?
 > Concurrency: yes — tasks interleave via context switches, so multiple things are in progress even though only one executes at any instant. Parallelism: no — parallelism means _simultaneous_ execution, which requires at least two cores.
 
-> [!question]- A service is slow under load; each request mostly waits on a database. More threads, or async?
+> [!qard]- A service is slow under load; each request mostly waits on a database. More threads, or async?
 > Async (concurrency). The work is I/O-bound, so extra threads would just sit blocked on the DB and exhaust the pool. Async frees the thread during the wait, so a few threads serve many requests. Reach for more threads only when the work is CPU-bound.
 
-> [!question]- Why doesn't doubling the cores double a parallel job's speed?
+> [!qard]- Why doesn't doubling the cores double a parallel job's speed?
 > Amdahl's law: the serial part (setup, coordination, contention on shared resources) doesn't parallelize and caps the speedup; threads also add scheduling and context-switch overhead. A job that's 20% serial can't beat ~5× no matter how many cores you add.
 
 ## Related
 
-- [[Async/Await]] — the concurrency tool for I/O-bound work.
+- [[Async and Await|Async/Await]] — the concurrency tool for I/O-bound work.
 - [[Threads and the Thread Pool]] — the execution units underneath both.
 - [[Race Conditions]], [[Locks and Synchronization]], [[Deadlocks]] — the cost of shared mutable state under concurrency.
 

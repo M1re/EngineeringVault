@@ -2,18 +2,19 @@
 publish: true
 title: Async/Await
 created: 2026-07-11
-modified: 2026-11-09T11:45:57.515Z
-published: 2026-11-09T11:45:57.515Z
+modified: 2026-11-09T16:49:25.382Z
+published: 2026-11-09T16:49:25.382Z
 tags:
   - async
   - concurrency
   - task
   - io-bound
+summary: async/await lets a thread start a slow I/O operation, such as a network or database call, and do other work instead of waiting; the method pauses at await and resumes when the result is ready.
 status: done
 ---
 
 > [!summary]
-> `async`/`await` lets one thread start a slow operation and then go do other work instead of waiting. The method pauses at `await`, the thread is freed, and the method continues when the result is ready. This is how a server handles thousands of requests on just a few threads. It is concurrency, not parallelism. Nothing runs faster. The thread just stops waiting.
+> `async`/`await` lets one thread start a slow I/O operation and then go do other work instead of waiting. The method pauses at `await`, the thread is freed, and the method continues when the result is ready. This is how a server handles thousands of requests on just a few threads. It is concurrency, not parallelism. Nothing runs faster. The thread just stops waiting.
 
 ## Blocking vs Async
 
@@ -342,28 +343,28 @@ The usual trigger is a single blocking call buried on a hot path. Some helper de
 
 ## Questions
 
-> [!question]- Does `await` block the thread? What actually happens to it?
+> [!qard]- Does `await` block the thread? What actually happens to it?
 > No. At an incomplete `await`, `MoveNext` saves the state and returns to the caller, and the thread is released to the pool or the UI message loop. For I/O, no thread is used at all while waiting. The OS (IOCP or epoll) signals completion and the continuation is queued onto a pool thread, or onto the captured context. If the awaited thing was already complete, there is no pause. `IsCompleted` is true and execution continues inline on the same thread.
 
-> [!question]- Walk me through what the compiler generates for an `async` method.
+> [!qard]- Walk me through what the compiler generates for an `async` method.
 > A state-machine type (`IAsyncStateMachine`) with an `int` state, a builder that owns the returned `Task`, lifted locals, and an awaiter field. The body becomes `MoveNext()`, split at each `await`. `MoveNext` runs to the first incomplete `await` and checks `awaiter.IsCompleted`. If it is false, it saves the state, calls `builder.AwaitUnsafeOnCompleted` (which boxes the struct to the heap and hooks the continuation), and returns. When the awaiter completes, `MoveNext` runs again, jumps past the `await`, calls `GetResult()`, and finally `builder.SetResult()` to complete the task.
 
-> [!question]- What does `await` actually require of the thing you await?
+> [!qard]- What does `await` actually require of the thing you await?
 > The awaiter pattern, not `Task` in particular. `expr.GetAwaiter()` must return an awaiter with `bool IsCompleted`, `void OnCompleted(Action)` from `INotifyCompletion`, and `T GetResult()`. The compiler matches it by shape, which is why `ValueTask`, `Task.Yield()`, and custom awaitables all work.
 
-> [!question]- Why does `.Result` deadlock in a UI or classic-ASP.NET app but not in ASP.NET Core?
+> [!qard]- Why does `.Result` deadlock in a UI or classic-ASP.NET app but not in ASP.NET Core?
 > Those hosts install a single-threaded `SynchronizationContext`. `.Result` blocks that one thread. The continuation is posted back to the same context to resume, but the context is blocked, so neither can proceed. ASP.NET Core has no `SynchronizationContext`, so the continuation resumes on a free pool thread and there is no cycle. You still should not block, because it wastes threads and invites starvation. `ConfigureAwait(false)` also breaks the cycle, because the continuation no longer needs the context.
 
-> [!question]- You wrap a CPU-heavy loop in an `async` method and `await` it. Is the caller unblocked?
+> [!qard]- You wrap a CPU-heavy loop in an `async` method and `await` it. Is the caller unblocked?
 > No. `async` does not move work off the thread by itself. Code runs synchronously until it awaits something that is not yet complete, and a compute loop never does. Offload it on purpose with `await Task.Run(() => Work())`, which runs it on a pool thread and gives you a `Task` to await.
 
-> [!question]- When would you return `ValueTask<T>` instead of `Task<T>`, and what is the risk?
+> [!qard]- When would you return `ValueTask<T>` instead of `Task<T>`, and what is the risk?
 > When the method usually completes synchronously on a hot path, such as a cache hit or a buffered read. `ValueTask<T>` avoids the `Task` allocation on that path. The risk is its rules. You must await it at most once, never await it twice at the same time, never read `.Result` before it is done, and never cache it in a field. Break those and you can get silent wrong results. For ordinary code, prefer `Task<T>`.
 
-> [!question]- `Task.WhenAll` vs `Task.WaitAll`. Which and why?
+> [!qard]- `Task.WhenAll` vs `Task.WaitAll`. Which and why?
 > `WhenAll` returns a `Task` you await. It does not block, it composes into other async code, and on await it throws the first exception while `Task.Exception` holds them all in an `AggregateException`. `WaitAll` blocks the calling thread until everything finishes. Inside async code prefer `await Task.WhenAll(...)`. `WaitAll` brings back the blocking that async exists to avoid.
 
-> [!question]- What flows across an `await`, and does `ConfigureAwait(false)` stop it?
+> [!qard]- What flows across an `await`, and does `ConfigureAwait(false)` stop it?
 > `ExecutionContext`, which carries `AsyncLocal<T>` values, always flows across `await`. `SynchronizationContext` decides where the continuation resumes, and that is what `ConfigureAwait(false)` opts out of. So `ConfigureAwait(false)` changes the resume thread, but it does not stop `AsyncLocal` from flowing.
 
 ## Related
