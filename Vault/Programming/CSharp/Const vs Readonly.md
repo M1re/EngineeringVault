@@ -1,6 +1,6 @@
 ---
 title: "const vs readonly"
-summary: "Both set a value once: a const is fixed at compile time and copied into every place that reads it, a readonly field is set once at runtime."
+summary: "A const is fixed at compile time and copied into every assembly that reads it, while a readonly field is assigned at runtime and cannot change after the constructor finishes."
 tags:
   - constants
   - immutability
@@ -93,6 +93,8 @@ void N(int x = Limit) { }   // compile error: a default value must be a constant
 
 If a value has to be used in one of these places, it must be `const`, and you accept the versioning cost from Pitfall 1.
 
+## In Production
+
 A shared library `Company.Common` exposes a page size:
 
 ```csharp
@@ -111,16 +113,16 @@ Now each service reads `DefaultPageSize` from `Company.Common` at runtime. Publi
 
 ## Questions
 
-> [!question]- `const` or `readonly` — which, and why?
+> [!qard]- `const` or `readonly` — which, and why?
 > Use `const` only for a value that is fixed forever and known at compile time (`DaysPerWeek = 7`), and only for a primitive, `string`, `enum`, or `null`. Use `readonly` for everything else: a value computed at runtime, a value of any other type, or a public value that might change in a later version. The deciding factor is usually whether the value crosses an assembly boundary and might change — a `const` is baked into consumers, a `readonly` field is not.
 
-> [!question]- You change a public `const` in a library and redeploy only the library's DLL. Why does nothing change in the consumer?
+> [!qard]- You change a public `const` in a library and redeploy only the library's DLL. Why does nothing change in the consumer?
 > The compiler substituted the `const`'s literal value into the consumer's own IL when the consumer was built. The consumer never reads the value from the library at runtime, so replacing the library's DLL does not change the value the consumer uses. The consumer picks up the new value only after it is recompiled against the new library. A `static readonly` field would be read from the library at runtime and would not need the recompile.
 
-> [!question]- Is a `readonly` field immutable?
+> [!qard]- Is a `readonly` field immutable?
 > Not necessarily. `readonly` stops the field from being reassigned after the constructor. For a reference type, that fixes the reference but not the object. A `readonly List<T>` can still have items added; only reassigning the list itself is blocked. For truly unchangeable contents, use an immutable type or expose a read-only view such as `IReadOnlyList<T>`.
 
-> [!question]- Can a `const` hold `DateTime.UtcNow` or `new List<int>()`?
+> [!qard]- Can a `const` hold `DateTime.UtcNow` or `new List<int>()`?
 > No. A `const` must be a value the compiler can write as a literal at compile time, which rules out any computed value and any reference type other than `string` or `null`. `DateTime.UtcNow` and `new List<int>()` are computed at runtime, so they must be `static readonly`.
 
 ## Related

@@ -1,6 +1,6 @@
 ---
 title: "Value vs Reference Types"
-summary: "The difference is copy semantics, not storage: assigning a value type copies the value, assigning a reference type copies only the reference."
+summary: "The defining difference between value and reference types is copy semantics, not storage: assigning a value type copies the value, assigning a reference type copies only the reference."
 tags:
   - value-types
   - reference-types
@@ -136,19 +136,19 @@ A `readonly struct` would have turned this silent bug into a compile error, whic
 
 ## Questions
 
-> [!question]- What actually distinguishes a value type from a reference type?
+> [!qard]- What actually distinguishes a value type from a reference type?
 > Copy semantics. A value type is copied by value: assigning it or passing it copies every field, and the copy is independent. A reference type is copied by reference: the variable holds a reference to a heap object, so copying the variable makes both point to the same object. Storage location (stack or heap) is a consequence and an implementation detail, not the defining property.
 
-> [!question]- Is "value types live on the stack" true?
+> [!qard]- Is "value types live on the stack" true?
 > Not as a rule. A value type lives where it is declared. A local value type usually lives on the stack, but a value type that is a field of a class lives on the heap inside that object, and a value type in an array lives on the heap inside the array. A reference type's object is always on the heap. Reason about copy semantics, not about the stack.
 
-> [!question]- You put a mutable `struct` in a `List<T>` and call a method that changes it, but nothing changes. Why?
+> [!qard]- You put a mutable `struct` in a `List<T>` and call a method that changes it, but nothing changes. Why?
 > The list indexer and `foreach` return a *copy* of the value-type element, so the method runs on the copy and leaves the list element untouched. To change the element, replace the whole value (`list[i] = newValue`) or make the type a `class`. Keeping structs immutable (`readonly struct`) turns this silent bug into a compile error.
 
-> [!question]- A profiler shows unexpected heap allocations on a hot path built from value types. What causes them, and how do you remove them?
+> [!qard]- A profiler shows unexpected heap allocations on a hot path built from value types. What causes them, and how do you remove them?
 > Boxing. A value type is boxed — wrapped in a new heap object — whenever it is used as `object` or a non-generic interface: assigned to an `object` variable, passed to an `object` parameter, or compared through a non-generic interface. Each box is a heap allocation and adds GC pressure. Remove it by keeping the value in generic APIs (`List<int>`, `IComparable<T>`), which never box, and by avoiding `object`-typed parameters and default `struct` `Equals` on the hot path.
 
-> [!question]- How do value and reference types differ in equality and default value?
+> [!qard]- How do value and reference types differ in equality and default value?
 > A value type compares by value: `Equals` checks its fields one by one, though the default does this by reflection and boxes each field, so override it or use a `record struct` on a hot path. A reference type compares by identity: `==` is true only when both variables point to the same object, unless the type overrides equality (as `string` and records do). The default of a value type is all fields zeroed; the default of a reference type is `null`, and a value type cannot be `null` unless wrapped as `Nullable<T>`.
 
 ## Related

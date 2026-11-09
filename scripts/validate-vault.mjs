@@ -5,7 +5,8 @@
 // Concept notes (every .md except folder-notes and Templates/):
 //   - frontmatter: title, tags (list), status (new | in-progress | done), publish (bool), created (YYYY-MM-DD)
 //   - summary: required on `done` notes (one plain line; feeds the site's description/link previews)
-//   - body: no top-level `# Title` (Quartz renders the title), every code fence names a language
+//   - body: no top-level `# Title` (Quartz renders the title), every code fence names a language,
+//     self-test questions are `> [!qard]-` cards (Qard spaced repetition), not `[!question]`
 //   - `done` notes: required sections present, in order; References hold no images
 //   - no `banner` (covers belong to folder-notes)
 // Folder-notes (index.md): tags include FolderNote, title, publish: true, banner. Vault/index.md (home) is exempt.
@@ -93,6 +94,8 @@ function checkConcept(file, fm, body) {
   for (const { n, line } of body) {
     if (/^#\s/.test(line))
       report("error", file, n, "no top-level `# Title` in the body (Quartz renders `title`)")
+    if (/^>\s*\[!question\]/i.test(line))
+      report("error", file, n, "self-test questions are Qard cards: use `> [!qard]-`")
   }
 
   if (fm.status !== "done") return

@@ -35,6 +35,8 @@ How this stays healthy (so it never bloats and drags down quality):
 - Default to **full automation** and **path-agnostic, no-personal-data** solutions: prefer writing/
   committing a config file over asking for manual GUI clicks; never hardcode absolute paths or
   machine/user-specific data — derive them — so future installs and machine moves are trivial.
+- Borrow ideas from other vaults, never their code: features seen elsewhere are rebuilt here, so no
+  third-party copyright/names land in this public repo.
 - Don't multiply docs: fold short how-tos (setup, workflow) into an existing file — machine setup
   lives as a concise README section, not its own note. How-tos are minimal: every command spelled
   out in a code block (incl. obvious ones like `git clone`), almost no prose. GUI steps: one
@@ -46,6 +48,9 @@ How this stays healthy (so it never bloats and drags down quality):
 <!-- Dated history. Newest first. Not required reading; kept for provenance. -->
 
 ### 2026-11-09
+
+- Reference-vault features (algorithm traces, complexity charts, site question bank) are deferred
+  and will be built in-house rather than copied (the MIT notice would put a real name in the repo).
 
 - "Too much water, I don't get what happened" on a long work summary: chat replies to the author
   must be short, plain and chewed — refined the explanations rule.

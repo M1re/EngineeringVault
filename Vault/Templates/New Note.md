@@ -70,6 +70,7 @@ const today = tp.date.now("YYYY-MM-DD");
 // 5. Scaffold — the vault's concept-note format, linked back to the sub-topic.
 const body = `---
 title: "${title}"
+summary: ""
 tags:${tagsYaml}
 status: new
 publish: false
@@ -93,7 +94,7 @@ created: ${today}
 
 ## Questions
 
-> [!question]- <a design- or review-level question>
+> [!qard]- <a design- or review-level question>
 > <the answer — concrete and correct>
 
 ## Related

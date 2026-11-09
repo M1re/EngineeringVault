@@ -294,9 +294,10 @@
 ├── <span class="auto">CLAUDE.md</span>                <span class="cmt"># «конституция»: правила, Claude читает всегда</span>
 ├── <span class="auto">.claude/feedback.md</span>      <span class="cmt"># журнал правок автора (обязателен к соблюдению)</span>
 │
-├── <span class="dir">quartz/</span>                  <span class="cmt"># движок сайта (+ components/Banner.tsx) — не трогаем</span>
-├── <span class="dir">quartz.config.ts</span>         <span class="cmt"># тема (Notion-палитра, шрифт Inter), baseUrl</span>
-├── <span class="dir">quartz.layout.ts</span>         <span class="cmt"># раскладка страниц: сайдбар, граф, обложка</span>
+├── <span class="dir">quartz/</span>                  <span class="cmt"># движок Quartz v5 — не трогаем (кроме styles/custom.scss)</span>
+├── <span class="dir">quartz.config.yaml</span>       <span class="cmt"># настройки, тема, плагины и раскладка сайта</span>
+├── <span class="dir">quartz.ts + custom/</span>      <span class="cmt"># наш код: обложка, порядок разделов, summary → description</span>
+├── <span class="dir">quartz.lock.json</span>         <span class="cmt"># версии плагинов Quartz (ставятся в .quartz/)</span>
 │
 ├── <span class="auto">scripts/</span>                 <span class="cmt"># setup.mjs, sync-quartz.mjs (экспорт), regen-dashboards.mjs, sync-banners.mjs</span>
 ├── <span class="auto">.githooks/pre-commit</span>     <span class="cmt"># перед коммитом заметок экспортирует vault через Syncer</span>
@@ -388,9 +389,9 @@
         <table>
           <thead><tr><th>Файл</th><th>За что отвечает</th></tr></thead>
           <tbody>
-            <tr><td><code>quartz.config.ts</code></td><td>Главные настройки: заголовок, <code>baseUrl</code> (<code>M1re.github.io/EngineeringVault</code>), тема (Notion-палитра + шрифт Inter), что игнорировать.</td></tr>
-            <tr><td><code>quartz.layout.ts</code></td><td>Раскладка страниц: сайдбар, граф, оглавление, порядок разделов (Programming→DevOps), обложка над заголовком.</td></tr>
-            <tr><td><code>quartz/components/Banner.tsx</code></td><td>Наш компонент: рисует обложку (<code>banner</code>) поверх folder-notes. Читает то же поле, что и плагин Banners в Obsidian.</td></tr>
+            <tr><td><code>quartz.config.yaml</code></td><td>Главные настройки Quartz v5: заголовок, <code>baseUrl</code> (<code>M1re.github.io/EngineeringVault</code>), тема (Notion-палитра + Inter), список плагинов и где каждый стоит на странице.</td></tr>
+            <tr><td><code>quartz.ts</code> + <code>custom/</code></td><td>Наш код: обложка (<code>banner</code>) на folder-notes, порядок разделов (Programming→DevOps) в дереве, <code>summary</code> → описание страницы. Обновления Quartz его не трогают.</td></tr>
+            <tr><td><code>quartz.lock.json</code></td><td>Точные версии плагинов Quartz. <code>npm run setup</code> и CI ставят их в <code>.quartz/</code>.</td></tr>
             <tr><td><code>quartz/</code></td><td>Код движка. Его <strong>не трогаем</strong> — обновляется отдельно.</td></tr>
           </tbody>
         </table>
@@ -446,8 +447,8 @@
         <table>
           <thead><tr><th>Что</th><th>На сайте (Quartz)</th><th>В Obsidian</th></tr></thead>
           <tbody>
-            <tr><td>Палитра + шрифт Inter</td><td><code>quartz.config.ts</code></td><td>сниппет <code>.obsidian/snippets/notion.css</code></td></tr>
-            <tr><td>Обложка (banner)</td><td><code>components/Banner.tsx</code></td><td>плагин <strong>Banners</strong></td></tr>
+            <tr><td>Палитра + шрифт Inter</td><td><code>quartz.config.yaml</code> + <code>custom.scss</code></td><td>сниппет <code>.obsidian/snippets/notion.css</code></td></tr>
+            <tr><td>Обложка (banner)</td><td><code>custom/components/banner.tsx</code></td><td>плагин <strong>Banners</strong></td></tr>
           </tbody>
         </table>
       </div>

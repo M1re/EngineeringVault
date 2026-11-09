@@ -44,3 +44,11 @@ article {
 .popover-hint:has(.fd) > .page-listing {
   display: none;
 }
+
+// Qard flashcards (`> [!qard]-`) look like the question callouts they replaced.
+.callout[data-callout="qard"] {
+  --color: #dba642;
+  --border: #dba64244;
+  --bg: #dba64210;
+  --callout-icon: var(--callout-icon-question);
+}

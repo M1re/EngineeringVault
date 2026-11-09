@@ -84,3 +84,9 @@ body {
 .markdown-preview-view .metadata-container {
   margin-top: 34px;
 }
+
+/* Qard flashcards (`> [!qard]-`) look like the question callouts they replaced. */
+.callout[data-callout="qard"] {
+  --callout-color: var(--callout-question);
+  --callout-icon: lucide-help-circle;
+}

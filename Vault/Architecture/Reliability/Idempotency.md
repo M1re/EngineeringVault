@@ -79,16 +79,16 @@ That combination is what lets Stripe's own client libraries **retry failed reque
 
 ## Questions
 
-> [!question]- Why isn't `POST` idempotent, and how would you make a "create order" endpoint safely retryable?
+> [!qard]- Why isn't `POST` idempotent, and how would you make a "create order" endpoint safely retryable?
 > `POST` is defined to create a _new_ resource on each call, so two identical `POST`s make two orders. You make it retry-safe by having the client attach a unique idempotency key per logical order and keep it constant across retries; the server records the key on first success and replays the stored response for any repeat, so a retry after a lost response returns the _same_ order instead of creating a second.
 
-> [!question]- Two concurrent retries of the same request arrive at the same instant. What stops both from executing?
+> [!qard]- Two concurrent retries of the same request arrive at the same instant. What stops both from executing?
 > A uniqueness constraint on the key (e.g. a `UNIQUE` database index). Both retries try to insert the same key; the database lets exactly one win and rejects the other, so only one request runs the side effect. Without that atomic check-and-insert, a plain "SELECT then INSERT" has a race window where both see "no key yet" and both execute.
 
-> [!question]- The server records the idempotency key but the process dies before the side effect commits. What breaks, and how do you close the gap?
+> [!qard]- The server records the idempotency key but the process dies before the side effect commits. What breaks, and how do you close the gap?
 > The split between "do the effect" and "record the key" is the bug. If the key saves but the effect doesn't, the retry sees the key and reports success for something that never happened; if the effect commits but the key doesn't, the retry re-executes. Close it by committing both in one transaction, or by making the downstream effect idempotent on its own (dedupe on a natural key).
 
-> [!question]- How does at-least-once delivery in a message queue relate to idempotency?
+> [!qard]- How does at-least-once delivery in a message queue relate to idempotency?
 > At-least-once means the broker may deliver the same message more than once (a consumer ack can be lost just like an HTTP response). The consumer must therefore be **idempotent** — processing a message twice must equal processing it once — usually by deduping on a message ID. Idempotency is what makes at-least-once delivery safe to build on.
 
 ## Related

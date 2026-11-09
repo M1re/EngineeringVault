@@ -60,7 +60,7 @@ Depth & honesty
 - [ ] "Pitfalls & Trade-offs" is numbered and states real **costs and failure modes** with a code
       snippet or scenario per item, not benefits only.
 - [ ] "In Production" gives a concrete real-world example with code, not an abstract toy.
-- [ ] "Questions" are design/review-level self-test callouts (`> [!question]-`), not "what is X".
+- [ ] "Questions" are design/review-level self-test callouts (`> [!qard]-`), not "what is X".
 
 Form
 - [ ] Every code fence declares a language; snippets are correct and minimal.

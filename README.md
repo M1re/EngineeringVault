@@ -21,7 +21,7 @@ AGENTS.md    rules for every coding agent (CLAUDE.md imports it)
 docs/        local setup & workflow notes (not published)
 scripts/     setup, the commit-time export, dashboard/cover helpers
 .githooks/   pre-commit export hook (enabled by npm run setup)
-quartz/      static-site generator (Quartz v4)
+quartz/      static-site generator (Quartz v5; our code in quartz.ts + custom/)
 ```
 
 ## Setup on a new machine
@@ -56,6 +56,7 @@ The commit hook exports `publish: true` notes into `content/`; the push deploys 
 npm run export              # export without committing
 git commit --no-verify      # commit without exporting
 npx quartz build --serve    # preview at http://localhost:8080
+npm run validate            # check notes against the vault rules (also runs in CI)
 ```
 
 Hook log: `.git/quartz-sync.log`. The repo is public: `publish: false` hides a note from the site only.
