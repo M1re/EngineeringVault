@@ -1,7 +1,8 @@
 # Setting up a new machine (Windows first)
 
 Everything lives in this repo (notes, Obsidian config + plugins, Quartz, Claude automation) except
-installed programs, your Git identity/GitHub sign-in, and two Obsidian GUI toggles. One command
+installed programs, your Git identity/GitHub sign-in, and one Obsidian GUI toggle (the CLI). The
+`notion` CSS snippet is already enabled by the committed `appearance.json`. One command
 (`npm run setup`) does the rest.
 
 ## 1. Install the programs
@@ -29,8 +30,7 @@ Windows signs in to GitHub through its credential manager on the first push.
 
 1. **Open folder as vault** → select `EngineeringVault\Vault` (not the repo root).
 2. **Trust the author / enable community plugins** — they are already in the repo.
-3. **Settings → Appearance → CSS snippets** → enable **`notion`**.
-4. **Settings → General → Command line interface** → turn it on and accept the registration prompt.
+3. **Settings → General → Command line interface** → turn it on and accept the registration prompt.
    Then reopen your terminal so the `obsidian` command is on `PATH`.
 
 Keep Obsidian open for the next step.
