@@ -34,9 +34,10 @@ The **Banners** plugin renders it immediately in Obsidian. (You can also just ty
 The site reads the same `banner` field, but two things need to be true first:
 
 1. **Quartz Syncer → "Include all properties" = ON.** Otherwise Syncer strips
-   `banner` (and `color`/`status`/`icon`) out of the published note. One-time toggle.
+   `banner` (and `color`/`status`/`icon`) out of the published note. `npm run setup` applies it
+   (`includeAllFrontmatter` in `scripts/quartz-syncer.defaults.json`).
 2. **Mirror the image into `content/`.** Covers are referenced only in frontmatter, so
-   Syncer doesn't copy the image itself. Run this before publishing:
+   Syncer doesn't copy the image itself. The commit hook does this for you; by hand it is:
 
    ```bash
    node scripts/sync-banners.mjs
@@ -44,7 +45,7 @@ The site reads the same `banner` field, but two things need to be true first:
 
    It copies `Vault/attachments/` → `content/attachments/` so the file reaches the build.
 
-Then publish (Quartz Syncer Publication Center, or the CLI). After GitHub Pages rebuilds,
+Then commit and push (the hook exports). After GitHub Pages rebuilds,
 the cover shows on the site too.
 
 > [!tip] Where GIFs render

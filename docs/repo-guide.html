@@ -235,7 +235,7 @@
         <div class="card">
           <span class="tag site">2 · САЙТ</span>
           <h3 style="margin-top:.6rem">Quartz + Syncer</h3>
-          <p>Плагин Quartz Syncer компилирует опубликованные заметки в <code>content/</code>, а Quartz собирает из них сайт с поиском, графом и навигацией на GitHub Pages.</p>
+          <p>Плагин Quartz Syncer при каждом коммите компилирует опубликованные заметки в <code>content/</code>, а Quartz собирает из них сайт с поиском, графом и навигацией на GitHub Pages.</p>
         </div>
         <div class="card">
           <span class="tag auto">3 · ПОМОЩНИК</span>
@@ -256,7 +256,7 @@
         <div class="card"><span class="tag site">Vault/</span><p style="margin-top:.5rem"><strong>Открываешь в Obsidian и пишешь.</strong> Здесь живут все заметки, шаблоны, картинки и настройки Obsidian.</p></div>
         <div class="card"><span class="tag auto">content/</span><p style="margin-top:.5rem"><strong>Генерирует Quartz Syncer</strong> при публикации — руками не трогать. Это скомпилированная копия того, что ушло на сайт.</p></div>
       </div>
-      <p>То есть как vault в Obsidian ты открываешь <strong>именно <code>Vault/</code></strong>. Публикуется не «весь репозиторий» — только заметки с <code>publish: true</code>, и попадают они на сайт через Syncer, а не через обычный git-commit.</p>
+      <p>То есть как vault в Obsidian ты открываешь <strong>именно <code>Vault/</code></strong>. Публикуется не «весь репозиторий» — только заметки с <code>publish: true</code>. Публикация — это обычный коммит: pre-commit хук запускает Syncer, и свежий <code>content/</code> уезжает в тот же коммит.</p>
       <div class="note warn">
         <span class="lbl">Не редактируй content/</span>
         <p><code>content/</code> — собственность Syncer. Любая ручная правка там затрётся при следующей публикации. Пишешь всегда в <code>Vault/</code>.</p>
@@ -298,7 +298,8 @@
 ├── <span class="dir">quartz.config.ts</span>         <span class="cmt"># тема (Notion-палитра, шрифт Inter), baseUrl</span>
 ├── <span class="dir">quartz.layout.ts</span>         <span class="cmt"># раскладка страниц: сайдбар, граф, обложка</span>
 │
-├── <span class="auto">scripts/</span>                 <span class="cmt"># regen-dashboards.mjs (в CI), sync-banners.mjs (обложки)</span>
+├── <span class="auto">scripts/</span>                 <span class="cmt"># setup.mjs, sync-quartz.mjs (экспорт), regen-dashboards.mjs, sync-banners.mjs</span>
+├── <span class="auto">.githooks/pre-commit</span>     <span class="cmt"># перед коммитом заметок экспортирует vault через Syncer</span>
 ├── <span class="auto">docs/</span>                    <span class="cmt"># setup.md, machine-setup.md, covers.md, roadmap.md, этот гайд</span>
 ├── <span class="dir">.github/workflows/deploy.yml</span> <span class="cmt"># сборка сайта на каждый push в main</span>
 └── README.md
@@ -382,7 +383,7 @@
 
     <section id="quartz">
       <h2><span class="num">06</span> Движок: Quartz + Quartz Syncer</h2>
-      <p><strong>Quartz</strong> — генератор статических сайтов: превращает Markdown в готовый HTML (никакого сервера с базой). <strong>Quartz Syncer</strong> — плагин Obsidian, мост между твоим vault и сайтом: он прекомпилирует Datacore/Dataview-дашборды в статический HTML и пушит результат в <code>content/</code>. Только он трогает <code>content/</code>.</p>
+      <p><strong>Quartz</strong> — генератор статических сайтов: превращает Markdown в готовый HTML (никакого сервера с базой). <strong>Quartz Syncer</strong> (2.2.0, локальный режим) — плагин Obsidian, мост между твоим vault и сайтом: он прекомпилирует Datacore/Dataview-дашборды в статический HTML и пишет результат прямо в <code>content/</code> этой репы — без токена. Только он трогает <code>content/</code>. Общие настройки — <code>scripts/quartz-syncer.defaults.json</code>; его <code>data.json</code> у каждой машины свой (в .gitignore).</p>
       <div class="tablewrap">
         <table>
           <thead><tr><th>Файл</th><th>За что отвечает</th></tr></thead>
@@ -399,13 +400,15 @@
 
     <section id="pipeline">
       <h2><span class="num">07</span> Цепочка публикации: от заметки до сайта</h2>
-      <p>Что происходит при публикации. Первые два шага делаешь ты, дальше — автоматика:</p>
+      <p>Что происходит при публикации. Ты пишешь и коммитишь, дальше — автоматика:</p>
       <div class="pipe">
         <div class="step s-site"><div class="k">Ты · Obsidian</div><div class="v">Пишешь заметку, ставишь publish: true</div></div>
         <div class="arrow">→</div>
-        <div class="step s-site"><div class="k">Ты · Quartz Syncer</div><div class="v">Publication Center → Publish</div></div>
+        <div class="step s-site"><div class="k">Ты · Git</div><div class="v">Коммит (Obsidian Git или git)</div></div>
         <div class="arrow">→</div>
-        <div class="step s-auto"><div class="k">GitHub</div><div class="v">Syncer пушит content/ в main</div></div>
+        <div class="step s-auto"><div class="k">pre-commit хук</div><div class="v">Syncer экспортирует content/ в этот же коммит</div></div>
+        <div class="arrow">→</div>
+        <div class="step s-site"><div class="k">Ты · push</div><div class="v">git push в main</div></div>
         <div class="arrow">→</div>
         <div class="step s-auto"><div class="k">GitHub Actions</div><div class="v">deploy.yml: пересчёт дашбордов</div></div>
         <div class="arrow">→</div>
@@ -413,10 +416,10 @@
         <div class="arrow">→</div>
         <div class="step s-site"><div class="k">GitHub Pages</div><div class="v">Сайт обновлён 🎉</div></div>
       </div>
-      <p><strong>GitHub Actions</strong> — робот-сборщик на серверах GitHub. Файл <code>.github/workflows/deploy.yml</code> — его инструкция: «на каждый push в main поставь Node, пересчитай дашборды (<code>scripts/regen-dashboards.mjs</code>), собери Quartz, выложи на Pages». Тебе не нужно собирать вручную — Syncer пушит, робот собирает.</p>
+      <p><strong>GitHub Actions</strong> — робот-сборщик на серверах GitHub. Файл <code>.github/workflows/deploy.yml</code> — его инструкция: «на каждый push в main поставь Node, пересчитай дашборды (<code>scripts/regen-dashboards.mjs</code>), собери Quartz, выложи на Pages». Тебе не нужно собирать вручную — хук экспортирует, ты пушишь, робот собирает.</p>
       <div class="note">
-        <span class="lbl">Публикация — только вручную</span>
-        <p>Раньше был watcher, публиковавший сам на каждое изменение. Он конфликтовал с ручными правками и заклинивал Syncer, поэтому его <strong>удалили</strong>. Публикуем руками через Publication Center.</p>
+        <span class="lbl">Коммит = публикация</span>
+        <p>Хук срабатывает, только если коммит трогает заметки в <code>Vault/</code>, и требует, чтобы <strong>все</strong> изменения в <code>Vault/</code> были застейджены. Нужен открытый Obsidian с включённым CLI. Экспорт без коммита — <code>npm run export</code>; закоммитить без экспорта — <code>git commit --no-verify</code>. Фонового автопаблиша нет.</p>
       </div>
     </section>
 
@@ -432,7 +435,7 @@
       </div>
       <div class="note">
         <span class="lbl">Важно для сайта</span>
-        <p>Чтобы нестандартные поля (<code>banner</code>, <code>color</code>, <code>status</code>, <code>icon</code>) доехали до сайта, в настройках Quartz Syncer должно быть включено <strong>«Include all properties»</strong>.</p>
+        <p>Чтобы нестандартные поля (<code>banner</code>, <code>color</code>, <code>status</code>, <code>icon</code>) доехали до сайта, в Quartz Syncer включено <strong>«Include all properties»</strong> — это часть общих настроек, <code>npm run setup</code> ставит его сам.</p>
       </div>
     </section>
 
@@ -448,7 +451,7 @@
           </tbody>
         </table>
       </div>
-      <p>Обложки (<code>banner</code>) есть <strong>только у топиков и саб-топиков</strong> (folder-notes), по умолчанию <code>attachments/banners/aurora.svg</code>. Поставить свою картинку или гифку — командой <strong>Set Cover</strong> (Templater): выбираешь файл из <code>attachments</code> или вставляешь URL. Перед публикацией на сайт: <code>node scripts/sync-banners.mjs</code> (копирует картинку в <code>content/</code>). Подробно — в <code>docs/covers.md</code>.</p>
+      <p>Обложки (<code>banner</code>) есть <strong>только у топиков и саб-топиков</strong> (folder-notes), по умолчанию <code>attachments/banners/aurora.svg</code>. Поставить свою картинку или гифку — командой <strong>Set Cover</strong> (Templater): выбираешь файл из <code>attachments</code> или вставляешь URL. Картинку в <code>content/</code> копирует сам хук при коммите (<code>scripts/sync-banners.mjs</code>). Подробно — в <code>docs/covers.md</code>.</p>
     </section>
 
     <section id="cheat">
@@ -463,7 +466,8 @@
             <tr><td>Проставить связи в графе</td><td><code>/link Idempotency</code></td></tr>
             <tr><td>Поставить обложку</td><td>команда <strong>Set Cover</strong> (Templater) → выбрать файл/URL</td></tr>
             <tr><td>Посмотреть сайт локально</td><td><code>npx quartz build --serve</code> → <code>localhost:8080</code></td></tr>
-            <tr><td>Опубликовать</td><td><code>publish: true</code> → Quartz Syncer → <em>Publish</em></td></tr>
+            <tr><td>Настроить новую машину</td><td>открыть <code>Vault/</code> в Obsidian, включить CLI → <code>npm run setup</code></td></tr>
+            <tr><td>Опубликовать</td><td><code>publish: true</code> → коммит → <code>git push</code></td></tr>
             <tr><td>Проверить статус сборки</td><td>GitHub → вкладка <strong>Actions</strong></td></tr>
           </tbody>
         </table>
@@ -485,13 +489,13 @@
             <tr><td><strong>Folder-note</strong></td><td><code>index.md</code> папки с <code>tags: [FolderNote]</code> — обложка+дашборд раздела или саб-топика.</td></tr>
             <tr><td><strong>Datacore</strong></td><td>Плагин Obsidian, рисующий живые дашборды (карточки прогресса, списки заметок).</td></tr>
             <tr><td><strong>Quartz</strong></td><td>Генератор статических сайтов, превращающий заметки в веб-сайт.</td></tr>
-            <tr><td><strong>Quartz Syncer</strong></td><td>Плагин Obsidian: компилирует заметки в <code>content/</code> и пушит на GitHub.</td></tr>
+            <tr><td><strong>Quartz Syncer</strong></td><td>Плагин Obsidian: компилирует заметки в <code>content/</code> этой репы (локальный режим, вызывается хуком при коммите).</td></tr>
             <tr><td><strong>Wikilink</strong></td><td>Ссылка вида <code>[[Название]]</code> между заметками. Основа графа.</td></tr>
             <tr><td><strong>banner</strong></td><td>Обложка (картинка/гифка) над заголовком folder-note. Notion-стиль.</td></tr>
             <tr><td><strong>Static site</strong></td><td>Сайт из готовых HTML-файлов, без сервера с базой. Быстро и дёшево.</td></tr>
             <tr><td><strong>GitHub Pages</strong></td><td>Бесплатный хостинг статических сайтов прямо из репозитория.</td></tr>
             <tr><td><strong>GitHub Actions</strong></td><td>Робот-автоматизация на серверах GitHub. Собирает и публикует сайт.</td></tr>
-            <tr><td><strong>Hook</strong></td><td>Скрипт, который система запускает сама на событие (у нас — перед записью файла).</td></tr>
+            <tr><td><strong>Hook</strong></td><td>Скрипт, который система запускает сама на событие: у Claude — перед записью файла, у git — перед коммитом (экспорт vault).</td></tr>
             <tr><td><strong>Skill</strong></td><td>Навык, который Claude включает сам, когда задача подходит.</td></tr>
             <tr><td><strong>Slash-команда</strong></td><td>Твой готовый промпт, вызываемый через <code>/имя</code>.</td></tr>
             <tr><td><strong>baseUrl</strong></td><td>Адрес, по которому опубликован сайт. Нужен, чтобы ссылки и стили работали.</td></tr>
@@ -502,7 +506,7 @@
   </main>
 
   <footer>
-    Engineering Vault · открывай <code>Vault/</code> в Obsidian, пиши, публикуй через Quartz Syncer.
+    Engineering Vault · открывай <code>Vault/</code> в Obsidian, пиши, коммить — хук опубликует.
   </footer>
 </div>
 

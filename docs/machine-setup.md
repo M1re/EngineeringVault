@@ -1,12 +1,8 @@
-# Restoring on a new machine (or after a Windows reinstall)
+# Setting up a new machine (Windows first)
 
-Everything except three things lives in this git repo (notes, Obsidian config + plugins, Quartz,
-Claude automation). The three that do **not** and must be redone by hand:
-
-- installed programs (Node, Git, Obsidian),
-- the Quartz Syncer **GitHub token** (a secret — never committed),
-- toggles inside Obsidian's GUI (trust/enable plugins, enable the `notion` CSS snippet, Syncer
-  "Include all properties", a Set Cover hotkey — all in step 3).
+Everything lives in this repo (notes, Obsidian config + plugins, Quartz, Claude automation) except
+installed programs, your Git identity/GitHub sign-in, and two Obsidian GUI toggles. One command
+(`npm run setup`) does the rest.
 
 ## 1. Install the programs
 
@@ -14,54 +10,72 @@ Claude automation). The three that do **not** and must be redone by hand:
 winget install OpenJS.NodeJS.LTS
 winget install Git.Git
 winget install Obsidian.Obsidian
-winget install GitHub.cli        # optional, for gh
 ```
 
-## 2. Get the repo
+Node must be 22 or newer (`.node-version`). Obsidian must be 1.13 or newer (Quartz Syncer 2.2.0).
+On macOS: `brew install node git` and `brew install --cask obsidian`.
+
+## 2. Clone
 
 ```powershell
 git clone https://github.com/M1re/EngineeringVault.git
 cd EngineeringVault
-npm install
 ```
 
-## 3. Set up Obsidian
+Set your Git name/email if this machine has none (`git config --global user.name …`). Git for
+Windows signs in to GitHub through its credential manager on the first push.
 
-1. **Open folder as vault** → select `...\EngineeringVault\Vault`.
-2. If prompted, **trust the author / enable community plugins** (they're already in the repo — nothing
-   to reinstall). Make sure **Banners** is enabled (it renders the covers).
-3. **Settings → Appearance → CSS snippets** → enable **`notion`** (the Notion theme + palette).
-4. **Settings → Quartz Syncer → Git**: paste a **GitHub Personal Access Token** (fine-grained,
-   permission *Contents: Read and write*). Also turn **ON "Include all properties"** so
-   `banner`/`color`/`status`/`icon` survive publishing.
-5. (Optional) **Settings → Templater → Template Hotkeys** → bind a key to **Set Cover** (the cover picker).
-6. (Optional, only for manual CLI publishing) **Settings → General → Advanced → Command line interface** → on.
+## 3. Open the vault in Obsidian (once)
 
-## 4. Publishing (manual)
+1. **Open folder as vault** → select `EngineeringVault\Vault` (not the repo root).
+2. **Trust the author / enable community plugins** — they are already in the repo.
+3. **Settings → Appearance → CSS snippets** → enable **`notion`**.
+4. **Settings → General → Command line interface** → turn it on and accept the registration prompt.
+   Then reopen your terminal so the `obsidian` command is on `PATH`.
 
-Publish from Obsidian's **Quartz Syncer → Publication Center** (or the Syncer CLI). Before publishing a
-note that has a cover, run `node scripts/sync-banners.mjs` — it mirrors cover images into `content/`
-so they reach the site build.
+Keep Obsidian open for the next step.
 
-> [!note] Publishing is manual on purpose
-> An earlier auto-publish watcher raced with manual edits and wedged Syncer, so it was removed
-> (see [issue #1](https://github.com/M1re/EngineeringVault/issues/1)).
+## 4. Run setup
 
-## 5. Claude Code
+```powershell
+npm run setup
+```
 
-Nothing to restore — `.claude/` (commands, skills, hooks, settings) is in the repo. Just run
-`claude` from the repo root. Your personal `settings.local.json` is machine-local (gitignored).
+It installs the locked npm dependencies, enables the repo's Git hooks (`core.hooksPath .githooks`),
+and points Quartz Syncer at this checkout in **local mode** with the shared defaults from
+`scripts/quartz-syncer.defaults.json` ("Include all properties" included). No GitHub token is
+needed. It never exports, commits or pushes. If a step fails it says which; fix it and run it again.
 
----
+Syncer's own `data.json` is per-machine (it holds the absolute checkout path) and is gitignored.
 
-## Keeping this machine in sync (git pull)
+## 5. Daily flow: commit = publish
 
-The repo receives commits from three places: **you/Claude** (structure, scripts), **Quartz Syncer**
-(the compiled `content/`), and **GitHub Actions** never writes back. To pull the latest safely:
+1. Write notes in Obsidian; set `publish: true` on what should go live.
+2. Commit — from **Obsidian Git** or `git commit`. The pre-commit hook
+   (`.githooks/pre-commit` → `scripts/sync-quartz.mjs`) runs only when the commit touches notes in
+   `Vault/`. It:
+   - refuses if `Vault/` has unstaged/untracked changes (the export reads the disk, so stage all of it);
+   - exports through Quartz Syncer via the Obsidian CLI (Datacore dashboards are compiled by the real plugin);
+   - removes pages of deleted/unpublished notes, blocks on failed notes or uncompiled Datacore blocks;
+   - mirrors covers (`scripts/sync-banners.mjs`) and stages `content/` into the same commit.
+3. Push to `main` → GitHub Actions builds and deploys the site.
+
+Export without committing: `npm run export`. Commit once without exporting:
+`git commit --no-verify`. Log: `.git/quartz-sync.log`. If Obsidian's CLI is not on `PATH`, set
+`OBSIDIAN_BIN` to its full path.
+
+> [!warning] Unverified on Windows
+> The hook was tested against a stand-in CLI, not a real Obsidian on Windows. If the first commit
+> fails, the message names the step; send it over and fix it there. Until then `--no-verify` +
+> the Publication Center (which now also writes to the local `content/`) still work.
+
+## 6. Claude Code
+
+Nothing to restore — `.claude/` is in the repo. Run `claude` from the repo root. Your personal
+`settings.local.json` is machine-local (gitignored).
+
+## Keeping in sync
 
 ```powershell
 git pull --rebase
 ```
-
-Use `--rebase` because Syncer and your local edits can diverge on unrelated files; rebase replays
-your local commits on top cleanly. If you only ever edit on one machine, plain `git pull` is fine.
