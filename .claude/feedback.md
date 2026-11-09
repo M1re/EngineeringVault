@@ -20,7 +20,8 @@ How this stays healthy (so it never bloats and drags down quality):
 
 - Be concrete: real mechanics, numbers, failure modes, small code snippets — not textbook definitions.
 - Clear and tight beats long and vague; if a point needs a re-read to parse, rewrite it.
-- For the author's own explanations: simple language, still detailed and technically honest.
+- Replies to the author (chat, summaries of work): short and plain — what was done, why, what to
+  do next. No jargon, no wall of caveats; still technically honest.
 - No AI slop: no filler, no hype, no restating the obvious, no padding to look thorough.
 - Never fabricate facts, APIs, numbers, or features. If unsure → `> [!warning] Unverified`, or omit.
 - Don't add AI-attribution / "made or maintained with Claude Code"-style credit lines — not to note
@@ -46,6 +47,8 @@ How this stays healthy (so it never bloats and drags down quality):
 
 ### 2026-11-09
 
+- "Too much water, I don't get what happened" on a long work summary: chat replies to the author
+  must be short, plain and chewed — refined the explanations rule.
 - Author wants the agent setup to mirror the reference vault (`grafanaKibana/devbook.zip`) and to try
   Chisle and oh-my-claudecode. Moved the rules into an agent-agnostic `AGENTS.md` (`CLAUDE.md` now
   imports it), enabled Chisle, oh-my-claudecode and kepano/obsidian-skills as project plugins, and
