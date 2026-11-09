@@ -38,6 +38,7 @@ Open `EngineeringVault/Vault` as a vault in Obsidian, trust its plugins, and ena
 **Settings → General → Command line interface**. With Obsidian running, in a new terminal:
 
 ```powershell
+cd EngineeringVault
 npm run setup
 ```
 
