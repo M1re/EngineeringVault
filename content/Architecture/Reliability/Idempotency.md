@@ -2,8 +2,8 @@
 publish: true
 title: Idempotency
 created: 2026-07-08
-modified: 2026-11-09T12:17:49.704Z
-published: 2026-11-09T12:17:49.704Z
+modified: 2026-11-09T12:35:43.919Z
+published: 2026-11-09T12:35:43.919Z
 tags:
   - reliability
   - api-design

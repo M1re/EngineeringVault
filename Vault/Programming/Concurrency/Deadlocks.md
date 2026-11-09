@@ -1,7 +1,7 @@
 ---
-title: "Deadlocks"
+title: Deadlocks
 tags: []
-status: new
+status: in progress
 publish: true
 created: 2026-07-09
 ---
