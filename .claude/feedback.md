@@ -37,7 +37,8 @@ How this stays healthy (so it never bloats and drags down quality):
   committing a config file over asking for manual GUI clicks; never hardcode absolute paths or
   machine/user-specific data — derive them — so future installs and machine moves are trivial.
 - Don't multiply docs: fold short how-tos (setup, workflow) into an existing file — machine setup
-  lives as a concise README section, not its own note.
+  lives as a concise README section, not its own note. How-tos are minimal: every command spelled
+  out in a code block (incl. obvious ones like `git clone`), almost no prose.
 - Keep this ledger lean: record proactively, merge duplicates, promote mature rules into structure.
 
 ## Archive (log)
@@ -47,7 +48,8 @@ How this stays healthy (so it never bloats and drags down quality):
 ### 2026-11-09
 
 - Machine setup must not be a separate doc: folded `docs/machine-setup.md` into a short README
-  section ("don't multiply notes").
+  section ("don't multiply notes"). Then: "too much water, missing commands (no clone)" —
+  cut it to commands + a few lines.
 
 - Author works on **Windows** now and wants the local workflow to match a public reference vault
   (`grafanaKibana/devbook.zip`): one setup command, Quartz Syncer in local mode, and **commit =
