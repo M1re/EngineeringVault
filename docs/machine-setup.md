@@ -1,7 +1,7 @@
 # Restoring on a new machine (or after a Windows reinstall)
 
 Everything except three things lives in this git repo (notes, Obsidian config + plugins, Quartz,
-Claude automation, the auto-publish scripts). The three that do **not** and must be redone by hand:
+Claude automation). The three that do **not** and must be redone by hand:
 
 - installed programs (Node, Git, Obsidian),
 - the Quartz Syncer **GitHub token** (a secret — never committed),
@@ -43,10 +43,9 @@ Publish from Obsidian's **Quartz Syncer → Publication Center** (or the Syncer 
 note that has a cover, run `node scripts/sync-banners.mjs` — it mirrors cover images into `content/`
 so they reach the site build.
 
-> [!note] Auto-publish is disabled
-> The watcher (`scripts/watch-publish.mjs`, run on startup by the Shell commands plugin) raced with
-> manual edits and wedged Syncer, so it's off. Kill-switch: `scripts/.autopublish-disabled` — delete
-> it to re-enable. Tracked in [issue #1](https://github.com/M1re/EngineeringVault/issues/1).
+> [!note] Publishing is manual on purpose
+> An earlier auto-publish watcher raced with manual edits and wedged Syncer, so it was removed
+> (see [issue #1](https://github.com/M1re/EngineeringVault/issues/1)).
 
 ## 5. Claude Code
 

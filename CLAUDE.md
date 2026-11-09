@@ -54,7 +54,7 @@ Every concept note follows `Vault/Templates/Concept Note.md`. Frontmatter:
 ---
 title: "Human Readable Title"
 tags: [thematic-kebab-tags]   # concepts the note touches, NOT the folder path
-status: creation   # creation = in progress; set to "done" when complete (fills the progress bar)
+status: new        # new = nothing written yet | in-progress = being written | done = written & validated
 publish: false     # false = stays private; set to true to publish to the site
 created: YYYY-MM-DD
 ---
@@ -98,9 +98,11 @@ Keep CLAUDE.md small; domain detail lives in skills/subagents that load only whe
   Datacore/Dataview to static HTML and pushes the compiled `content/` to `main`, which GitHub
   Actions builds and deploys to Pages. Never edit `content/` by hand — Syncer owns it.
 - Only notes with `publish: true` reach the site; everything else stays private in `Vault/`.
-- `status: done` marks a note complete and fills the home dashboard's progress bar.
+- `status` has three states — `new` (nothing written), `in-progress` (being written), `done` (written
+  and validated); the bar shows all three (% = `done` share). Mobile publishes run `scripts/regen-dashboards.mjs`.
 - Keep Syncer **"Include all properties"** ON (so `banner`/`color`/`status`/`icon` survive), and
-  publish **manually** — the auto-publish watcher is disabled (`scripts/.autopublish-disabled`, issue #1).
+  publish **manually** from the Publication Center (the old auto-publish watcher was removed — it raced
+  with manual edits and wedged Syncer).
 - **Anything we build must render the same in Obsidian AND on the deployed site** — use tech that
   works in both (Datacore + Quartz Syncer, or plain Markdown/HTML). See `.claude/feedback.md`.
 

@@ -40,5 +40,4 @@ and on the deployed site** (see `.claude/feedback.md`).
 
 ## Tracked in GitHub issues
 
-- [#1](https://github.com/M1re/EngineeringVault/issues/1) — revisit the auto-publish watcher (disabled).
 - [#2](https://github.com/M1re/EngineeringVault/issues/2) — auto-mirror cover images into `content/`.

@@ -12,7 +12,7 @@ Bring the repository guide back in sync with the repo's actual state.
    `.claude/feedback.md`. Do not invent files that don't exist.
 3. Redeploy to the SAME artifact page by calling the Artifact tool with:
    - `file_path`: `docs/repo-guide.html`
-   - `url`: `https://claude.ai/code/artifact/ce03401b-1126-4f79-a7f9-f97bc6b2f7ce`
-   - `favicon`: `🌿`
+   - `url`: `https://claude.ai/artifact/FnsANVK91e56MDx6J5J5NR`
+   - `icon`: `book`
    Passing `url` updates the existing page instead of minting a new one.
 4. Commit `docs/repo-guide.html` and give a short summary of what changed.
