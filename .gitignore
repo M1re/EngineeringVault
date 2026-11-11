@@ -27,8 +27,8 @@ Vault/.obsidian/plugins/quartz-syncer/data.json
 .claude/settings.local.json
 
 
-# Agent runtime state, per machine: the reviewer-gate receipts, oh-my-claudecode's state,
-# and the CLAUDE.md that `omc-setup --local` generates (the shared rules live in AGENTS.md)
+# Agent runtime state, per machine: the reviewer-gate receipts. `.omc/` and `.claude/CLAUDE.md` are
+# leftovers of the removed oh-my-claudecode plugin; keep them out of the repo if they still exist.
 .claude/state/
 .omc/
 .claude/CLAUDE.md

@@ -47,6 +47,11 @@ How this stays healthy (so it never bloats and drags down quality):
 
 <!-- Dated history. Newest first. Not required reading; kept for provenance. -->
 
+### 2026-11-11
+
+- Removed the Chisle and oh-my-claudecode plugins at the author's request; only the Obsidian skills
+  plugin stays.
+
 ### 2026-11-09
 
 - Reference-vault features (algorithm traces, complexity charts, site question bank) are deferred
