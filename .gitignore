@@ -36,3 +36,6 @@ Vault/.obsidian/plugins/quartz-syncer/data.json
 # Quartz v5: community plugins are installed here from quartz.lock.json
 .quartz/
 quartz/cli/tui/dist/
+
+# /write-note pipeline work folders (facts, plans, drafts)
+.notes-work/

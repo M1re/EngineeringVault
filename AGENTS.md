@@ -67,8 +67,8 @@ notes, section order, no body `# Title`, code-fence languages, References, and f
 
 ## Where the detailed rules live (loaded on demand)
 
-- Writing a note → the **note-writer** skill (`.claude/skills/note-writer/`): hub + sub-notes, section
-  pattern, writing standard, verification protocol.
+- Writing a note → `/write-note <topic>` (multi-agent pipeline, queue in `docs/topic-map.md`); the
+  standard is the **note-writer** skill (`.claude/skills/note-writer/`).
 - Reviewing a note → the **reviewer** subagent (`.claude/agents/reviewer.md`; without subagents, run
   that prompt in a fresh session). Covers → `docs/covers.md`; new notes → the **New …** commands.
 
@@ -86,16 +86,8 @@ reviewer pass in this session. Agents set `done` only on a note with a fresh rec
 
 ## Agent plugins (Claude Code)
 
-<<<<<<< Updated upstream
 `.claude/settings.json` enables **obsidian** (kepano/obsidian-skills) — Obsidian Markdown, Bases,
 JSON Canvas, CLI; Claude Code offers to install it on first open.
-=======
-`.claude/settings.json` enables these; Claude Code offers to install them on first open.
-- **Chisle** — terse style for **chat only**; notes and docs keep full sentences, and a note is read
-  in full before it is edited or reviewed. Compression covers only `Bash,WebSearch,Grep,Glob`.
-- **oh-my-claudecode** — keyword modes; its agents obey this file and the reviewer gate (`.omc/` is
-  gitignored). **obsidian** (kepano/obsidian-skills) — Obsidian Markdown, Bases, Canvas, CLI.
->>>>>>> Stashed changes
 
 ## Linking conventions
 

@@ -94,7 +94,8 @@ cannot be verified, write a `> [!warning] Unverified` callout or leave it out. F
    reviewer gate in `AGENTS.md`).
 5. The author rereads the finished note and gives feedback.
 
-A multi-agent pipeline (`/write-note`) will replace this single-agent workflow (issue #21).
+New notes go through the multi-agent pipeline: `/write-note <topic>` (`.claude/commands/write-note.md`).
+It runs the same steps with one agent per job; this skill is the standard every agent follows.
 
 ## Tags
 

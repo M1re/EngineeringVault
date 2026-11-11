@@ -49,10 +49,8 @@ How this stays healthy (so it never bloats and drags down quality):
 
 ### 2026-11-11
 
-<<<<<<< Updated upstream
 - Removed the Chisle and oh-my-claudecode plugins at the author's request; only the Obsidian skills
   plugin stays.
-=======
 - New note strategy (epic #24): the vault is the author's **study guide** for reading and thinking at
   **senior / tech lead** level and passing interviews, not a public staff-level reference. Complaints
   that drove it: notes too complex, too much water, invented facts. Decided and promoted into
@@ -67,7 +65,6 @@ How this stays healthy (so it never bloats and drags down quality):
   - C# / .NET by default; version notes as text "(.NET 8+)", no emoji markers.
 - Calibration source: the author's own hand-written notes (style patterns go into the reader profile,
   #20). Rollout: one note at a time with the author rereading, then batch.
->>>>>>> Stashed changes
 
 ### 2026-11-09
 
