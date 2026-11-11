@@ -19,6 +19,12 @@ How this stays healthy (so it never bloats and drags down quality):
 ## Active rules
 
 - Be concrete: real mechanics, numbers, failure modes, small code snippets — not textbook definitions.
+- **Interview-ready, not a textbook.** A note must be learnable for an interview in one sitting. Keep
+  only what a typical senior / tech lead actually knows, uses or gets asked; deep runtime internals
+  (spec sections, builder/box details, OS I/O plumbing) go to a sub-note or are dropped. A hub is
+  short. Lively, colleague-to-colleague delivery like the author's own notes — not a grey,
+  university-style "definition → Зачем → Механизм" march in every section.
+- The note pipeline must be cheap and fast: few agents, no work that does not change the note.
 - Clear and tight beats long and vague; if a point needs a re-read to parse, rewrite it.
 - Replies to the author (chat, summaries of work): short and plain — what was done, why, what to
   do next. No jargon, no wall of caveats; still technically honest.
@@ -35,8 +41,8 @@ How this stays healthy (so it never bloats and drags down quality):
 - Default to **full automation** and **path-agnostic, no-personal-data** solutions: prefer writing/
   committing a config file over asking for manual GUI clicks; never hardcode absolute paths or
   machine/user-specific data — derive them — so future installs and machine moves are trivial.
-- Borrow ideas from other vaults, never their code: features seen elsewhere are rebuilt here, so no
-  third-party copyright/names land in this public repo.
+- Never name other people's repositories, vaults, or authors anywhere in this repo (files, ledger,
+  commit messages, issues). Ideas seen elsewhere are rebuilt here from scratch; never copy their code.
 - Don't multiply docs: fold short how-tos (setup, workflow) into an existing file — machine setup
   lives as a concise README section, not its own note. How-tos are minimal: every command spelled
   out in a code block (incl. obvious ones like `git clone`), almost no prose. GUI steps: one
@@ -49,6 +55,13 @@ How this stays healthy (so it never bloats and drags down quality):
 
 ### 2026-11-11
 
+- Author does not want other people's repositories named in this repo: removed those mentions from
+  the ledger and turned the "borrow ideas" rule into "never name third-party repos, vaults, or authors".
+- Calibration run of `/write-note` (Asynchronous Execution hub, ~940 lines, 14 agent runs) rated
+  **4/10**: "too bookish, nobody can learn it in this form", "too much text to prep for an interview",
+  "grey, university-like delivery", "a pile of under-the-hood details maybe 1 in 10 tech leads
+  knows". The pipeline also ate the usage limit and took too long for one note. Added the
+  "interview-ready, not a textbook" and "cheap pipeline" active rules.
 - Removed the Chisle and oh-my-claudecode plugins at the author's request; only the Obsidian skills
   plugin stays.
 - New note strategy (epic #24): the vault is the author's **study guide** for reading and thinking at
@@ -68,14 +81,13 @@ How this stays healthy (so it never bloats and drags down quality):
 
 ### 2026-11-09
 
-- Reference-vault features (algorithm traces, complexity charts, site question bank) are deferred
-  and will be built in-house rather than copied (the MIT notice would put a real name in the repo).
+- Algorithm traces, complexity charts, and a site question bank are deferred and will be built
+  in-house.
 
 - "Too much water, I don't get what happened" on a long work summary: chat replies to the author
   must be short, plain and chewed — refined the explanations rule.
-- Author wants the agent setup to mirror the reference vault (`grafanaKibana/devbook.zip`) and to try
-  Chisle and oh-my-claudecode. Moved the rules into an agent-agnostic `AGENTS.md` (`CLAUDE.md` now
-  imports it), enabled Chisle, oh-my-claudecode and kepano/obsidian-skills as project plugins, and
+- Author wanted to try Chisle and oh-my-claudecode. Moved the rules into an agent-agnostic `AGENTS.md` (`CLAUDE.md` now
+  imports it), enabled Chisle, oh-my-claudecode and the Obsidian skills as project plugins, and
   **promoted the "reviewer gate before committing" active rule into structure**: a Stop hook blocks
   finishing while an edited concept note lacks a hash-bound review receipt (`AGENTS.md` → Reviewer gate).
 
@@ -83,11 +95,9 @@ How this stays healthy (so it never bloats and drags down quality):
   section ("don't multiply notes"). Then: "too much water, missing commands (no clone)" —
   cut it to commands + a few lines.
 
-- Author works on **Windows** now and wants the local workflow to match a public reference vault
-  (`grafanaKibana/devbook.zip`): one setup command, Quartz Syncer in local mode, and **commit =
+- Author works on **Windows** now and wants a simple local workflow: one setup command, Quartz Syncer in local mode, and **commit =
   publish** via a pre-commit export hook. Implemented cross-platform in Node (`npm run setup`,
-  `scripts/sync-quartz.mjs`, `.githooks/pre-commit`) instead of the reference's Bash/.NET, which is
-  macOS-only. Removed the disabled auto-publish watcher (issue #1). Covered by the existing
+  `scripts/sync-quartz.mjs`, `.githooks/pre-commit`) so it runs on every OS. Removed the disabled auto-publish watcher (issue #1). Covered by the existing
   full-automation rule; no new active rule.
 
 ### 2026-09-04
