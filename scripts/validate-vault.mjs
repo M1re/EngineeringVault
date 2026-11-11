@@ -8,6 +8,7 @@
 //   - body: no top-level `# Title` (Quartz renders the title), every code fence names a language,
 //     self-test questions are `> [!qard]-` cards (Qard spaced repetition), not `[!question]`
 //   - `done` notes: required sections present, in order; References hold no images
+//   - length: at most MAX_TEACHING_LINES lines before `## Related` (error on `done`, warning on `in-progress`)
 //   - no `banner` (covers belong to folder-notes)
 // Folder-notes (index.md): tags include FolderNote, title, publish: true, banner. Vault/index.md (home) is exempt.
 //
@@ -22,6 +23,8 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
 const VAULT = path.join(ROOT, "Vault")
 const SKIP_DIRS = new Set([".obsidian", ".trash", "attachments", "Templates"])
 const STATUSES = new Set(["new", "in-progress", "done"])
+// Length budget (note-writer skill): a note must be learnable for an interview in one sitting.
+const MAX_TEACHING_LINES = 350
 // Required `done` sections, in order (matched case-insensitively).
 const DONE_SECTIONS = [
   { label: "> [!summary]", re: /^>\s*\[!summary\]/i },
@@ -73,7 +76,7 @@ function scanBody(text, bodyStart, file) {
   return out
 }
 
-function checkConcept(file, fm, body) {
+function checkConcept(file, fm, body, bodyStart) {
   if (typeof fm.title !== "string" || !fm.title.trim())
     report("error", file, null, "frontmatter `title` missing")
   if (!Array.isArray(fm.tags)) report("error", file, null, "frontmatter `tags` must be a list")
@@ -96,6 +99,18 @@ function checkConcept(file, fm, body) {
       report("error", file, n, "no top-level `# Title` in the body (Quartz renders `title`)")
     if (/^>\s*\[!question\]/i.test(line))
       report("error", file, n, "self-test questions are Qard cards: use `> [!qard]-`")
+  }
+
+  const related = body.find((b) => /^##\s+related\s*$/i.test(b.line))
+  if (related && fm.status !== "new") {
+    const teaching = related.n - 1 - bodyStart
+    if (teaching > MAX_TEACHING_LINES)
+      report(
+        fm.status === "done" ? "error" : "warn",
+        file,
+        null,
+        `${teaching} lines before "## Related" (budget ${MAX_TEACHING_LINES}): cut topics into sub-notes`,
+      )
   }
 
   if (fm.status !== "done") return
@@ -160,7 +175,7 @@ for (const file of walk(VAULT)) {
   const body = scanBody(text, bodyStart, file)
   if (file === path.join(VAULT, "index.md")) continue // home page: dashboard, own contract
   if (path.basename(file) === "index.md") checkFolderNote(file, fm)
-  else checkConcept(file, fm, body)
+  else checkConcept(file, fm, body, bodyStart)
 }
 
 const errors = problems.filter((p) => p.level === "error")

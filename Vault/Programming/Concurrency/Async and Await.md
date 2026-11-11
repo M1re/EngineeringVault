@@ -2,7 +2,7 @@
 title: "Asynchronous Execution"
 summary: "Асинхронность в .NET: поток запускает операцию, не ждёт её, а метод продолжается, когда результат готов; Task — обещание результата, async/await — синтаксис поверх state machine, и главные ошибки — блокировка на Task, async void и потерянные задачи."
 tags: [async, concurrency, task, io-bound]
-status: done
+status: in-progress
 publish: false
 created: 2026-07-11
 ---

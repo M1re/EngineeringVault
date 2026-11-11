@@ -1,7 +1,6 @@
 # Reader Profile
 
-Who reads the notes and how they learn. The writer follows it; the reviewer and the "learner"
-check against it. It was extracted from the author's own hand-written notes (Async, Multithreading,
+Who reads the notes and how they learn. The writer follows it; the reviewer checks against it. It was extracted from the author's own hand-written notes (Async, Multithreading,
 Middleware, Static, Const vs Readonly). Only the patterns are kept here, not the notes.
 
 ## The reader
@@ -55,6 +54,11 @@ Middleware, Static, Const vs Readonly). Only the patterns are kept here, not the
 
 ## What loses this reader
 
+- A note too long to learn for an interview in one sitting.
+- Textbook register: grey, university-style delivery, the same "definition → why → mechanism"
+  labels in every section.
+- Under-the-hood details that few tech leads know (spec sections, builder internals, OS I/O
+  plumbing) — they belong in a deep sub-note, if anywhere.
 - Long paragraphs that mix three ideas.
 - Abstract wording that could describe any system ("отвечает за", "участвует в").
 - Explaining a term with another term that was never explained.

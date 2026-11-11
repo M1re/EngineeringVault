@@ -53,7 +53,7 @@ Run `claude` from the repo root. Custom commands:
 
 | Command | What it does |
 | --- | --- |
-| `/write-note Asynchronous Execution` | Writes one note with the multi-agent pipeline (topics from `docs/topic-map.md`). |
+| `/write-note Asynchronous Execution` | Writes one note with the pipeline: you approve the plan, then research, fact-check, draft and review run (topics from `docs/topic-map.md`). |
 | `/new-note Networks — DNS` | Creates a fully-formatted note in the section. |
 | `/expand DNS` | Deepens an existing note to the senior bar. |
 | `/review-note DNS` | Checks privacy, format, and depth before publishing. |

@@ -51,12 +51,14 @@ Completeness & depth (the whole mechanism, not just each sentence)
       individually-true step can still be misplaced or have a step omitted between it and the next.
 - [ ] No important mechanism, nuance, number, or edge case a **senior / tech lead** is expected to
       know is omitted or hand-waved. Naming a concept without explaining how it actually works is a gap.
+- [ ] Nothing beyond that: details few tech leads know or get asked go to a sub-note. The note fits
+      the length budget in the `note-writer` skill.
 - [ ] Nothing reads as plausible-but-unconfirmed. Subtly wrong detail erodes trust more than an
       admitted gap — if you cannot confirm it, verify it or cut it.
 
 Depth & honesty
-- [ ] The topic is covered from the basics to advanced. Each sub-topic gives a plain definition, why
-      it matters, and the **mechanism** (what/when/who/on-failure), not a restated summary.
+- [ ] The topic is covered from the basics to advanced. Each section opens with its question or
+      problem and explains the **mechanism** (what/when/who/on-failure), not a restated summary.
 - [ ] "Pitfalls & Trade-offs" is numbered and states real **costs and failure modes** with a code
       snippet or scenario per item, not benefits only.
 - [ ] "In Production" gives a working example from a real system: real domain code, bad version and

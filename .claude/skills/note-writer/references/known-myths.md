@@ -1,6 +1,6 @@
 # Known Myths
 
-Plausible claims that are wrong. Researchers, the fact-checker, and the auditor check against this
+Plausible claims that are wrong. The researcher, the fact-checker, and the reviewer check against this
 list; a note must never repeat one. The fact-checker still confirms the correct version against a
 primary source every time it is used. Add a myth whenever a run or the author catches a new one.
 

@@ -67,7 +67,7 @@ notes, section order, no body `# Title`, code-fence languages, References, and f
 
 ## Where the detailed rules live (loaded on demand)
 
-- Writing a note → `/write-note <topic>` (multi-agent pipeline, queue in `docs/topic-map.md`); the
+- Writing a note → `/write-note <topic>` (lean pipeline: plan → research → fact-check → draft → review; queue in `docs/topic-map.md`); the
   standard is the **note-writer** skill (`.claude/skills/note-writer/`).
 - Reviewing a note → the **reviewer** subagent (`.claude/agents/reviewer.md`; without subagents, run
   that prompt in a fresh session). Covers → `docs/covers.md`; new notes → the **New …** commands.

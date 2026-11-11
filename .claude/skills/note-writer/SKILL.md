@@ -12,7 +12,9 @@ level** about the topic and **pass an interview** on it. The reader finishes the
 how the thing works, where it breaks, and how to answer questions about it.
 
 - **Reader:** an engineer moving to senior / tech lead. Cover the topic **from the basics to
-  advanced**. Skip nothing a senior is expected to know.
+  advanced**, but keep only what a typical senior / tech lead **knows, uses at work, or gets asked
+  in an interview**. Deep internals (spec sections, compiler/runtime plumbing, OS I/O details) go to
+  a sub-note or are dropped. A note must be learnable for an interview in one sitting.
 - **Stack:** C# / .NET by default. Use another language only when the topic is not about .NET.
 - **Language:** the note body and `summary` are in **Russian**. Technical terms stay in **English**
   (`Thread Pool`, `state machine`, `deadlock`, `ConfigureAwait`). Frontmatter `title`, all `##`/`###`
@@ -29,20 +31,31 @@ how the thing works, where it breaks, and how to answer questions about it.
   gives a short overview of it and links to it; the sub-note links back to the hub.
 - Every note follows `Vault/Templates/Concept Note.md`.
 
+## Length budget
+
+- **Hub:** at most 7 topic sections, about 300 lines before `## Related`, 4–6 question cards.
+- **Sub-note:** at most 5 topic sections, about 250 lines before `## Related`.
+- `npm run validate` fails a `done` note longer than 350 lines before `## Related`.
+- Fit the budget by choosing fewer topics, never by squeezing an explanation or dropping a step of a
+  mechanism.
+
 ## Section pattern
 
 After the `> [!summary]`, the body is a run of topical sections with short English noun-phrase
 headers (`## Thread Pool`, `### Context Switching`), ordered from the basics to advanced. Each
-sub-topic follows this pattern:
+section reads like a senior explaining it to a colleague at a whiteboard, not like a textbook:
 
-1. **Definition in plain words** — one or two sentences: what it is.
-2. **Why it matters** — the problem it solves, or what goes wrong without it.
-3. **Mechanism, step by step** — what actually happens: who does what, in what order, what happens
-   on failure. If it leans on a concept the reader may not know, explain that concept first.
-4. **Example code** — real domain code (orders, payments, accounts, requests), never `foo`/`bar`.
-   Comments trace the execution step by step where the flow is not obvious. Show a `// ❌ BAD` /
-   `// ✅ GOOD` pair when there is a common mistake.
-5. **Key points** — a short bullet list of what to remember.
+1. **Open with the question or the problem** — how an interviewer or a real bug raises the topic
+   ("Почему `.Result` вешает WPF, а в ASP.NET Core — нет?").
+2. **Answer it in plain words** — what it is and why it matters, in one or two sentences.
+3. **Show the mechanism** — what actually happens, in order, and what happens on failure. Explain a
+   term the reader may not know before leaning on it.
+4. **Example code** — short, real domain code (orders, payments, accounts, requests), never
+   `foo`/`bar`. A `// ❌ BAD` / `// ✅ GOOD` pair when there is a common mistake.
+5. **Key points** — 2–4 bullets, only when the section is long enough to need them.
+
+These are the content of a section, not labels: do not print "Зачем:" / "Механизм:" in every
+section.
 
 Use, where they fit:
 - **One short analogy per sub-topic** to anchor the idea, followed immediately by the exact mechanism.
@@ -73,7 +86,7 @@ Use, where they fit:
   the fix, plus the symptom (latency, error, outage) that shows the difference.
 - **Questions** — interview cards: `> [!qard]- <the interview question>` with the answer folded
   inside. The answer is how a senior answers: the direct answer, the mechanism behind it, and the
-  trade-off or "it depends" a senior would add. 4–8 cards per hub note.
+  trade-off or "it depends" a senior would add. 4–6 cards per note.
 - **Related** — wikilinks to the hub, sub-notes, and neighbouring notes.
 - **References** — primary sources.
 
@@ -87,14 +100,14 @@ cannot be verified, write a `> [!warning] Unverified` callout or leave it out. F
 
 ## Workflow
 
-1. **Research** the topic in primary sources.
-2. **Plan** the hub and sub-notes, ordered from the basics to advanced.
+1. **Plan** what the note covers, within the length budget; the author approves it.
+2. **Research** the plan's risky claims in primary sources.
 3. **Draft** to the section pattern and the writing standard.
 4. **Review** with the `reviewer` subagent, apply every must-fix, record the receipt (see the
    reviewer gate in `AGENTS.md`).
 5. The author rereads the finished note and gives feedback.
 
-New notes go through the multi-agent pipeline: `/write-note <topic>` (`.claude/commands/write-note.md`).
+New notes go through the pipeline: `/write-note <topic>` (`.claude/commands/write-note.md`).
 It runs the same steps with one agent per job; this skill is the standard every agent follows.
 
 ## Tags
