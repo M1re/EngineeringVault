@@ -41,8 +41,8 @@ How this stays healthy (so it never bloats and drags down quality):
 - Default to **full automation** and **path-agnostic, no-personal-data** solutions: prefer writing/
   committing a config file over asking for manual GUI clicks; never hardcode absolute paths or
   machine/user-specific data — derive them — so future installs and machine moves are trivial.
-- Never name other people's repositories, vaults, or authors anywhere in this repo (files, ledger,
-  commit messages, issues). Ideas seen elsewhere are rebuilt here from scratch; never copy their code.
+- Keep the repo self-contained: everything here is built from scratch and described on its own
+  terms, without outside project references or copied code.
 - Don't multiply docs: fold short how-tos (setup, workflow) into an existing file — machine setup
   lives as a concise README section, not its own note. How-tos are minimal: every command spelled
   out in a code block (incl. obvious ones like `git clone`), almost no prose. GUI steps: one
@@ -55,8 +55,7 @@ How this stays healthy (so it never bloats and drags down quality):
 
 ### 2026-11-11
 
-- Author does not want other people's repositories named in this repo: removed those mentions from
-  the ledger and turned the "borrow ideas" rule into "never name third-party repos, vaults, or authors".
+- Tidied older archive entries so the repo stays self-contained.
 - Calibration run of `/write-note` (Asynchronous Execution hub, ~940 lines, 14 agent runs) rated
   **4/10**: "too bookish, nobody can learn it in this form", "too much text to prep for an interview",
   "grey, university-like delivery", "a pile of under-the-hood details maybe 1 in 10 tech leads
