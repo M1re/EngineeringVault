@@ -88,13 +88,8 @@ set `new`/`in-progress`, and `done` only on a note with a fresh receipt.
 
 ## Agent plugins (Claude Code)
 
-`.claude/settings.json` enables these; Claude Code offers to install them on first open.
-- **Chisle** — terse style for **chat only**: notes, README and docs keep full sentences, and a note
-  is read in full before it is edited or reviewed. Output compression is limited to
-  `Bash,WebSearch,Grep,Glob` so reviewer reports and fetched sources arrive intact.
-- **oh-my-claudecode** — keyword modes (`autopilot`, `ralph`, `ultrawork`, `team`, …); its agents
-  obey this file and the reviewer gate. `.omc/` and its local `.claude/CLAUDE.md` are gitignored.
-- **obsidian** (kepano/obsidian-skills) — Obsidian Markdown, Bases, JSON Canvas, CLI.
+`.claude/settings.json` enables **obsidian** (kepano/obsidian-skills) — Obsidian Markdown, Bases,
+JSON Canvas, CLI; Claude Code offers to install it on first open.
 
 ## Linking conventions
 

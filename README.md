@@ -45,7 +45,7 @@ npm run setup
 
 If PowerShell blocks scripts: `npm.cmd run setup`.
 
-In Claude Code, accept the prompt to install the project plugins (Chisle, oh-my-claudecode, Obsidian skills).
+In Claude Code, accept the prompt to install the project plugin (Obsidian skills).
 
 ## Publishing
 
