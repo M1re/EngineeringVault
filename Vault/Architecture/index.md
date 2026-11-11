@@ -10,7 +10,7 @@ publish: true
 banner_y: 0.175
 ---
 
-Designing systems that stay correct, available, and affordable as they grow — the core of staff-level work.
+Designing systems that stay correct, available, and affordable as they grow — the core of senior and tech lead work.
 
 > [!abstract] Scope
 > Distributed systems, system design, scalability patterns, and the trade-offs behind every architectural decision.

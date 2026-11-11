@@ -1,9 +1,9 @@
 # Engineering Vault — Agent Operating Guide
 
 The one instruction file for every agent here (Claude Code, OpenCode, Codex); `CLAUDE.md` imports it.
-This **public** Obsidian knowledge base covers what a **staff software engineer** should understand
-deeply. Notes live in `Vault/` and are published with **Quartz** (via **Quartz Syncer**) on GitHub
-Pages. When you help here, you are writing and organising durable technical notes.
+This **public** Obsidian vault is the author's study guide: what a **senior / tech lead** engineer
+should understand deeply, from the basics to advanced, ready for interviews. Notes live in `Vault/`
+and are published with **Quartz** (via **Quartz Syncer**) on GitHub Pages.
 
 ## 🚨 Non-negotiable rules
 
@@ -12,7 +12,8 @@ Pages. When you help here, you are writing and organising durable technical note
    or anything identifying the author or their company. If a source has such data, strip it.
 2. **Never invent facts.** Technical accuracy matters more than volume. If unsure, say so in the
    note (a `> [!warning] Unverified` callout) or leave it out. Prefer primary sources.
-3. **English only** for note content (frontmatter, headings, body). This is the audience's language.
+3. **Language:** note body and `summary` in **Russian**; technical terms, `title`, headings, and code
+   in **English**. An English translation is planned (issue #22).
 
 ## Feedback ledger (binding)
 
@@ -55,23 +56,21 @@ created: YYYY-MM-DD
 Required body sections, in order (do **not** add a top-level `# Title` heading — Quartz renders the
 frontmatter `title` as the page heading):
 - `> [!summary]` — the gist in 1–3 plain sentences (+ one line on why it matters)
-- the mechanism as topical `##` sections with strict noun-phrase headers (no generic "How it works")
+- topic sections with short noun-phrase headers, from the basics to advanced (no "How it works")
 - `## Pitfalls & Trade-offs` — real failure modes and "X buys A at the cost of B"
-- `## In Production` — a concrete real-world production example, not a toy
-- `## Questions` — self-test as collapsible callouts: `> [!qard]- <q>` with the answer inside (Qard flashcards: spaced repetition in Obsidian)
-- `## Related` — wikilinks to neighbouring notes
-- `## References` — primary sources (every note stands on these)
+- `## In Production` — real domain code from a real system, bad version and fix, never foo/bar
+- `## Questions` — interview cards `> [!qard]- <q>`, a senior's answer folded inside (Qard flashcards)
+- `## Related` — wikilinks; `## References` — primary sources
 
-`npm run validate` (`scripts/validate-vault.mjs`, also run in CI on every PR/push) checks this:
-frontmatter fields and statuses, `summary` on `done` notes, section order, no body `# Title`, a
-language on every code fence, no images in References, folder-note fields.
+`npm run validate` (`scripts/validate-vault.mjs`, also in CI) checks frontmatter, `summary` on `done`
+notes, section order, no body `# Title`, code-fence languages, References, and folder-note fields.
 
 ## Where the detailed rules live (loaded on demand)
 
-- Writing a note → the **note-writer** skill (`.claude/skills/note-writer/`): depth bar + verification protocol.
-- Reviewing a note → the **reviewer** subagent (`.claude/agents/reviewer.md`); agents without
-  subagents run that prompt in a fresh session. Obsidian syntax → the `obsidian` skills plugin.
-- Covers/theme → `docs/covers.md`; creating topics/notes → the **New …** Templater commands.
+- Writing a note → the **note-writer** skill (`.claude/skills/note-writer/`): hub + sub-notes, section
+  pattern, writing standard, verification protocol.
+- Reviewing a note → the **reviewer** subagent (`.claude/agents/reviewer.md`; without subagents, run
+  that prompt in a fresh session). Covers → `docs/covers.md`; new notes → the **New …** commands.
 
 ## Reviewer gate (enforced)
 
@@ -81,15 +80,22 @@ After creating or changing a concept note (`Vault/**.md`, except `index.md` and 
 2. Apply every must-fix.
 3. Record it: `node .claude/hooks/review-receipt.js --verdict PUBLISH-READY|FIXES-APPLIED "<note>"`.
 
-The receipt is bound to the note's content hash (the `status:`/`publish:` lines excluded), so any
-later edit voids it. In Claude Code a Stop hook refuses to end the turn while an edited note lacks
-a fresh receipt. Never record a receipt without a reviewer pass in this session. **Status:** agents
-set `new`/`in-progress`, and `done` only on a note with a fresh receipt.
+The receipt is bound to the note's content hash (minus `status:`/`publish:`), so any later edit voids
+it; a Stop hook refuses to end the turn without a fresh one. Never record a receipt without a
+reviewer pass in this session. Agents set `done` only on a note with a fresh receipt.
 
 ## Agent plugins (Claude Code)
 
+<<<<<<< Updated upstream
 `.claude/settings.json` enables **obsidian** (kepano/obsidian-skills) — Obsidian Markdown, Bases,
 JSON Canvas, CLI; Claude Code offers to install it on first open.
+=======
+`.claude/settings.json` enables these; Claude Code offers to install them on first open.
+- **Chisle** — terse style for **chat only**; notes and docs keep full sentences, and a note is read
+  in full before it is edited or reviewed. Compression covers only `Bash,WebSearch,Grep,Glob`.
+- **oh-my-claudecode** — keyword modes; its agents obey this file and the reviewer gate (`.omc/` is
+  gitignored). **obsidian** (kepano/obsidian-skills) — Obsidian Markdown, Bases, Canvas, CLI.
+>>>>>>> Stashed changes
 
 ## Linking conventions
 
@@ -115,8 +121,5 @@ JSON Canvas, CLI; Claude Code offers to install it on first open.
   `scripts/regen-dashboards.mjs`. Syncer's `includeAllFrontmatter` stays ON so `banner`/`status` survive.
 - **Anything we build must render the same in Obsidian AND on the deployed site** — use tech that
   works in both (Datacore + Quartz Syncer, or plain Markdown/HTML).
-
-## Look & feel & covers
-
-Notion-inspired theme in both surfaces: `quartz.config.yaml` + `custom.scss` (site), `notion.css` +
-**Banners** (Obsidian). Folder-note covers: **Set Cover**; the commit hook mirrors them. See `docs/covers.md`.
+- Look & feel: Notion-inspired theme in both surfaces (`custom.scss` / `notion.css` + **Banners**);
+  folder-note covers via **Set Cover**, mirrored by the commit hook. See `docs/covers.md`.

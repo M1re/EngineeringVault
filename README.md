@@ -1,7 +1,7 @@
 # Engineering Vault
 
-A public knowledge base about what a **staff software engineer** is expected to understand
-deeply — written to *understand* the stack, not just memorize it for interviews.
+A knowledge base about what a **senior software engineer** is expected to understand deeply —
+written to *understand* the stack, from the basics to advanced topics, and to be ready for interviews.
 
 Notes are authored in [Obsidian](https://obsidian.md) and published as a website with
 [Quartz](https://quartz.jzhao.xyz) via GitHub Pages.

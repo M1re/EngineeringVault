@@ -5,7 +5,7 @@ tags:
 publish: true
 ---
 
-A public knowledge base built to understand — not just memorize — what a **staff software engineer** should know across the stack.
+A public knowledge base built to understand — not just memorize — what a **senior software engineer** should know across the stack.
 
 ```datacorejsx
 return function TopicDashboard() {

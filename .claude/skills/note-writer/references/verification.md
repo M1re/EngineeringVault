@@ -49,27 +49,30 @@ Completeness & depth (the whole mechanism, not just each sentence)
 - [ ] Multi-step mechanisms and lookup / precedence / fallback **orders** are verified **as a whole**
       against a primary source (docs or runtime/reference source), not step-by-step in isolation. An
       individually-true step can still be misplaced or have a step omitted between it and the next.
-- [ ] No important mechanism, nuance, number, or edge case a **staff engineer** would expect is
-      omitted or hand-waved. Naming a concept without explaining how it actually works is a gap.
+- [ ] No important mechanism, nuance, number, or edge case a **senior / tech lead** is expected to
+      know is omitted or hand-waved. Naming a concept without explaining how it actually works is a gap.
 - [ ] Nothing reads as plausible-but-unconfirmed. Subtly wrong detail erodes trust more than an
       admitted gap — if you cannot confirm it, verify it or cut it.
 
 Depth & honesty
-- [ ] Topical mechanism sections (no `## How it works` umbrella) explain the **mechanism**
-      (what/when/who/on-failure) why-before-how, not a restated summary or a definition-first opening.
+- [ ] The topic is covered from the basics to advanced. Each sub-topic gives a plain definition, why
+      it matters, and the **mechanism** (what/when/who/on-failure), not a restated summary.
 - [ ] "Pitfalls & Trade-offs" is numbered and states real **costs and failure modes** with a code
       snippet or scenario per item, not benefits only.
-- [ ] "In Production" gives a concrete real-world example with code, not an abstract toy.
-- [ ] "Questions" are design/review-level self-test callouts (`> [!qard]-`), not "what is X".
+- [ ] "In Production" gives a working example from a real system: real domain code, bad version and
+      fix, plus the symptom. No foo/bar.
+- [ ] "Questions" are interview cards (`> [!qard]-`) answered the way a senior answers: the direct
+      answer, the mechanism, the trade-off.
 
 Form
 - [ ] Every code fence declares a language; snippets are correct and minimal.
 - [ ] Reads dry and concrete on first read (see the `note-writer` Writing standard). Terms/acronyms
-      grounded before use (no ungrounded "L1/L2/L3", "TLB"); no number-dumping. No metaphors or
-      flavour labels, abstract-category filler, mid-sentence hedges, or off-topic comparisons — state
+      grounded before use (no ungrounded "L1/L2/L3", "TLB"); no number-dumping. At most one analogy
+      per sub-topic, followed by the exact mechanism; no flavour labels, abstract-category filler, mid-sentence hedges, or off-topic comparisons — state
       the literal mechanism. Concrete nouns, not vague pronouns ("the thread", not "it"); every
       sentence carries one concrete step, none only restating, decorating, or forward-pointing.
 - [ ] Required sections present and in order (see `Vault/Templates/Concept Note.md`).
+- [ ] Body in Russian, technical terms and headings in English; version notes as text ("(.NET 8+)").
 
 Repo hygiene
 - [ ] No personal/private data (names, employers, emails, internal URLs, secrets).

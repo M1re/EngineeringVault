@@ -1,150 +1,109 @@
 ---
 name: note-writer
-description: Use when creating or editing technical concept notes in this Engineering Vault knowledge base (files under Vault/). Provides the methodology for writing notes at a staff-software-engineer depth — mechanics, trade-offs, and self-test questions — in the vault's required format. Trigger for tasks like "write a note on X", "expand this note", "document this concept", or any editing of Vault/*.md concept notes.
+description: Use when creating or editing technical concept notes in this Engineering Vault knowledge base (files under Vault/). Provides the methodology for writing notes at senior / tech lead depth — from the basics to advanced topics, mechanics, trade-offs, and interview questions — in the vault's required format. Trigger for tasks like "write a note on X", "expand this note", "document this concept", or any editing of Vault/*.md concept notes.
 ---
 
 # Note Writer
 
-You are writing durable reference notes for a **public** staff-engineer knowledge base. The bar: a
-reader finishes the note actually *understanding* the concept and its trade-offs, not just able to
-recognise the term.
+## Purpose and reader
 
-**Audience:** a solid **mid-level** engineer levelling up toward staff. Explain the mechanism fully;
-skip only the trivial 101. Simple words, deep content — the plain gist first, then under the hood.
-Complex wording is not smartness.
+The vault is the author's study guide. A note must let the reader **think at senior / tech lead
+level** about the topic and **pass an interview** on it. The reader finishes the note understanding
+how the thing works, where it breaks, and how to answer questions about it.
 
-**Reference notes** — match their depth, format, and register:
-- `Vault/Programming/Concurrency/Async and Await.md` ([[Async/Await]]) — depth and structure.
-- `Vault/Programming/Concurrency/Threads and the Thread Pool.md` ([[Threads and the Thread Pool]]) —
-  the dry, concrete register.
+- **Reader:** an engineer moving to senior / tech lead. Cover the topic **from the basics to
+  advanced**. Skip nothing a senior is expected to know.
+- **Stack:** C# / .NET by default. Use another language only when the topic is not about .NET.
+- **Language:** the note body and `summary` are in **Russian**. Technical terms stay in **English**
+  (`Thread Pool`, `state machine`, `deadlock`, `ConfigureAwait`). Frontmatter `title`, all `##`/`###`
+  headings, code, and code comments for identifiers stay in English. Explanatory code comments are
+  in Russian.
 
-Also follow the template in `Vault/Templates/Concept Note.md` and the rules in `AGENTS.md`.
+## Note shape: hub + sub-notes
 
-## Workflow
+- A **hub note** covers a whole topic: the basics and an overview of every sub-topic, so the reader
+  sees the full picture in one place (for example "Asynchronous Execution").
+- A sub-topic that needs real depth (`ValueTask`, `ConfigureAwait`) gets **its own note**. The hub
+  gives a short overview of it and links to it; the sub-note links back to the hub.
+- Every note follows `Vault/Templates/Concept Note.md`.
 
-1. **Research first.** Verify the mechanism against primary sources and build a depth map. Never draft
-   mechanism detail from memory. (Details in [Method](#method).)
-2. **Draft** to the Structure and Writing standard below.
-3. **Review.** Run the `reviewer` subagent — it runs three passes (accuracy, completeness & ordering,
-   readability) against [`references/verification.md`](references/verification.md). Apply its must-fixes.
-4. **Publish**, then let the author read the finished note and calibrate. Iterate on the live note —
-   there is no depth-outline step; the author reviews the finished draft.
+## Section pattern
 
-## Structure
+After the `> [!summary]`, the body is a run of topical sections with short English noun-phrase
+headers (`## Thread Pool`, `### Context Switching`), ordered from the basics to advanced. Each
+sub-topic follows this pattern:
 
-The note has **no** generic `## How it works` header. After the `> [!summary]`, the body is a run of
-**topical sections with strict, official noun-phrase headers** — `## State Machine`, not
-"## The state machine: what the compiler actually generates". Order them so each builds on the last.
-Then the fixed tail: `## Pitfalls & Trade-offs`, `## In Production`, `## Questions`, `## Related`,
-`## References` (Title Case).
+1. **Definition in plain words** — one or two sentences: what it is.
+2. **Why it matters** — the problem it solves, or what goes wrong without it.
+3. **Mechanism, step by step** — what actually happens: who does what, in what order, what happens
+   on failure. If it leans on a concept the reader may not know, explain that concept first.
+4. **Example code** — real domain code (orders, payments, accounts, requests), never `foo`/`bar`.
+   Comments trace the execution step by step where the flow is not obvious. Show a `// ❌ BAD` /
+   `// ✅ GOOD` pair when there is a common mistake.
+5. **Key points** — a short bullet list of what to remember.
 
-- **Pitfalls & Trade-offs** is a **numbered** list, most common / most dangerous first. Each item
-  carries a short code snippet or concrete scenario that shows *why* it is wrong, or the narrow case
-  where it is acceptable — never a bare assertion. Frame trade-offs as trade-offs: "X buys A at the
-  cost of B".
-- **In Production** shows **code** (typically the bad version and the fix side by side) plus a real
-  number or symptom, not prose alone.
+Use, where they fit:
+- **One short analogy per sub-topic** to anchor the idea, followed immediately by the exact mechanism.
+- **A comparison table** for "X vs Y".
+- **Numbered rules** ("ValueTask: rules of use").
+- **A real-life scenario** ("the user reloads the page 5 times").
+- **Senior-level details** — the facts that separate a senior from a junior (`const` is inlined into
+  the calling assembly, so changing it needs a rebuild of the caller).
+- **Mermaid** diagrams for flows and sequences.
+- **Version notes as text** — "(.NET 8+)", never emoji markers.
 
 ## Writing standard
 
-Deep by default; the enemy is padding, not length. Write so a mid-level engineer *understands*, not
-just recognises. Four rules do most of the work.
+- **One sentence = one thought.** Short sentences, simple words, deep detail.
+- **Say what actually happens.** Concrete verbs and nouns: "the GC freezes every thread and reads
+  its stack", not "the thread takes part in runtime services". If a sentence could describe ten
+  different systems, name the specific thing instead.
+- **Name the object.** "the worker thread", not "it"; "runs two threads", not "runs two".
+- **Cut:** filler, hedges ("generally", "in normal use"), decorative labels ("context-switch tax"),
+  sentences that only restate the previous one, forward pointers ("more on this later").
 
-1. **Why before how.** Open each section with the problem, or the concrete question it answers, then
-   the mechanism. Introduce a term only once the reader feels why it is needed — never definition-
-   first. ("A `SynchronizationContext` decides which thread runs the rest of your method after an
-   `await`" lands; "represents a place to run code" does not.) If a section leans on a concept the
-   reader may not know (the UI thread, the CPU cache), explain that concept from scratch before
-   building on it.
+## Fixed tail sections
 
-2. **Dry and concrete — say what actually happens.** This is the rule notes break most, and breaking
-   it is what makes a note read as "заумно". Describe the literal mechanism with concrete verbs and
-   nouns: "the GC freezes every thread and reads its stack for live objects", not "the thread takes
-   part in runtime services". Cut, every time:
-   - **Metaphors and flavour labels** ("thin skin", "standing crew", "context-switch tax",
-     "starvation valve") and editorial asides ("here is the bind", "the cost is sneaky").
-   - **Abstract-category filler** ("takes part in", "is responsible for", "a wrapper around it") and
-     mid-sentence hedges ("in normal use", "generally", "effectively"). If a sentence could describe
-     ten different systems, name the specific thing instead.
-   - **Off-topic comparisons** to a language or tech the note is not about ("the thread a C program
-     would get" in a .NET note).
-   - **Vague pronouns and dropped nouns.** Write "the thread" / "the worker thread", not "it"; "runs
-     two threads", not "runs two".
+- **Pitfalls & Trade-offs** — a numbered list, most common or most dangerous first. Each item has a
+  short code snippet or a concrete scenario that shows why it breaks. Trade-offs read "X buys A at
+  the cost of B".
+- **In Production** — a working example from a real system: real domain code, the bad version and
+  the fix, plus the symptom (latency, error, outage) that shows the difference.
+- **Questions** — interview cards: `> [!qard]- <the interview question>` with the answer folded
+  inside. The answer is how a senior answers: the direct answer, the mechanism behind it, and the
+  trade-off or "it depends" a senior would add. 4–8 cards per hub note.
+- **Related** — wikilinks to the hub, sub-notes, and neighbouring notes.
+- **References** — primary sources.
 
-3. **One step per sentence.** Every sentence carries one concrete step of the explanation. Cut any
-   sentence that only restates the previous one, decorates it, or just points forward ("the next
-   section covers it"). Keep sentences short; prefer a period over a semicolon, a mid-sentence colon,
-   or a stacked em-dash.
+## Facts: research first
 
-4. **Code where it explains better than prose.** Not only in Pitfalls and In Production, but inside a
-   tricky mechanism section too — a generated-code sketch, a two-line before/after.
+Never draft a mechanism from memory. Research the topic in primary sources first (official docs,
+the spec, the runtime source, the canonical book). Verify multi-step orders (lookup, fallback,
+precedence) **as a whole**, not one step at a time. Draft only from what you verified. If a point
+cannot be verified, write a `> [!warning] Unverified` callout or leave it out. Full protocol:
+[`references/verification.md`](references/verification.md).
 
-## The depth test
+## Workflow
 
-Before finishing a note, ask: *"Would this teach a mid-level engineer something a blog-post
-definition wouldn't?"* If not, it isn't done. Every note must answer three questions:
+1. **Research** the topic in primary sources.
+2. **Plan** the hub and sub-notes, ordered from the basics to advanced.
+3. **Draft** to the section pattern and the writing standard.
+4. **Review** with the `reviewer` subagent, apply every must-fix, record the receipt (see the
+   reviewer gate in `AGENTS.md`).
+5. The author rereads the finished note and gives feedback.
 
-1. **How does it actually work?** — the mechanism, step by step. Not "it uses a queue" but
-   *what* is enqueued, *when*, *who* consumes it, and *what happens on failure*.
-2. **What breaks in production?** — the failure modes, costs, and limits. This is the section
-   that proves you understand the thing. Never skip or hand-wave it.
-3. **What would a staff-level review ask?** — turn the hardest parts into self-test questions.
-
-## Method
-
-1. **Research first — never draft the mechanism from memory.** Before writing, research the topic
-   against primary sources (official docs, the RFC/spec, the **runtime or reference source**, the
-   canonical book). Build an internal **depth map**: the sections; each mechanism stated *fully and
-   in the correct order* — verify orderings, precedence, and fallback sequences *as a whole* against
-   the source, because an individually-true step can still be misplaced or have a step omitted before
-   the next one; the nuances, numbers, and edge cases a **staff engineer** would know; and the real
-   pitfalls. Draft only from that map. Memory is for structure and intuition, not for mechanism
-   detail — surface-level or subtly-wrong text (which reads as "invented") is exactly what a real
-   research pass prevents. When you genuinely can't verify a point, write a `> [!warning] Unverified`
-   callout or omit it. Never fabricate numbers or APIs.
-   Full protocol: [`references/verification.md`](references/verification.md).
-2. **Lead with the one-sentence summary**, then widen: why it matters → mechanics → trade-offs.
-3. **Be concrete.** Prefer a small code snippet, a numbered sequence, or a real number over prose.
-   Every code block declares its language.
-4. **Show trade-offs as trade-offs** — "X buys you A at the cost of B", not a list of features.
-5. **Weave the graph.** Add `[[wikilinks]]` to related notes inline and in `## Related`; link the
-   note from its section `index.md`. Unresolved links to not-yet-written notes are encouraged.
-6. **Right-size it.** A tight, correct note beats a long vague one. Split genuinely separate
-   concepts into separate notes and link them.
+A multi-agent pipeline (`/write-note`) will replace this single-agent workflow (issue #21).
 
 ## Tags
 
-Tags are **thematic and cross-cutting**, not a copy of the folder path. The tree already says
-*where* a note lives (Programming → .NET → Reflection); tags say *what concepts it touches*, so
-notes cluster across folders in the graph and on tag pages.
+Tags are thematic and cross-cutting, not a copy of the folder path: lowercase kebab-case
+(`garbage-collection`, `api-design`), 2–4 per note, reuse existing tags where they fit. Structural
+tags (`FolderNote`, `MetricsIgnore`) are not for concept notes.
 
-- Lowercase kebab-case (`garbage-collection`, `api-design`, `tls`).
-- Tag by concept, not location — don't add `programming` / `dotnet` just because of the folder.
-- Reuse existing tags where they fit (the **New Note** command lists them); coin new ones sparingly.
-- 2–4 is usually right; a note with no shared concepts can have none. Structural tags
-  (`FolderNote`, `MetricsIgnore`) are separate and not for concept notes.
+## Status
 
-## Before you commit — always review (automatic)
-
-After writing or editing a note, **automatically** run the **`reviewer`** subagent on it — don't
-wait to be asked. The flow is: **write → review → apply the must-fixes → commit the fixed note.**
-The reviewer reads with fresh eyes, checks against
-[`references/verification.md`](references/verification.md), and verifies shaky claims against primary
-sources, then returns must-fixes. Apply them, then set `status: done` / `publish: true` and commit.
-You wrote it, so you're the worst judge of it — never commit a note that hasn't passed the gate.
-(`/review-note` triggers the same reviewer manually.)
-
-## Style
-
-- **Diagrams:** prefer **Mermaid** code blocks for flows, sequences, and architecture — they render
-  in both Obsidian and the site and diff in git; use Excalidraw only for freeform sketches.
-- **Questions** are collapsible self-test callouts: `> [!qard]- <q>` with the answer folded inside (Qard reads these as flashcards for spaced repetition);
-  ask design/review-level questions, not "what is X".
-- Use callouts to signal importance: `> [!summary]`, `> [!tip]`, `> [!warning]`.
-- Neutral, technical, timeless voice. No "recently", no dates in prose, no first person.
-- Status has three states: `new` (a stub, nothing written), `in-progress` (actively being written),
-  `done` (written and validated). A new stub starts `new` / `publish: false`; set `in-progress` while
-  drafting, then `done` once every section is complete and it passed the reviewer, then `publish: true`.
+`new` (a stub, nothing written) → `in-progress` (being written) → `done` (written and passed the
+reviewer gate), then `publish: true`.
 
 ## Hard constraints (public repo)
 

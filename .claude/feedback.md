@@ -49,8 +49,25 @@ How this stays healthy (so it never bloats and drags down quality):
 
 ### 2026-11-11
 
+<<<<<<< Updated upstream
 - Removed the Chisle and oh-my-claudecode plugins at the author's request; only the Obsidian skills
   plugin stays.
+=======
+- New note strategy (epic #24): the vault is the author's **study guide** for reading and thinking at
+  **senior / tech lead** level and passing interviews, not a public staff-level reference. Complaints
+  that drove it: notes too complex, too much water, invented facts. Decided and promoted into
+  structure (`note-writer` skill, template, reviewer, `verification.md`, `AGENTS.md`), so not repeated
+  in Active rules:
+  - hub note (basics + overview) + deep sub-topics as separate linked notes; basics to advanced;
+  - body in Russian, technical terms / headings / code in English (EN translation later, #22);
+  - one sentence = one thought, simple words, deep detail;
+  - plain definition first, then why — **supersedes** the 2026-07-19 "never definition-first";
+  - one short analogy per sub-topic, then the exact mechanism — **supersedes** "no metaphors";
+  - In Production stays, with real domain code, never foo/bar; Questions are interview cards;
+  - C# / .NET by default; version notes as text "(.NET 8+)", no emoji markers.
+- Calibration source: the author's own hand-written notes (style patterns go into the reader profile,
+  #20). Rollout: one note at a time with the author rereading, then batch.
+>>>>>>> Stashed changes
 
 ### 2026-11-09
 

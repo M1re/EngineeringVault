@@ -9,43 +9,42 @@ created: {{date:YYYY-MM-DD}}
 ---
 
 > [!summary]
-> <!-- The gist in 1–3 plain sentences a mid-level engineer gets immediately, plus one line on why
->      it matters in real systems. Plain words. Keep the internals for the body. -->
+> <!-- The gist in 1–3 plain sentences (Russian, terms in English), plus one line on why it matters
+>      in real systems. Keep the internals for the body. -->
 
-<!-- MECHANISM SECTIONS — the body of the note.
-     Do NOT use a generic "## How it works" header. Break the mechanism into topical sections with
-     strict, official noun-phrase headers (e.g. "## State Machine", "## Awaiter Pattern"), ordered
-     so each one builds on the last. For every section:
-       - Explain from WHY to HOW: the problem or question first, then the mechanism. Introduce a
-         term only once the reader feels why it is needed — never definition-first.
-       - If the section leans on an unfamiliar supporting concept, explain that concept from scratch
-         before you use it.
-       - Strictly technical, but slow. No metaphors, no padding, no restating the summary.
-       - Concrete phrasings: name the object of the action ("block a thread", not "block").
-       - Short sentences, simple punctuation.
-       - Use a code snippet or a Mermaid diagram wherever it explains better than prose. -->
+<!-- TOPIC SECTIONS — the body of the note, ordered from the basics to advanced.
+     Short English noun-phrase headers (e.g. "## Thread Pool", "### Context Switching").
+     A deep sub-topic gets its own note; the hub gives a short overview and links to it.
+     Each sub-topic:
+       1. Definition in plain words (1–2 sentences).
+       2. Why it matters: the problem it solves.
+       3. Mechanism step by step: who does what, in what order, what happens on failure.
+       4. Example code from a real domain (orders, payments), comments tracing the steps;
+          a ❌ BAD / ✅ GOOD pair for a common mistake.
+       5. Key points as a short list.
+     One sentence = one thought. At most one short analogy per sub-topic, then the exact mechanism.
+     Version notes as text: "(.NET 8+)". -->
 
-## <First Mechanism>
+## <First Topic>
 
-## <Second Mechanism>
+## <Second Topic>
 
 ## Pitfalls & Trade-offs
 
-<!-- A numbered list (1, 2, 3 …), most common / most dangerous first. EACH pitfall carries a short
-     code snippet or concrete scenario that shows WHY it is wrong, or the narrow case where it is
-     acceptable. Frame trade-offs as trade-offs: "X buys A at the cost of B", not a feature list. -->
+<!-- A numbered list, most common / most dangerous first. Each item carries a short code snippet or a
+     concrete scenario that shows WHY it breaks. Trade-offs read "X buys A at the cost of B". -->
 
 ## In Production
 
-<!-- A concrete, real production situation — not an abstract toy. Show CODE (for example the bad
-     version and the fix side by side) plus a real number or symptom. -->
+<!-- A working example from a real system: real domain code (the bad version and the fix side by
+     side) plus the symptom — latency, error, outage. Never foo/bar. -->
 
 ## Questions
 
-<!-- Self-test: the question is visible, the answer is folded (`-`). The reader answers in their
-     head, then expands to check. 2–5 design/review-level questions, not "what is X". -->
-> [!qard]- <a design- or review-level question>
-> <the answer — concrete and correct>
+<!-- Interview cards: the question is visible, the answer is folded (`-`). The answer is how a senior
+     answers: the direct answer, the mechanism behind it, and the trade-off. 4–8 cards per hub note. -->
+> [!qard]- <an interview question>
+> <how a senior answers it>
 
 ## Related
 

@@ -54,7 +54,7 @@ Run `claude` from the repo root. Custom commands:
 | Command | What it does |
 | --- | --- |
 | `/new-note Networks — DNS` | Creates a fully-formatted note in the section. |
-| `/expand DNS` | Deepens an existing note to the staff-engineer bar. |
+| `/expand DNS` | Deepens an existing note to the senior bar. |
 | `/review-note DNS` | Checks privacy, format, and depth before publishing. |
 | `/link DNS` | Weaves a note into the graph with wikilinks. |
 
