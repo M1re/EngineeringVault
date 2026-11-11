@@ -18,6 +18,8 @@ how the thing works, where it breaks, and how to answer questions about it.
   (`Thread Pool`, `state machine`, `deadlock`, `ConfigureAwait`). Frontmatter `title`, all `##`/`###`
   headings, code, and code comments for identifiers stay in English. Explanatory code comments are
   in Russian.
+- **How this reader learns** — the patterns, examples, and anti-patterns in
+  [`references/reader-profile.md`](references/reader-profile.md). Read it before drafting.
 
 ## Note shape: hub + sub-notes
 

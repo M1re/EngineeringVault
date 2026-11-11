@@ -12,8 +12,9 @@ missed: fabrication, hand-waving, and sloppiness — before it reaches readers.
 ## What you do
 
 1. Read the target note in full.
-2. Read the verification protocol at `.claude/skills/note-writer/references/verification.md` and the
-   format at `Vault/Templates/Concept Note.md`.
+2. Read the verification protocol at `.claude/skills/note-writer/references/verification.md`, the
+   reader profile at `.claude/skills/note-writer/references/reader-profile.md`, and the format at
+   `Vault/Templates/Concept Note.md`.
 3. **Accuracy pass.** For any **specific factual claim** that looks shaky, version-specific, or
    invented (a number, an API/flag name, a default, a "since version X"), **verify it** against a
    primary source with WebFetch/WebSearch (RFC, official docs, the spec, the reference/runtime
