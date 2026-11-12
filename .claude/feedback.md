@@ -30,6 +30,9 @@ How this stays healthy (so it never bloats and drags down quality):
   the task calls the registered continuation"). Every rule carries its reason ("why"), and every
   term or metric (p99, RPS) is explained on first use. No telegraphic shorthand ("Под GUI —
   deadlock. Фикс один: …"); write full sentences.
+- Usage rules ("await only once", "don't read .Result early") are taught by first showing how it
+  breaks — a short step-by-step failure story plus BAD/GOOD code — then a plain can / can't list.
+  A bare rule list with abstract reasons ("reusable object", "race") is not understandable.
 - Section openers are neutral, interview-style questions ("Зачем нужен async, если поток может
   просто дождаться ответа?"), not chatty or childish ones ("Зачем вообще…", "просто").
 - Clear and tight beats long and vague; if a point needs a re-read to parse, rewrite it.
@@ -59,6 +62,12 @@ How this stays healthy (so it never bloats and drags down quality):
 ## Archive (log)
 
 <!-- Dated history. Newest first. Not required reading; kept for provenance. -->
+
+### 2026-11-12
+
+- Asynchronous Execution hub accepted ("в остальном всё супер"), except the ValueTask rules, which
+  were still hard to read. Added the "show how it breaks before the rules" active rule. Next: test
+  the format on three more notes — one hard, one medium, one easy.
 
 ### 2026-11-11
 
