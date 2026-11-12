@@ -25,6 +25,13 @@ How this stays healthy (so it never bloats and drags down quality):
   short. Lively, colleague-to-colleague delivery like the author's own notes — not a grey,
   university-style "definition → Зачем → Механизм" march in every section.
 - The note pipeline must be cheap and fast: few agents, no work that does not change the note.
+- **Explain the trigger, not just the steps.** When a mechanism says "X happens later", say who makes
+  it happen and how ("the OS signals the I/O is done → the code that owns the task completes it →
+  the task calls the registered continuation"). Every rule carries its reason ("why"), and every
+  term or metric (p99, RPS) is explained on first use. No telegraphic shorthand ("Под GUI —
+  deadlock. Фикс один: …"); write full sentences.
+- Section openers are neutral, interview-style questions ("Зачем нужен async, если поток может
+  просто дождаться ответа?"), not chatty or childish ones ("Зачем вообще…", "просто").
 - Clear and tight beats long and vague; if a point needs a re-read to parse, rewrite it.
 - Replies to the author (chat, summaries of work): short and plain — what was done, why, what to
   do next. No jargon, no wall of caveats; still technically honest.
@@ -55,6 +62,10 @@ How this stays healthy (so it never bloats and drags down quality):
 
 ### 2026-11-11
 
+- Lean-pipeline rewrite of the Asynchronous Execution hub: the author's remarks were that the `await`
+  steps don't say how the code learns the result is ready, the openers read childish, the ValueTask
+  rules lack context, the Pitfalls line is telegraphic, and p99 is unexplained. Added the "explain
+  the trigger" and "neutral openers" active rules.
 - Tidied older archive entries so the repo stays self-contained.
 - Calibration run of `/write-note` (Asynchronous Execution hub, ~940 lines, 14 agent runs) rated
   **4/10**: "too bookish, nobody can learn it in this form", "too much text to prep for an interview",
