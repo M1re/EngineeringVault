@@ -81,8 +81,8 @@ Use, where they fit:
 ## Fixed tail sections
 
 - **Pitfalls & Trade-offs** — a numbered list, most common or most dangerous first. Each item has a
-  short code snippet or a concrete scenario that shows why it breaks. Trade-offs read "X buys A at
-  the cost of B".
+  short code snippet or a concrete scenario that shows why it breaks. A trade-off says plainly, in
+  natural Russian, what you gain and what you pay (no word-for-word English formulas).
 - **In Production** — a working example from a real system: real domain code, the bad version and
   the fix, plus the symptom (latency, error, outage) that shows the difference.
 - **Questions** — interview cards: `> [!qard]- <the interview question>` with the answer folded

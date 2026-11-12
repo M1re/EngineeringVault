@@ -4,7 +4,7 @@
  *
  * A tripwire for instruction bloat. When AGENTS.md, CLAUDE.md or .claude/feedback.md grows past a soft
  * limit, it prints a nudge (surfaced back into the session) telling Claude to run
- * /consolidate-feedback. It ONLY measures and warns — the actual semantic compaction (merging
+ * /audit-rules. It ONLY measures and warns — the actual semantic compaction (merging
  * rules, resolving contradictions) is Claude's job; a shell script can't do that intelligently.
  *
  * It never edits the files it watches, so it cannot cause an edit -> hook -> edit loop.
@@ -77,7 +77,7 @@ const norm = (p) => String(p || "").replace(/\\/g, "/").toLowerCase();
 
     if (warns.length) {
       console.error(
-        "LEDGER SIZE TRIPWIRE — consider running /consolidate-feedback now:\n  - " +
+        "LEDGER SIZE TRIPWIRE — consider running /audit-rules now:\n  - " +
           warns.join("\n  - ")
       );
       process.exit(2); // surfaces stderr back into the session (the edit already succeeded)

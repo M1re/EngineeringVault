@@ -32,7 +32,7 @@ created: {{date:YYYY-MM-DD}}
 ## Pitfalls & Trade-offs
 
 <!-- A numbered list, most common / most dangerous first. Each item carries a short code snippet or a
-     concrete scenario that shows WHY it breaks. Trade-offs read "X buys A at the cost of B". -->
+     concrete scenario that shows WHY it breaks. A trade-off says plainly what you gain and what you pay. -->
 
 ## In Production
 

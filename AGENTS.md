@@ -24,7 +24,8 @@ and are published with **Quartz** (via **Quartz Syncer**) on GitHub Pages.
    anywhere, unprompted — capture it that turn: refine an active rule (preferred) or add one, and
    log it in the Archive.
 3. **Keep it lean.** Mature rules move into structure (skill, template, hook, Linter) and leave the
-   ledger. When the size tripwire (`.claude/hooks/check-ledger-size.js`) nudges you, consolidate.
+   ledger. When the size tripwire (`.claude/hooks/check-ledger-size.js`) nudges you, run `/audit-rules`
+   (one home per rule, no duplicates or conflicts).
 
 ## Repository layout
 
@@ -57,7 +58,7 @@ Required body sections, in order (do **not** add a top-level `# Title` heading �
 frontmatter `title` as the page heading):
 - `> [!summary]` — the gist in 1–3 plain sentences (+ one line on why it matters)
 - topic sections with short noun-phrase headers, from the basics to advanced (no "How it works")
-- `## Pitfalls & Trade-offs` — real failure modes and "X buys A at the cost of B"
+- `## Pitfalls & Trade-offs` — real failure modes; each trade-off says plainly what you gain and what you pay
 - `## In Production` — real domain code from a real system, bad version and fix, never foo/bar
 - `## Questions` — interview cards `> [!qard]- <q>`, a senior's answer folded inside (Qard flashcards)
 - `## Related` — wikilinks; `## References` — primary sources

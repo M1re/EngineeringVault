@@ -240,7 +240,7 @@
         <div class="card">
           <span class="tag auto">3 · ПОМОЩНИК</span>
           <h3 style="margin-top:.6rem">Автоматизация Claude</h3>
-          <p>Папка <code>.claude/</code> и <code>CLAUDE.md</code> — правила, команды, навыки и защита, чтобы Claude помогал писать в едином стиле и не давал утечь личным данным.</p>
+          <p>Папка <code>.claude/</code>, <code>AGENTS.md</code> и <code>CLAUDE.md</code> — правила, команды, агенты, навыки и защита, чтобы Claude помогал писать в едином стиле и не давал утечь личным данным.</p>
         </div>
       </div>
       <div class="note">
@@ -275,7 +275,7 @@
 │   │   ├── <span class="dir">CSharp/</span>          <span class="cmt"># саб-топик — тоже folder-note</span>
 │   │   └── …                <span class="cmt"># ещё 7 саб-топиков</span>
 │   │   └── <span class="dir">Concurrency/</span>
-│   │       └── Async and Await.md <span class="cmt"># эталонная заметка — образец формата</span>
+│   │       └── Async and Await.md <span class="cmt"># эталон тона и глубины (хаб Asynchronous Execution)</span>
 │   ├── <span class="dir">Architecture/</span>        <span class="cmt"># … и ещё 8 разделов (всего 9)</span>
 │   ├── <span class="dir">Templates/</span>           <span class="cmt"># шаблоны заметок (на сайт НЕ идут)</span>
 │   ├── <span class="dir">attachments/banners/</span> <span class="cmt"># обложки: картинки и гифки</span>
@@ -284,14 +284,15 @@
 ├── <span class="auto">content/</span>                 <span class="cmt"># ГЕНЕРИТ Quartz Syncer — руками НЕ трогать</span>
 │
 ├── <span class="auto">.claude/</span>                 <span class="cmt"># автоматизация Claude Code</span>
-│   ├── <span class="auto">commands/</span>            <span class="cmt"># слэш-команды: /new-note /expand /review-note …</span>
-│   ├── <span class="auto">skills/</span>              <span class="cmt"># навык note-writer (Claude включает сам)</span>
-│   ├── <span class="auto">agents/</span>              <span class="cmt"># субагент reviewer — независимая проверка заметки</span>
-│   ├── <span class="auto">hooks/</span>              <span class="cmt"># check-secrets.js, check-ledger-size.js</span>
+│   ├── <span class="auto">commands/</span>            <span class="cmt"># слэш-команды: /write-note /new-note /expand /review-note /audit-rules …</span>
+│   ├── <span class="auto">skills/</span>              <span class="cmt"># навык note-writer: стандарт письма (Claude включает сам)</span>
+│   ├── <span class="auto">agents/</span>              <span class="cmt"># агенты конвейера note-*, reviewer, rules-auditor</span>
+│   ├── <span class="auto">hooks/</span>              <span class="cmt"># check-secrets, check-ledger-size, шлюз ревьюера (квитанции)</span>
 │   ├── <span class="auto">settings.json</span>        <span class="cmt"># сюда подключены хуки (едет в репо)</span>
 │   └── <span class="auto">launch.json</span>          <span class="cmt"># конфиг локального превью сайта</span>
 │
-├── <span class="auto">CLAUDE.md</span>                <span class="cmt"># «конституция»: правила, Claude читает всегда</span>
+├── <span class="auto">AGENTS.md</span>                <span class="cmt"># «конституция»: правила для всех агентов (Claude, OpenCode, Codex)</span>
+├── <span class="auto">CLAUDE.md</span>                <span class="cmt"># подключает AGENTS.md + то, что специфично для Claude</span>
 ├── <span class="auto">.claude/feedback.md</span>      <span class="cmt"># журнал правок автора (обязателен к соблюдению)</span>
 │
 ├── <span class="dir">quartz/</span>                  <span class="cmt"># движок Quartz v5 — не трогаем (кроме styles/custom.scss)</span>
@@ -299,10 +300,10 @@
 ├── <span class="dir">quartz.ts + custom/</span>      <span class="cmt"># наш код: обложка, порядок разделов, summary → description</span>
 ├── <span class="dir">quartz.lock.json</span>         <span class="cmt"># версии плагинов Quartz (ставятся в .quartz/)</span>
 │
-├── <span class="auto">scripts/</span>                 <span class="cmt"># setup.mjs, sync-quartz.mjs (экспорт), regen-dashboards.mjs, sync-banners.mjs</span>
+├── <span class="auto">scripts/</span>                 <span class="cmt"># setup, sync-quartz (экспорт), regen-dashboards, sync-banners, validate-vault, strip-fact-tags</span>
 ├── <span class="auto">.githooks/pre-commit</span>     <span class="cmt"># перед коммитом заметок экспортирует vault через Syncer</span>
-├── <span class="auto">docs/</span>                    <span class="cmt"># setup.md, covers.md, roadmap.md, этот гайд</span>
-├── <span class="dir">.github/workflows/deploy.yml</span> <span class="cmt"># сборка сайта на каждый push в main</span>
+├── <span class="auto">docs/</span>                    <span class="cmt"># topic-map.md (очередь заметок), setup.md, covers.md, roadmap.md, этот гайд</span>
+├── <span class="dir">.github/workflows/</span>       <span class="cmt"># deploy.yml — сборка сайта; validate.yml — проверка заметок</span>
 └── README.md
 </pre></div>
     </section>
@@ -315,16 +316,18 @@
       <p>Знания разложены на 9 разделов: Programming, Computer Science, Data Persistence, Networks, Architecture, AI and ML, Security, Cloud, DevOps. Каждый раздел (и каждый саб-топик внутри) — это папка с файлом <code>index.md</code>, который становится её <strong>folder-note</strong>: у него <code>tags: [FolderNote]</code>, <code>title</code>, <code>color</code>, <code>icon</code>, <code>publish: true</code> и <code>banner</code> (обложка). Вложенность: <strong>раздел → саб-топик → заметка</strong>.</p>
 
       <h3>Из чего состоит заметка</h3>
-      <p>Открой <code>Programming/Concurrency/Async and Await.md</code> — это эталон. Скелет — <code>Templates/Concept Note.md</code>. Сверху <strong>frontmatter</strong> (блок между <code>---</code>), потом тело по фиксированной структуре:</p>
+      <p>Открой <code>Programming/Concurrency/Async and Await.md</code> — это эталон тона и глубины. Скелет — <code>Templates/Concept Note.md</code>. Сверху <strong>frontmatter</strong> (блок между <code>---</code>), потом тело по фиксированной структуре:</p>
       <div class="tree"><pre><span class="cmt">---</span>
-<span class="dir">title</span>: Async and Await    <span class="cmt"># заголовок (его рисует сайт — H1 в теле НЕ пишем)</span>
+<span class="dir">title</span>: Asynchronous Execution <span class="cmt"># заголовок (его рисует сайт — H1 в теле НЕ пишем)</span>
+<span class="dir">summary</span>: "…"            <span class="cmt"># одна строка; описание страницы и превью ссылок</span>
 <span class="dir">tags</span>: [concurrency]       <span class="cmt"># теги для графа и поиска</span>
 <span class="dir">status</span>: done            <span class="cmt"># new → in-progress → done (прогресс-бар)</span>
 <span class="dir">publish</span>: true           <span class="cmt"># false = приватно, true = на сайт</span>
+<span class="dir">created</span>: 2026-07-11      <span class="cmt"># дата создания</span>
 <span class="cmt">---</span>
 <span class="cmt"># тело: [!summary] → тематические секции механики (свои заголовки) →</span>
 <span class="cmt"># Pitfalls &amp; Trade-offs → In Production → Questions → Related → References</span></pre></div>
-      <p>Эта структура заставляет раскрывать тему на уровне staff-инженера: не «определение из учебника», а механика + компромиссы + сложные вопросы.</p>
+      <p>Эта структура заставляет раскрывать тему на уровне senior / tech lead к собеседованию: не «определение из учебника», а механика + компромиссы + вопросы с ответами. Формат проверяет <code>npm run validate</code> (<code>scripts/validate-vault.mjs</code>) — локально и в CI.</p>
 
       <h3>Живые дашборды и связи</h3>
       <p>Каждый <code>index.md</code> несёт блок <code>datacorejsx</code> — <strong>Datacore-дашборд</strong>: карточки саб-топиков с прогрессом + список заметок со статус-пилюлями. Он рекурсивный и одинаковый на всех уровнях. Заметки связываются <strong>вики-ссылками</strong> <code>[[Название]]</code> — из них строится граф; ссылка на ещё не написанную заметку это нормально, «маркер на будущее».</p>
@@ -339,8 +342,8 @@
           <div class="badge">Md</div>
           <div>
             <div class="who">Запускается сам · читается каждую сессию</div>
-            <h4><code>CLAUDE.md</code> — «Конституция»</h4>
-            <p>Правила базы: структура, стиль заметок, запрет личных данных, формат frontmatter, публикация. Claude подгружает его автоматически каждый раз в этой папке — фон, который действует всегда. Рядом <code>.claude/feedback.md</code> — журнал твоих правок, тоже обязателен.</p>
+            <h4><code>AGENTS.md</code> + <code>CLAUDE.md</code> — «Конституция»</h4>
+            <p>Сами правила живут в <code>AGENTS.md</code> — общем файле для всех агентов (Claude, OpenCode, Codex): структура, формат заметок, запрет личных данных, шлюз ревьюера, публикация. <code>CLAUDE.md</code> подключает его и добавляет только то, что специфично для Claude; Claude подгружает его автоматически каждый раз в этой папке. Рядом <code>.claude/feedback.md</code> — журнал твоих правок, его «Active rules» тоже обязательны.</p>
           </div>
         </div>
         <div class="layer">
@@ -348,7 +351,7 @@
           <div>
             <div class="who">Запускаешь ты · вручную командой</div>
             <h4>Слэш-команды <code>.claude/commands/</code> — «Кнопки»</h4>
-            <p>Готовые сценарии-промпты: <code>/new-note</code>, <code>/expand</code>, <code>/review-note</code>, <code>/link</code>, а также <code>/feedback</code>, <code>/consolidate-feedback</code> и <code>/update-guide</code>. Печатаешь команду — Claude выполняет сценарий.</p>
+            <p>Готовые сценарии-промпты. Главная — <code>/write-note</code>: конвейер одной заметки (план с твоим OK → исследование → фактчек → черновик → ревью). Ещё <code>/new-note</code>, <code>/expand</code>, <code>/review-note</code>, <code>/link</code>, <code>/feedback</code>, <code>/audit-rules</code> (одно место для каждого правила, без дублей и конфликтов) и <code>/update-guide</code>. Печатаешь команду — Claude выполняет сценарий.</p>
           </div>
         </div>
         <div class="layer">
@@ -356,15 +359,15 @@
           <div>
             <div class="who">Включает сам Claude · когда уместно</div>
             <h4>Навык <code>note-writer</code> — «Мастерство»</h4>
-            <p>Методология письма на staff-уровне. Ты его <em>не вызываешь</em> — Claude сам подхватывает навык, когда видит, что ты пишешь или правишь заметку. «Насмотренность», которая включается автоматически.</p>
+            <p>Стандарт письма заметок уровня senior / tech lead: структура, бюджет длины, подача. Ты его <em>не вызываешь</em> — Claude сам подхватывает навык, когда видит, что ты пишешь или правишь заметку. «Насмотренность», которая включается автоматически.</p>
           </div>
         </div>
         <div class="layer">
           <div class="badge">✓</div>
           <div>
-            <div class="who">Запускает Claude · перед каждым коммитом заметки</div>
-            <h4>Субагент <code>reviewer</code> — «Второе мнение»</h4>
-            <p><code>.claude/agents/reviewer.md</code> читает заметку свежим взглядом: точность фактов, полнота механики, читаемость, формат, приватность. Только советует — файлы не правит. Без его проверки заметку не коммитим; вручную — <code>/review-note</code>.</p>
+            <div class="who">Запускает Claude · по шагам конвейера</div>
+            <h4>Субагенты <code>.claude/agents/</code> — «Команда»</h4>
+            <p>Конвейер <code>/write-note</code>: <code>note-planner</code> (план), <code>note-researcher</code> (источники), <code>note-fact-checker</code> (проверка фактов), <code>note-drafter</code> (текст, без доступа в веб). Затем <code>reviewer</code> читает готовую заметку свежим взглядом: факты, полнота, читаемость, формат, приватность — только советует, файлы не правит; вручную — <code>/review-note</code>. <code>rules-auditor</code> работает для <code>/audit-rules</code> и тоже только читает.</p>
           </div>
         </div>
         <div class="layer">
@@ -372,13 +375,13 @@
           <div>
             <div class="who">Запускает система · автоматически на событие</div>
             <h4>Хуки <code>.claude/hooks/</code> — «Охрана»</h4>
-            <p><code>check-secrets.js</code> срабатывает <strong>перед каждой записью файла</strong>: сканирует на секреты и личные данные (ключи, токены, email) и <strong>блокирует запись</strong>, если что-то найдёт (работает только внутри репозитория). <code>check-ledger-size.js</code> следит, чтобы <code>CLAUDE.md</code> и журнал правок не разрастались.</p>
+            <p><code>check-secrets.js</code> срабатывает <strong>перед каждой записью файла</strong>: сканирует на секреты и личные данные (ключи, токены, email) и <strong>блокирует запись</strong>, если что-то найдёт (работает только внутри репозитория). <code>check-ledger-size.js</code> следит, чтобы <code>AGENTS.md</code>, <code>CLAUDE.md</code> и журнал правок не разрастались. <strong>Шлюз ревьюера</strong>: <code>track-note-edits.js</code> замечает правки заметок, а <code>enforce-review.js</code> не даёт закончить ход без свежей квитанции (<code>review-receipt.js</code>), привязанной к тексту заметки — любая правка после ревью её аннулирует.</p>
           </div>
         </div>
       </div>
       <div class="note">
         <span class="lbl">Как запомнить</span>
-        <p><strong>CLAUDE.md</strong> = правила (всегда). <strong>/команды</strong> = ты нажал. <strong>Навык</strong> = Claude сам сообразил. <strong>Reviewer</strong> = независимая проверка. <strong>Хук</strong> = система проверила. Разные триггеры — разные роли.</p>
+        <p><strong>AGENTS.md</strong> = правила (всегда). <strong>/команды</strong> = ты нажал. <strong>Навык</strong> = Claude сам сообразил. <strong>Агенты</strong> = шаги конвейера и независимая проверка. <strong>Хук</strong> = система проверила. Разные триггеры — разные роли.</p>
       </div>
     </section>
 
@@ -417,7 +420,7 @@
         <div class="arrow">→</div>
         <div class="step s-site"><div class="k">GitHub Pages</div><div class="v">Сайт обновлён 🎉</div></div>
       </div>
-      <p><strong>GitHub Actions</strong> — робот-сборщик на серверах GitHub. Файл <code>.github/workflows/deploy.yml</code> — его инструкция: «на каждый push в main поставь Node, пересчитай дашборды (<code>scripts/regen-dashboards.mjs</code>), собери Quartz, выложи на Pages». Тебе не нужно собирать вручную — хук экспортирует, ты пушишь, робот собирает.</p>
+      <p><strong>GitHub Actions</strong> — робот-сборщик на серверах GitHub. Файл <code>.github/workflows/deploy.yml</code> — его инструкция: «на каждый push в main поставь Node, пересчитай дашборды (<code>scripts/regen-dashboards.mjs</code>), собери Quartz, выложи на Pages». Рядом <code>validate.yml</code>: на каждый push и pull request запускает <code>npm run validate</code> и проверяет заметки на соответствие формату. Тебе не нужно собирать вручную — хук экспортирует, ты пушишь, робот собирает.</p>
       <div class="note">
         <span class="lbl">Коммит = публикация</span>
         <p>Хук срабатывает, только если коммит трогает заметки в <code>Vault/</code>, и требует, чтобы <strong>все</strong> изменения в <code>Vault/</code> были застейджены. Нужен открытый Obsidian с включённым CLI. Экспорт без коммита — <code>npm run export</code>; закоммитить без экспорта — <code>git commit --no-verify</code>. Фонового автопаблиша нет.</p>
@@ -432,7 +435,7 @@
         <div class="card"><span class="tag site">publish: true</span><p style="margin-top:.5rem">Заметка <strong>идёт на сайт</strong>. Syncer публикует только такие.</p></div>
         <div class="card"><span class="tag auto">status: new</span><p style="margin-top:.5rem">Заметка <strong>пустая</strong> — заготовка, ничего ещё не написано. Пустой трек бара.</p></div>
         <div class="card"><span class="tag auto">status: in-progress</span><p style="margin-top:.5rem">Заметка <strong>в работе</strong> — светлый сегмент прогресс-бара.</p></div>
-        <div class="card"><span class="tag site">status: done</span><p style="margin-top:.5rem">Заметка <strong>написана и проверена</strong> — сплошной сегмент; процент раздела = доля <code>done</code>.</p></div>
+        <div class="card"><span class="tag site">status: done</span><p style="margin-top:.5rem">Заметка <strong>написана и проверена</strong> ревьюером (есть свежая квитанция) — сплошной сегмент; процент раздела = доля <code>done</code>.</p></div>
       </div>
       <div class="note">
         <span class="lbl">Важно для сайта</span>
@@ -461,10 +464,13 @@
         <table>
           <thead><tr><th>Хочу…</th><th>Делаю</th></tr></thead>
           <tbody>
-            <tr><td>Создать заметку</td><td><code>/new-note Networks — TLS Handshake</code></td></tr>
+            <tr><td>Написать заметку из очереди</td><td><code>/write-note Const vs Readonly</code> (тема из <code>docs/topic-map.md</code>)</td></tr>
+            <tr><td>Создать пустую заметку</td><td><code>/new-note Networks — TLS Handshake</code></td></tr>
             <tr><td>Углубить заметку</td><td><code>/expand Async and Await</code></td></tr>
             <tr><td>Проверить перед публикацией</td><td><code>/review-note Idempotency</code></td></tr>
             <tr><td>Проставить связи в графе</td><td><code>/link Idempotency</code></td></tr>
+            <tr><td>Проверить формат заметок</td><td><code>npm run validate</code></td></tr>
+            <tr><td>Проверить правила на дубли и конфликты</td><td><code>/audit-rules</code></td></tr>
             <tr><td>Поставить обложку</td><td>команда <strong>Set Cover</strong> (Templater) → выбрать файл/URL</td></tr>
             <tr><td>Посмотреть сайт локально</td><td><code>npx quartz build --serve</code> → <code>localhost:8080</code></td></tr>
             <tr><td>Настроить новую машину</td><td>открыть <code>Vault/</code> в Obsidian, включить CLI → <code>npm run setup</code></td></tr>
@@ -486,7 +492,7 @@
           <tbody>
             <tr><td><strong>Vault</strong></td><td>«Хранилище» — папка, которую открывает Obsidian. У тебя это <code>Vault/</code>.</td></tr>
             <tr><td><strong>content/</strong></td><td>Скомпилированная копия сайта, которую генерит Quartz Syncer. Руками не трогать.</td></tr>
-            <tr><td><strong>Frontmatter</strong></td><td>Блок метаданных вверху заметки между <code>---</code> (title, tags, status, publish, created).</td></tr>
+            <tr><td><strong>Frontmatter</strong></td><td>Блок метаданных вверху заметки между <code>---</code> (title, summary, tags, status, publish, created).</td></tr>
             <tr><td><strong>Folder-note</strong></td><td><code>index.md</code> папки с <code>tags: [FolderNote]</code> — обложка+дашборд раздела или саб-топика.</td></tr>
             <tr><td><strong>Datacore</strong></td><td>Плагин Obsidian, рисующий живые дашборды (карточки прогресса, списки заметок).</td></tr>
             <tr><td><strong>Quartz</strong></td><td>Генератор статических сайтов, превращающий заметки в веб-сайт.</td></tr>
@@ -496,7 +502,8 @@
             <tr><td><strong>Static site</strong></td><td>Сайт из готовых HTML-файлов, без сервера с базой. Быстро и дёшево.</td></tr>
             <tr><td><strong>GitHub Pages</strong></td><td>Бесплатный хостинг статических сайтов прямо из репозитория.</td></tr>
             <tr><td><strong>GitHub Actions</strong></td><td>Робот-автоматизация на серверах GitHub. Собирает и публикует сайт.</td></tr>
-            <tr><td><strong>Hook</strong></td><td>Скрипт, который система запускает сама на событие: у Claude — перед записью файла, у git — перед коммитом (экспорт vault).</td></tr>
+            <tr><td><strong>Hook</strong></td><td>Скрипт, который система запускает сама на событие: у Claude — перед записью файла или в конце хода (шлюз ревьюера), у git — перед коммитом (экспорт vault).</td></tr>
+            <tr><td><strong>Субагент</strong></td><td>Отдельный Claude со своей ролью и инструментами (планировщик, фактчекер, ревьюер); работает в чистом контексте и возвращает короткий результат.</td></tr>
             <tr><td><strong>Skill</strong></td><td>Навык, который Claude включает сам, когда задача подходит.</td></tr>
             <tr><td><strong>Slash-команда</strong></td><td>Твой готовый промпт, вызываемый через <code>/имя</code>.</td></tr>
             <tr><td><strong>baseUrl</strong></td><td>Адрес, по которому опубликован сайт. Нужен, чтобы ссылки и стили работали.</td></tr>

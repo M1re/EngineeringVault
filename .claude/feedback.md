@@ -12,7 +12,7 @@ How this stays healthy (so it never bloats and drags down quality):
 - When a rule matures, move it into structure (the `note-writer` skill, the note template, a hook,
   or the Linter plugin) and **delete it from here** — structure costs no attention and is more reliable.
 - A size tripwire hook (`.claude/hooks/check-ledger-size.js`) nudges you to run
-  `/consolidate-feedback` when this file or `AGENTS.md` grows past its soft limit.
+  `/audit-rules` when this file or `AGENTS.md` grows past its soft limit.
 
 ---
 
@@ -42,7 +42,7 @@ How this stays healthy (so it never bloats and drags down quality):
 - Clear and tight beats long and vague; if a point needs a re-read to parse, rewrite it.
   Chewed ≠ wordy: explain a point in more detail by splitting it into steps and showing it in
   code, not by adding sentences. One paragraph — one idea. No hollow contrasts (a term "defined"
-  only against something left unsaid, like "a readonly field is a real field").
+  only against something left unsaid).
 - Replies to the author (chat, summaries of work): short and plain — what was done, why, what to
   do next. No jargon, no wall of caveats; still technically honest.
 - No AI slop: no filler, no hype, no restating the obvious, no padding to look thorough.
