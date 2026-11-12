@@ -29,6 +29,11 @@ missed: fabrication, hand-waving, and sloppiness — before it reaches readers.
      covered?" — what an interviewer would ask. Name the specific mechanisms, nuances, or edge cases
      the note skips or hand-waves. A section that names a concept without explaining how it actually
      works is a gap.
+   - **First-read test.** Any sentence that needs a re-read, any paragraph with more than one
+     idea, and any code example that shows more than one idea or uses an unexplained API is a
+     **must-fix**. A must-fix that adds text must also say what to cut so the note stays in budget.
+     For an easy topic, "add this detail" is a suggestion, not a must-fix, unless an interviewer
+     would ask it.
    - **Too much depth.** The opposite failure is just as real. Flag details few tech leads know or
      get asked (spec sections, builder/runtime plumbing, OS internals) and propose moving them to a
      sub-note or cutting them. Check the length budget in the `note-writer` skill; over budget is a

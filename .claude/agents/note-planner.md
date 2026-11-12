@@ -22,12 +22,15 @@ in doubt, leave it out: the reader can open the sub-note.
 1. **Note type and path:** hub or sub-note, the file in `Vault/`. For a hub: the sub-notes it links to
    with a one-line overview each.
 2. **Budget:** the skill's limits (hub: at most 7 topic sections and about 300 lines before
-   `## Related`; sub-note: at most 5 sections and about 250 lines).
+   `## Related`; sub-note: at most 5 sections and about 250 lines). Scale by difficulty: an easy topic
+   about 100 lines, a medium one about 180. State which one this is.
 3. **Sections in order**, from the basics to advanced. For each: the English header, the
    **opening question** (how an interviewer or a real bug raises the topic), and 3–6 bullets of what
    the answer explains, including any term the reader needs first.
 4. **Running example:** one real-domain scenario (orders, payments, requests) reused across sections.
-5. **Code plan:** which snippets, which BAD / GOOD pairs. Few and short.
+5. **Code plan:** which snippets, which BAD / GOOD pairs. Few and short. For each snippet: the one
+   idea it shows and the line where the reader sees it (e.g. "what the compiler wrote: `> 100`").
+   A snippet that needs two ideas becomes two snippets or loses one.
 6. **Pitfalls & Trade-offs** (3–6), **In Production** (one case), **Questions** (4–6 cards).
 7. **Left out:** what was cut and where it goes (sub-note or nowhere).
 8. **`## Verify`:** the risky claims the note will make, one per line — numbers, versions, defaults,

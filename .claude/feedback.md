@@ -19,6 +19,10 @@ How this stays healthy (so it never bloats and drags down quality):
 ## Active rules
 
 - Be concrete: real mechanics, numbers, failure modes, small code snippets — not textbook definitions.
+  Every code example shows one idea and makes the key moment visible (e.g. what the compiler
+  actually wrote into the caller). An API used in an example is explained in one sentence or not used.
+- Length follows the topic: an easy topic is short. A detail stays only if an interviewer would ask
+  it — this filter applies to reviewer suggestions and to fixes the orchestrator applies.
 - **Interview-ready, not a textbook.** A note must be learnable for an interview in one sitting. Keep
   only what a typical senior / tech lead actually knows, uses or gets asked; deep runtime internals
   (spec sections, builder/box details, OS I/O plumbing) go to a sub-note or are dropped. A hub is
@@ -36,6 +40,9 @@ How this stays healthy (so it never bloats and drags down quality):
 - Section openers are neutral, interview-style questions ("Зачем нужен async, если поток может
   просто дождаться ответа?"), not chatty or childish ones ("Зачем вообще…", "просто").
 - Clear and tight beats long and vague; if a point needs a re-read to parse, rewrite it.
+  Chewed ≠ wordy: explain a point in more detail by splitting it into steps and showing it in
+  code, not by adding sentences. One paragraph — one idea. No hollow contrasts (a term "defined"
+  only against something left unsaid, like "a readonly field is a real field").
 - Replies to the author (chat, summaries of work): short and plain — what was done, why, what to
   do next. No jargon, no wall of caveats; still technically honest.
 - No AI slop: no filler, no hype, no restating the obvious, no padding to look thorough.
@@ -64,6 +71,10 @@ How this stays healthy (so it never bloats and drags down quality):
 <!-- Dated history. Newest first. Not required reading; kept for provenance. -->
 
 ### 2026-11-12
+
+- Const vs Readonly (easy format test): too wordy, hollow and tangled phrasing, unclear examples;
+  reviewer-driven additions (JIT tiers, static init timing, default-parameter versioning) made it
+  longer, not clearer. → Rules above refined; planner/drafter/reviewer got the checks as structure.
 
 - Asynchronous Execution hub accepted ("в остальном всё супер"), except the ValueTask rules, which
   were still hard to read. Added the "show how it breaks before the rules" active rule. Next: test

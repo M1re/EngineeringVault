@@ -34,7 +34,8 @@ how the thing works, where it breaks, and how to answer questions about it.
 ## Length budget
 
 - **Hub:** at most 7 topic sections, about 300 lines before `## Related`, 4–6 question cards.
-- **Sub-note:** at most 5 topic sections, about 250 lines before `## Related`.
+- **Sub-note:** at most 5 topic sections, about 250 lines before `## Related`. That is the ceiling
+  for a hard topic: a medium topic is about 180 lines, an easy one about 100.
 - `npm run validate` fails a `done` note longer than 350 lines before `## Related`.
 - Fit the budget by choosing fewer topics, never by squeezing an explanation or dropping a step of a
   mechanism.

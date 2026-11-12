@@ -28,7 +28,8 @@ folder, so keep their outputs out of your context: read a file only when a step 
    then `npm run validate`. If the note replaces an existing note or stub, overwrite that file and
    keep its `created` and `publish` values. Link the note from its folder `index.md` if it is not
    already listed.
-6. **Review** — run the `reviewer` subagent on the placed note. Apply its must-fixes yourself, run
+6. **Review** — run the `reviewer` subagent on the placed note. Apply its must-fixes yourself
+   without leaving the plan's budget: an addition replaces text, it does not pile on. Then run
    `npm run validate` again, and record the receipt (`node .claude/hooks/review-receipt.js
    --verdict … "<note>"`). Then set `status: done`. Never change `publish`.
 

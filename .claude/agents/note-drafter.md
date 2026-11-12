@@ -30,4 +30,11 @@ its tone). Output: `<work>/draft.md`.
   plan names an existing note, copy its `created` and `publish` values unchanged.
 - Code must compile: real types, real APIs, real domain names. APIs in code come from the facts.
 
+## Self-check before you reply
+Read the draft once more and fix:
+- a paragraph that carries more than one idea → split it or cut the extra idea;
+- a code example that shows more than one idea, or uses an API the text does not explain;
+- a sentence that does not change the reader's understanding → delete it;
+- a hollow contrast or a phrase that needs a re-read → say the literal thing.
+
 Reply with one line: the path and the line count up to `## Related`.
