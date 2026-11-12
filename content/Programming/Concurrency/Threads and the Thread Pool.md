@@ -2,8 +2,8 @@
 publish: true
 title: Threads and the Thread Pool
 created: 2026-07-09
-modified: 2026-11-09T16:49:25.383Z
-published: 2026-11-09T16:49:25.383Z
+modified: 2026-11-12T10:09:28.499Z
+published: 2026-11-12T10:09:28.499Z
 tags:
   - threads
   - thread-pool
@@ -14,7 +14,7 @@ status: done
 ---
 
 > [!summary]
-> A **thread** is what the OS schedules onto a CPU core to run code. A thread is expensive: it holds about 1 MB of stack, it takes a system call to create, and it costs CPU time every time the scheduler moves it on or off a core. Because a thread is expensive, .NET does not create one per job. It keeps a **thread pool**: a set of long-lived worker threads that the pool grows and shrinks with load and that run jobs as they arrive. `Task.Run`, every `await` continuation, and timer and I/O callbacks all run on the pool. The pool's behaviour explains both a service's throughput and its thread-pool starvation.
+> A **thread** is what the OS schedules onto a CPU core to run code. A thread is expensive: it holds its own stack (1.5 MB by default on Windows and macOS, 8 MB on Linux), creating it is expensive, and it costs CPU time every time the scheduler moves it on or off a core. Because a thread is expensive, .NET does not create one per job. It keeps a **thread pool**: a set of long-lived worker threads that the pool grows and shrinks with load and that run jobs as they arrive. `Task.Run`, every `await` continuation, and timer and I/O callbacks all run on the pool. The pool's behaviour explains both a service's throughput and its thread-pool starvation.
 
 ## The Thread
 
@@ -34,7 +34,7 @@ So 40 OS threads on an 8-core machine is normal. Most of the threads are idle, a
 
 ## Managed Threads
 
-When you create a thread with `new Thread(...)`, .NET does not build a thread of its own. .NET asks the operating system for an ordinary OS thread, and the OS runs and schedules that thread. So a managed thread is an OS thread. Creating a managed thread costs the same as creating any OS thread: 1 MB of stack and a system call. The word "managed" does not make the thread cheaper or lighter.
+When you create a thread with `new Thread(...)`, .NET does not build a thread of its own. .NET asks the operating system for an ordinary OS thread, and the OS runs and schedules that thread. Creating a managed thread therefore costs what creating an OS thread costs: its own stack and the OS work to set it up. The word "managed" does not make the thread cheaper or lighter.
 
 The `Thread` object you get back is a wrapper around that OS thread. .NET keeps this wrapper because the runtime has to control the thread, and the runtime can only control a thread it created. Three things need that control:
 
@@ -52,8 +52,8 @@ worker.Start();
 
 A thread is one line of code to start, so its cost is easy to miss. There are three costs:
 
-- **Stack memory.** Each thread reserves a stack, 1 MB by default on Windows. 500 threads reserve half a gigabyte of memory before any thread runs a line of work.
-- **Startup.** Creating a thread is a system call. The OS allocates the stack, records the thread, and adds the thread to the scheduler. That work is expensive next to a job that finishes in 50 microseconds.
+- **Stack memory.** Each thread reserves a stack, 1.5 MB by default on Windows and macOS, 8 MB on Linux. 500 threads reserve hundreds of megabytes of memory before any thread runs a line of work.
+- **Startup.** Creating a thread is expensive. The OS allocates the stack, records the thread, and adds the thread to the scheduler. That work is expensive next to a job that finishes in 50 microseconds.
 - **Context switching.** Every time the scheduler moves a thread off a core, the machine pays a cost in saved and reloaded state, and in cache data the thread has to reload afterward. The next section explains it.
 
 ## Context Switching
@@ -142,7 +142,7 @@ The worker thread is blocked for the whole database round-trip instead of the mi
 Task.Factory.StartNew(PollDeviceForever, TaskCreationOptions.LongRunning);
 ```
 
-This costs one dedicated OS thread, which is cheaper than holding a pool worker thread that never returns.
+`LongRunning` is only a hint to the scheduler that an extra thread may be needed; for a guaranteed dedicated thread use `new Thread`.
 
 **3. Creating a thread per item wastes the pool.**
 
@@ -228,7 +228,7 @@ Now each worker thread is busy only for the microseconds around the call, not th
 ## Related
 
 - [[Async and Await]]. Async continuations and I/O completions run on this pool; starvation is the pool running dry.
-- [[Concurrency vs Parallelism]]. The pool gives parallelism across cores; async gives concurrency without threads.
+- [[Multithreading]]. The pool gives parallelism across cores; async gives concurrency without threads.
 - [[Synchronization Primitives]]. `lock`, `SemaphoreSlim`, `Interlocked` for the shared state pool worker threads touch.
 - [[Race Conditions]] and [[Deadlocks]]. The hazards of many worker threads running at once.
 

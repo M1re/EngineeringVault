@@ -17,7 +17,7 @@ created: 2026-07-11
 
 Потому что ожидание занимает поток, а поток стоит дорого.
 
-Заблокированный поток держит свой стек и место в Thread Pool. Документация `Thread` называет размер стека по умолчанию 1 MB, и потоки пула используют этот же размер. Запрос в базу идёт ~20 мс, и все 20 мс поток ничего не делает и не может взять другой запрос.
+Заблокированный поток держит свой стек и место в Thread Pool. Размер стека по умолчанию — 1.5 MB на Windows и macOS и 8 MB на Linux, и потоки пула используют этот же размер. Запрос в базу идёт ~20 мс, и все 20 мс поток ничего не делает и не может взять другой запрос.
 
 ```csharp
 // ❌ BAD: поток пула стоит все ~20 мс, пока база ищет заказ
@@ -349,7 +349,7 @@ public async Task<PaymentResult> ChargeAsync(Payment payment, CancellationToken 
 - [[SynchronizationContext and ConfigureAwait]] — где продолжается метод, `ConfigureAwait(false)`, `ExecutionContext` и `AsyncLocal`.
 - [[Async Streams]] — `IAsyncEnumerable<T>` и `await foreach`.
 - [[Thread Pool Starvation]] — sync over async под нагрузкой: симптомы, диагностика, рост пула.
-- [[Concurrency vs Parallelism]] — async это concurrency, а не parallelism.
+- [[Multithreading]] — async это concurrency, а не parallelism.
 - [[Threads and the Thread Pool]] — где на самом деле выполняются continuations.
 - [[Locks and Synchronization]] — `await` внутри `lock` и `SemaphoreSlim` как асинхронный lock.
 - [[Deadlocks]] — общая картина взаимных блокировок.
